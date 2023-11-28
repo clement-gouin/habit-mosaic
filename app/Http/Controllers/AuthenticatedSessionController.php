@@ -29,17 +29,7 @@ class AuthenticatedSessionController extends Controller
 
     public function store(LoginRequest $request): JsonResponse
     {
-        if ($request->boolean('new')) {
-            $user = User::query()
-                ->create([
-                'email' => $request->input('email'),
-                'name' => $request->input('name'),
-            ]);
-        } else {
-            $user = User::query()
-                ->where('email', $request->input('email'))
-                ->firstOrFail();
-        }
+        $user = $this->getUserFromRequest($request);
 
         $this->sendToken($user);
 
@@ -74,6 +64,21 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    protected function getUserFromRequest(LoginRequest $request): User
+    {
+        if ($request->boolean('new')) {
+            return User::query()
+                ->create([
+                    'email' => $request->input('email'),
+                    'name' => $request->input('name'),
+                ]);
+        }
+
+        return User::query()
+            ->where('email', $request->input('email'))
+            ->firstOrFail();
     }
 
     protected function sendToken(User $user): void
