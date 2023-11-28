@@ -4,9 +4,10 @@ includes:
 
 parameters:
     # The level 9 is the highest level
-    level: 5
+    level: 9
 
     checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
     ignoreErrors:
         -
             message: "#^Call to an undefined method Mockery\\\\LegacyMockInterface::allows\\(\\)\\.$#"
