@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+if [[ "$USER" == "vagrant" ]]; then
+  export NO_SSH=true
+else
+  export $(cat .env | sed 's/#.*//g' | sed 's/\r//g' | xargs)
+  PRIVATE_KEY=$VAGRANT_DIR/.vagrant/machines/default/lxc/private_key
+fi
+
+# get bash colors and styles here:
+# http://misc.flogisoft.com/bash/tip_colors_and_formatting
+C_RESET='\e[0m'
+C_RED='\e[31m'
+C_GREEN='\e[32m'
+C_YELLOW='\e[33m'
+
+function __run() #(step, name, cmd, filters)
+{
+    local color output exitcode
+
+    filters=${4:-"\.php$"}
+
+    printf "${C_YELLOW}[%s]${C_RESET} %-20s" "$1" "$2"
+
+    if [ -z "$NO_SSH" ]
+    then
+      output=$(eval "ssh vagrant@$VAGRANT_HOST -i $PRIVATE_KEY 'cd $WORKING_DIR && git diff --diff-filter=M --name-only --cached | grep -E \"$filters\" | $3'"  2>&1)
+    else
+      output=$(eval "git diff --diff-filter=M --name-only --cached | grep -E \"$filters\" | $3"  2>&1)
+    fi
+
+    exitcode=$?
+
+    if [[ 0 == $exitcode || 130 == $exitcode ]]; then
+        echo -e "${C_GREEN}OK!${C_RESET}"
+    else
+        echo -e "${C_RED}NOK!${C_RESET}\n\n$output"
+        exit 1
+    fi
+}
+
+__run "1/5" "php lint" "xargs -I {} -r php -l {}"
+__run "2/5" "php cbf" "xargs -r vendor/bin/phpcbf --no-colors"
+__run "3/5" "code sniffer" "xargs -r vendor/bin/phpcs --no-colors"
+__run "4/5" "phpstan" "xargs -r vendor/bin/phpstan analyse -c phpstan.neon" '^app/.*\.php$'
+__run "5/5" "eslint" "xargs -rI {} npx eslint --cache --no-color --fix {}" '^resources/js/.*\.(ts|js|vue)$'

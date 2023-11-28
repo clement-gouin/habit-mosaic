@@ -1,0 +1,7 @@
+includes:
+    - ./code_quality/phpstan/phpstan.neon
+parameters:
+    paths:
+        - app
+
+    excludePaths:

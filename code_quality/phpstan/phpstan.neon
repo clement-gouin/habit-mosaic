@@ -1,0 +1,13 @@
+includes:
+    - ../../vendor/nunomaduro/larastan/extension.neon
+    - ./phpstan-baseline.neon
+
+parameters:
+    # The level 9 is the highest level
+    level: 5
+
+    checkMissingIterableValueType: false
+    ignoreErrors:
+        -
+            message: "#^Call to an undefined method Mockery\\\\LegacyMockInterface::allows\\(\\)\\.$#"
+            path: ../../tests/TestCase.php

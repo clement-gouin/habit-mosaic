@@ -1,0 +1,32 @@
+<template>
+    <a :href="href ?? '#'" style="z-index: 100" role="button" @click="click" class="btn btn-default" :class="`btn-${type} ${sizeClass} ${disabled ? 'disabled' : ''}`"><slot /></a>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+
+interface Props {
+    type?: string
+    href?: string
+    small?: boolean
+    large?: boolean
+    disabled?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), { type: 'primary' });
+
+const emit = defineEmits(['click']);
+
+const sizeClass = computed(() => (props.small ? 'btn-sm' : (props.large ? 'btn-lg' : '')));
+
+function click (event: Event) {
+    if (!props.href) {
+        event?.preventDefault();
+        emit('click');
+    }
+}
+</script>
+
+<style scoped>
+
+</style>
