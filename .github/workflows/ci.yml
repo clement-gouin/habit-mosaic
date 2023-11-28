@@ -16,9 +16,10 @@ jobs:
       - run: npm ci
       - run: npm test
         continue-on-error: true
-      - uses: jwgmeligmeyling/checkstyle-github-action@master
+      - uses: github/codeql-action/upload-sarif@v2
         with:
-          path: 'reports/eslint.xml'
+          sarif_file: reports/eslint.sarif
+          wait-for-processing: true
   phpstan:
     runs-on: ubuntu-latest
     steps:
@@ -64,10 +65,11 @@ jobs:
       - uses: php-actions/phpmd@v1
         with:
           path: app
-          output: checkstyle
+          output: sarif
           ruleset: phpmd.xml
-          reportfile: reports/phpmd.xml
+          reportfile: reports/phpmd.sarif
         continue-on-error: true
-      - uses: jwgmeligmeyling/checkstyle-github-action@master
+      - uses: github/codeql-action/upload-sarif@v2
         with:
-          path: 'reports/phpmd.xml'
+          sarif_file: reports/phpmd.sarif
+          wait-for-processing: true
