@@ -3,6 +3,10 @@ on: [push]
 jobs:
   eslint:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -22,6 +26,10 @@ jobs:
           wait-for-processing: true
   phpstan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      actions: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
@@ -36,6 +44,10 @@ jobs:
           path: 'reports/phpstan.xml'
   phpcs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      actions: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
@@ -55,6 +67,10 @@ jobs:
           path: 'reports/phpcs.xml'
   phpmd:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache@v3
