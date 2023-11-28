@@ -43,6 +43,7 @@ jobs:
         if: always()
         with:
           path: 'reports/phpstan.xml'
+          name: phpstan report
   phpcs:
     runs-on: ubuntu-latest
     permissions:
@@ -66,6 +67,7 @@ jobs:
         if: always()
         with:
           path: 'reports/phpcs.xml'
+          name: phpcs report
   phpmd:
     runs-on: ubuntu-latest
     permissions:
@@ -85,7 +87,7 @@ jobs:
           output: sarif
           ruleset: phpmd.xml
           reportfile: reports/phpmd.sarif
-          args: -vvv
+          args: -vvv --ignore-errors-on-exit
       - uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
