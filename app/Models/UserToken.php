@@ -18,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $last_used_at
- * @property \Illuminate\Support\Carbon|null $expires_at
+ * @property \Illuminate\Support\Carbon $expires_at
  * @method static \Illuminate\Database\Eloquent\Builder|UserToken newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserToken newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|UserToken query()

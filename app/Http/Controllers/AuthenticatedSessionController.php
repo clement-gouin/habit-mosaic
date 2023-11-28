@@ -29,10 +29,16 @@ class AuthenticatedSessionController extends Controller
 
     public function store(LoginRequest $request): JsonResponse
     {
-        $user = User::query()->firstWhere('email', $request->input('email'));
-
         if ($request->boolean('new')) {
-            $user = User::query()->create($request->validated());
+            $user = User::query()
+                ->create([
+                'email' => $request->input('email'),
+                'name' => $request->input('name'),
+            ]);
+        } else {
+            $user = User::query()
+                ->where('email', $request->input('email'))
+                ->firstOrFail();
         }
 
         $this->sendToken($user);
