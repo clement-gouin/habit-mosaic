@@ -112,13 +112,13 @@ jobs:
           configuration: phpunit.xml
           log_junit: "reports/phpunit.xml"
           php_extensions: "xdebug"
-          coverage_clover: "reports/clover.xml"
+          coverage_cobertura: "reports/coverage.xml"
         env:
           XDEBUG_MODE: coverage
       - uses: EnricoMi/publish-unit-test-result-action@v2
         if: always()
         with:
           files: reports/phpunit.xml
-      - uses: lucassabreu/comment-coverage-clover@main
+      - uses: 5monkeys/cobertura-action@master
         with:
-          file: reports/clover.xml
+          path: reports/coverage.xml
