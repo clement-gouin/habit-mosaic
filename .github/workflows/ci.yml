@@ -1,0 +1,73 @@
+name: CI
+on: [push]
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
+          cache: 'npm'
+      - uses: actions/cache@v3
+        with:
+           path: .eslintcache
+           key: eslint-${{ hashFiles('package-lock.json') }}-${{ hashFiles('.eslintrc.js') }}
+      - run: npm ci
+      - run: npm test
+        continue-on-error: true
+      - uses: jwgmeligmeyling/checkstyle-github-action@master
+        with:
+          path: 'reports/eslint.xml'
+  phpstan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ hashFiles('**/composer.lock') }}
+      - uses: php-actions/composer@v6
+      - run: vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=checkstyle > reports/phpstan.xml
+        continue-on-error: true
+      - uses: jwgmeligmeyling/checkstyle-github-action@master
+        with:
+          path: 'reports/phpstan.xml'
+  phpcs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ hashFiles('**/composer.lock') }}
+      - uses: php-actions/composer@v6
+      - uses: php-actions/phpcs@v1
+        with:
+          path: ./
+          standard: phpcs.xml
+          report: checkstyle
+          report_file: reports/phpcs.xml
+        continue-on-error: true
+      - uses: jwgmeligmeyling/checkstyle-github-action@master
+        with:
+          path: 'reports/phpcs.xml'
+  phpmd:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ hashFiles('**/composer.lock') }}
+      - uses: php-actions/composer@v6
+      - uses: php-actions/phpmd@v1
+        with:
+          path: app
+          output: checkstyle
+          ruleset: phpmd.xml
+          reportfile: reports/phpmd.xml
+        continue-on-error: true
+      - uses: jwgmeligmeyling/checkstyle-github-action@master
+        with:
+          path: 'reports/phpmd.xml'

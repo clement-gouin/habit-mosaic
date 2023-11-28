@@ -4,7 +4,7 @@
         "dev": "vite",
         "build": "vite build",
         "lint": "eslint resources/js --ext .ts,.js,.vue --cache --fix",
-        "test": "eslint resources/js --ext .ts,.js,.vue --cache --format @microsoft/eslint-formatter-sarif --output-file eslint-results.sarif"
+        "test": "eslint resources/js --ext .ts,.js,.vue --cache --format checkstyle --output-file reports/eslint.xml"
     },
     "devDependencies": {
         "@microsoft/eslint-formatter-sarif": "^3.0.0",
