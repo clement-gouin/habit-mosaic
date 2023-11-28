@@ -6,6 +6,7 @@
         "lint": "eslint --ext .ts,.js,.vue --cache --fix resources/js"
     },
     "devDependencies": {
+        "@microsoft/eslint-formatter-sarif": "^3.0.0",
         "@types/qs": "^6.9.7",
         "@typescript-eslint/eslint-plugin": "^5.48.2",
         "@typescript-eslint/parser": "^5.48.2",
