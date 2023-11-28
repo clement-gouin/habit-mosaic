@@ -21,6 +21,7 @@ jobs:
       - run: npm test
         continue-on-error: true
       - uses: github/codeql-action/upload-sarif@v2
+        if: always()
         with:
           sarif_file: reports/eslint.sarif
           wait-for-processing: true
@@ -38,8 +39,8 @@ jobs:
           key: ${{ hashFiles('**/composer.lock') }}
       - uses: php-actions/composer@v6
       - run: vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=checkstyle > reports/phpstan.xml
-        continue-on-error: true
       - uses: jwgmeligmeyling/checkstyle-github-action@master
+        if: always()
         with:
           path: 'reports/phpstan.xml'
   phpcs:
@@ -61,8 +62,8 @@ jobs:
           standard: phpcs.xml
           report: checkstyle
           report_file: reports/phpcs.xml
-        continue-on-error: true
       - uses: jwgmeligmeyling/checkstyle-github-action@master
+        if: always()
         with:
           path: 'reports/phpcs.xml'
   phpmd:
@@ -84,8 +85,8 @@ jobs:
           output: sarif
           ruleset: phpmd.xml
           reportfile: reports/phpmd.sarif
-        continue-on-error: true
       - uses: github/codeql-action/upload-sarif@v2
+        if: always()
         with:
           sarif_file: reports/phpmd.sarif
           wait-for-processing: true
