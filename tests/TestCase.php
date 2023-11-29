@@ -16,4 +16,20 @@ abstract class TestCase extends BaseTestCase
 
         $this->withoutVite();
     }
+
+    protected static function invokeMethod(mixed $object, string $name, mixed ...$args): mixed
+    {
+        $class = new ReflectionClass(get_class($object));
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method->invokeArgs($object, $args);
+    }
+
+    protected static function invokeMethodStatic(string $className, string $name, mixed ...$args): mixed
+    {
+        $class = new ReflectionClass($className);
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method->invokeArgs(null, $args);
+    }
 }
