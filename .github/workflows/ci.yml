@@ -106,7 +106,6 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ hashFiles('**/composer.lock') }}
       - uses: php-actions/composer@v6
-      - run: cp .env.example .env && php artisan key:generate
       - uses: php-actions/phpunit@v3
         with:
           configuration: phpunit.xml
