@@ -4,6 +4,8 @@ namespace App\Http\Resources;
 
 use App\Models\Tracker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @property Tracker $resource */
@@ -16,6 +18,12 @@ class TrackerResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        try {
+            $date = Carbon::parse($request->string('date', 'now'));
+        } catch (InvalidFormatException) {
+            $date = Carbon::today();
+        }
+
         return [
             'id' => $this->resource->id,
             'name' => $this->resource->name,
@@ -25,8 +33,7 @@ class TrackerResource extends JsonResource
             'default_value' => $this->resource->default_value,
             'target_value' => $this->resource->target_value,
             'target_score' => $this->resource->target_score,
-            'data_points' => $this->when($request->boolean('with_data'), fn () => DataPointResource::collection($this->resource->dataPoints)),
-            'last_updated' => $this->resource->dataPoints()->first()?->value('date'),
+            'data_point' => DataPointResource::make($this->resource->getDataPointAt($date)),
         ];
     }
 }

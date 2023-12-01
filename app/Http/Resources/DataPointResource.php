@@ -12,6 +12,7 @@ class DataPointResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameters)
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -20,7 +21,19 @@ class DataPointResource extends JsonResource
             'id' => $this->resource->id,
             'date' => $this->resource->date,
             'value' => $this->resource->value,
-            'tracker' => $this->when($request->boolean('with_tracker'), fn () => TrackerResource::make($this->resource->tracker)),
+        ];
+    }
+
+    /**
+     * Top Level Meta Data
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameters)
+     * @return array<string, mixed>
+     */
+    public function with(Request $request): array
+    {
+        return [
+            'tracker' => TrackerResource::make($this->resource->tracker),
         ];
     }
 }

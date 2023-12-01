@@ -2,28 +2,19 @@ import { TableCellFunction } from '@types';
 export interface Base extends Record<string, unknown> {}
 
 export interface QueryParameters extends Base {
-    /** field to sort */
     sortBy?: string
-    /** string to search  */
     search?: string
-    /** number of items per page */
     perPage?: number
-    /** page number */
     page?: number
     filters?: Base
     include?: string[]
 }
 
 export interface TableColumn extends Base {
-    /** field name of column */
     id: string
-    /** column title to display */
     label: string
-    /** CSS class to apply to each cell */
     cssClass?: TableCellFunction | string
-    /** CSS style to apply to each cell */
     cssStyle?: TableCellFunction | string
-    /** can sort column */
     sortable?: boolean
     visible?: boolean
     clickable?: boolean
@@ -37,6 +28,25 @@ export interface Option extends Base {
 }
 
 export interface ErrorResponse extends Base {
-    /** fields and their associated errors */
     errors: Record<string, string[]>
+}
+
+export interface Tracker extends Base {
+    id?: number
+    name: string
+    icon: string
+    unit: string
+    value_step: number
+    default_value: number
+    target_value: number
+    target_score: number
+    data_point: DataPoint
+    last_update?: string
+}
+
+export interface DataPoint extends Base {
+    id: number
+    date: string
+    value: number
+    tracker?: Tracker
 }
