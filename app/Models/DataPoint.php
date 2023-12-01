@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $date
  * @property float $value
  * @property-read Tracker $tracker
- * @property-read User $user
  * @method static DataPoint factory($count = null, $state = [])
  * @method static Builder|DataPoint newModelQuery()
  * @method static Builder|DataPoint newQuery()
@@ -53,10 +52,5 @@ class DataPoint extends Model
     public function tracker(): BelongsTo
     {
         return $this->belongsTo(Tracker::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->tracker->user();
     }
 }

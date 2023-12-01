@@ -35,6 +35,7 @@ class UserToken extends Model
     protected $fillable = [
         'expires_at',
         'last_used_at',
+        'token',
     ];
 
     /**

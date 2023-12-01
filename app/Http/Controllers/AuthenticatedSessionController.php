@@ -85,6 +85,7 @@ class AuthenticatedSessionController extends Controller
     {
         $token = UserToken::query()->make([
             'expires_at' => Carbon::now()->addWeek(),
+            'token' => bin2hex(openssl_random_pseudo_bytes(20)),
         ]);
 
         $user->tokens()->save($token);

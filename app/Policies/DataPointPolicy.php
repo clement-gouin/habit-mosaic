@@ -13,6 +13,6 @@ class DataPointPolicy
      */
     public function update(User $user, DataPoint $dataPoint): bool
     {
-        return $dataPoint->user === $user;
+        return $dataPoint->tracker->user->id === $user->id;
     }
 }

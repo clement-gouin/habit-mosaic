@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Tracker;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\TrackerResource;
 use App\Http\Requests\StoreTrackerRequest;
 use App\Http\Requests\UpdateTrackerRequest;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Auth\Access\AuthorizationException;
 
 class TrackerController extends Controller
@@ -22,22 +26,29 @@ class TrackerController extends Controller
      * Store a newly created resource in storage.
      * @throws AuthorizationException
      */
-    public function store(StoreTrackerRequest $request): Response
+    public function store(StoreTrackerRequest $request): JsonResponse
     {
-        $tracker = Tracker::create($request->validated());
+        $tracker = new Tracker($request->validated());
 
-        return response()->noContent(501); // TODO
+        /** @var User $user */
+        $user = $request->user();
+
+        $user->trackers()->save($tracker);
+
+        return TrackerResource::make($tracker->refresh())
+            ->toResponse($request)
+            ->setStatusCode(201);
     }
 
     /**
      * Update the specified resource in storage.
      * @throws AuthorizationException
      */
-    public function update(UpdateTrackerRequest $request, Tracker $tracker): Response
+    public function update(UpdateTrackerRequest $request, Tracker $tracker): JsonResource
     {
         $tracker->update($request->validated());
 
-        return response()->noContent(501); // TODO
+        return TrackerResource::make($tracker->refresh());
     }
 
     /**

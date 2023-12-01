@@ -20,8 +20,6 @@ return new class extends Migration
             $table->timestamp('expires_at');
             $table->timestamps();
         });
-
-        DB::statement("ALTER TABLE user_tokens ALTER COLUMN token SET DEFAULT md5(random()::text)");
     }
 
     /**

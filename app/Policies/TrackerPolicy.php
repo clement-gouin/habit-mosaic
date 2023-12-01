@@ -13,7 +13,7 @@ class TrackerPolicy
      */
     public function view(User $user, Tracker $tracker): bool
     {
-        return $tracker->user === $user;
+        return $tracker->user->id === $user->id;
     }
 
     /**
@@ -21,7 +21,7 @@ class TrackerPolicy
      */
     public function update(User $user, Tracker $tracker): bool
     {
-        return $tracker->user === $user;
+        return $tracker->user->id === $user->id;
     }
 
     /**
@@ -29,6 +29,6 @@ class TrackerPolicy
      */
     public function delete(User $user, Tracker $tracker): bool
     {
-        return $tracker->user === $user;
+        return $tracker->user->id === $user->id;
     }
 }

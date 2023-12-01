@@ -60,6 +60,6 @@ class Tracker extends Model
 
     public function dataPoints(): HasMany
     {
-        return $this->hasMany(DataPoint::class);
+        return $this->hasMany(DataPoint::class)->orderByDesc('date');
     }
 }
