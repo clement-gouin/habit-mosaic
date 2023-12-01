@@ -3,8 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class UpdateDataPointRequest extends StoreTrackerRequest
+class UpdateDataPointRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,5 +16,17 @@ class UpdateDataPointRequest extends StoreTrackerRequest
         /** @var User $user */
         $user = $this->user();
         return $user->can('update', $this->route('data_point'));
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'value' => 'required|numeric',
+        ];
     }
 }

@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('icon');
             $table->string('unit')->nullable();
-            $table->float('value_step')->default(1);
-            $table->float('default_value')->default(0);
+            $table->float('value_step');
+            $table->float('default_value');
             $table->float('target_value');
             $table->float('target_score');
             $table->timestamps();

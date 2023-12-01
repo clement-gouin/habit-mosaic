@@ -8,14 +8,6 @@ use Illuminate\Contracts\Validation\ValidationRule;
 class StoreTrackerRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, ValidationRule|array|string>
@@ -23,7 +15,13 @@ class StoreTrackerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'icon' => 'required',
+            'unit' => 'nullable',
+            'value_step' => 'required|numeric|min:0',
+            'default_value' => 'required|numeric',
+            'target_value' => 'required|numeric',
+            'target_score' => 'required|numeric',
         ];
     }
 }
