@@ -4,37 +4,50 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Support\Carbon;
+use Database\Factories\TrackerFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * App\Models\UserToken
+ * App\Models\Tracker
  *
  * @property int $id
  * @property int $user_id
- * @property string $token
+ * @property string $name
+ * @property string $icon
+ * @property string|null $unit
+ * @property float $value_step
+ * @property float $default_value
+ * @property float $target_value
+ * @property float $target_score
  * @property-read User $user
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Carbon|null $last_used_at
- * @property Carbon $expires_at
+ * @method static TrackerFactory factory($count = null, $state = [])
  * @method static Builder|UserToken newModelQuery()
  * @method static Builder|UserToken newQuery()
  * @method static Builder|UserToken query()
- * @method static Builder|UserToken whereToken($value)
  * @mixin Eloquent
  */
-class UserToken extends Model
+class Tracker extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'expires_at',
-        'last_used_at',
+        'name',
+        'icon',
+        'unit',
+        'value_step',
+        'default_value',
+        'target_value',
+        'target_score'
     ];
 
     /**
@@ -51,8 +64,6 @@ class UserToken extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'last_used_at' => 'datetime',
-        'expires_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
