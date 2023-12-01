@@ -122,3 +122,7 @@ jobs:
         with:
           path: reports/coverage.xml
           minimum_coverage: 75
+          skip_covered: false
+          show_line: true
+          show_branch: true
+          show_class_names: true
