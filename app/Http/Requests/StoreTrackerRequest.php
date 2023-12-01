@@ -5,6 +5,9 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 
+/**
+ * @method array<string,mixed> validated()
+ */
 class StoreTrackerRequest extends FormRequest
 {
     /**

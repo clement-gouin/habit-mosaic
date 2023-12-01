@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 
+/**
+ * @method array<string,mixed> validated()
+ */
 class UpdateDataPointRequest extends FormRequest
 {
     /**
