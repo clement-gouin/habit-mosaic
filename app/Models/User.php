@@ -12,6 +12,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 
 /**
@@ -82,5 +83,10 @@ class User extends Authenticatable
     public function trackers(): HasMany
     {
         return $this->hasMany(Tracker::class);
+    }
+
+    public function dataPoints(): HasManyThrough
+    {
+        return $this->hasManyThrough(Tracker::class, DataPoint::class);
     }
 }

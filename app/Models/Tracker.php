@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Database\Factories\TrackerFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,12 +25,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property float $target_value
  * @property float $target_score
  * @property-read User $user
+ * @property-read Collection|DataPoint[] $dataPoints
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static TrackerFactory factory($count = null, $state = [])
- * @method static Builder|UserToken newModelQuery()
- * @method static Builder|UserToken newQuery()
- * @method static Builder|UserToken query()
+ * @method static Builder|Tracker newModelQuery()
+ * @method static Builder|Tracker newQuery()
+ * @method static Builder|Tracker query()
  * @mixin Eloquent
  */
 class Tracker extends Model
@@ -47,27 +50,16 @@ class Tracker extends Model
         'value_step',
         'default_value',
         'target_value',
-        'target_score'
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
+        'target_score',
     ];
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function dataPoints(): HasMany
+    {
+        return $this->hasMany(DataPoint::class);
     }
 }

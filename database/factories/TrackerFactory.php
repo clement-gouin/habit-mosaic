@@ -26,8 +26,8 @@ class TrackerFactory extends Factory
             'unit' => fake()->boolean() ? fake()->randomElement(['kilometer', 'meter', 'step', 'time', 'hour', 'minute', 'second']) : null,
             'value_step' => fake()->randomElement([.1, .5, 1, 5, 10]),
             'default_value' => 0,
-            'target_value' => fake()->numberBetween(0, 30),
-            'target_score' => fake()->numberBetween(-5, 5),
+            'target_value' => fake()->randomFloat(max: 30),
+            'target_score' => fake()->randomFloat(min: -10, max: 10),
         ];
     }
 
