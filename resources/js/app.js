@@ -1,7 +1,7 @@
 import './bootstrap';
 
 import { createApp, h } from 'vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import Components from './components/index.ts';
 
 const element = document.getElementById('app');

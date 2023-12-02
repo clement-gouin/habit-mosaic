@@ -9,11 +9,11 @@
 
 <script setup lang="ts">
 
-import IconInput from "@tools/forms/IconInput.vue";
+import IconInput from '@tools/forms/IconInput.vue';
 </script>
 
 <script lang="ts">
-import {ref} from "vue";
+import { ref } from 'vue';
 
 export default { inheritAttrs: false };
 
