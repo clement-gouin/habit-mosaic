@@ -25,9 +25,6 @@ export default defineConfig(({ mode }) => {
             },
             watch: {
                 usePolling: true,
-                interval: 1000,
-                binaryInterval: 3000,
-                awaitWriteFinish: true
             }
         },
         plugins: [
@@ -54,6 +51,7 @@ export default defineConfig(({ mode }) => {
                 '@symbols': path.resolve(__dirname, 'resources/js/symbols.ts'),
                 '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
                 '~bootstrap-icons': path.resolve(__dirname, 'node_modules/bootstrap-icons'),
+                '~fontawesome': path.resolve(__dirname, 'node_modules/@fortawesome/fontawesome-free'),
                 '@css': path.resolve(__dirname, 'resources/css'),
                 '@fonts': path.resolve(__dirname, 'resources/fonts'),
                 '@images': path.resolve(__dirname, 'resources/images')

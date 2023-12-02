@@ -14,7 +14,7 @@
             <div :class="$slots.addon ? 'input-group' : ''">
                 <div v-if="!showInput" class="form-control" @click="onClick" :class="{disabled}">
                     <div v-if="selected?.key"><slot name="item" v-bind="selected">{{ selected?.label }}</slot></div>
-                    <div v-else class="placeholder">{{ placeholder ?? 'Search...' }}</div>
+                    <div v-else class="placeholder-text">{{ placeholder ?? 'Search...' }}</div>
                 </div>
                 <input
                     v-else
@@ -236,7 +236,7 @@ ul.dropdown-menu {
     }
 }
 
-.form-control .placeholder {
+.form-control .placeholder-text {
     color: #999;
 }
 
