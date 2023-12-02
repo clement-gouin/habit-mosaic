@@ -26,8 +26,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Option } from '@interfaces';
-import {getIconList, searchIcon, mapToClassName} from "@utils/icons";
-import DropdownInput from "@tools/forms/DropdownInput.vue";
+import { getIconList, searchIcon, mapToClassName } from '@utils/icons';
+import DropdownInput from '@tools/forms/DropdownInput.vue';
 
 interface Props{
     name: string,
@@ -42,7 +42,7 @@ interface Props{
     notice?: string,
 }
 
-function iconNameToOption(name: string): Option {
+function iconNameToOption (name: string): Option {
     return { key: name, label: name, value: name };
 }
 

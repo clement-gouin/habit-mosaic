@@ -1,6 +1,6 @@
-import {QueryParameters, Tracker} from "@interfaces";
-import axios, {AxiosError} from "axios";
-import {toURLParameters} from "@utils/url";
+import { QueryParameters, Tracker } from '@interfaces';
+import axios, { AxiosError } from 'axios';
+import { toURLParameters } from '@utils/url';
 
 export const ENDPOINT = '/trackers';
 
