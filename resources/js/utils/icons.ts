@@ -4,8 +4,8 @@ export function getIconList (): string[] {
     return __ICONS__;
 }
 
-export function searchIcon (search: string|null): string[] {
-    if (!search || search.length <= 1) {
+export function searchIcon (search: string | undefined): string[] {
+    if (search === undefined || search.length <= 1) {
         return __ICONS__;
     }
 
@@ -15,7 +15,7 @@ export function searchIcon (search: string|null): string[] {
         }
         if (iconName in __ICON_SEARCHES__) {
             for (const term: string of __ICON_SEARCHES__[iconName]) {
-                if (term.toLowerCase().includes(search.toLowerCase())) {
+                if (term.toLowerCase().includes(search.toLowerCase()) as boolean) {
                     return true;
                 }
             }

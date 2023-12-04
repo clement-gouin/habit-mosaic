@@ -71,7 +71,7 @@ import Tooltip from '@tools/Tooltip.vue';
 import { Option } from '@interfaces';
 import { useBsForm } from '@composables/useBsForm';
 import { useDebouncedRef } from '@composables/useDebouncedRef';
-import {autoUpdate, flip, shift, size, useFloating} from '@floating-ui/vue';
+import { autoUpdate, flip, shift, size, useFloating } from '@floating-ui/vue';
 
 interface Props {
     name: string,
@@ -104,13 +104,13 @@ const internalError = ref<string|null>(null);
 const menu = ref(null);
 const { floatingStyles } = useFloating(input, menu, {
     placement: 'bottom-start',
-    middleware: [flip(), shift(),   size({
-        apply({rects, elements}) {
-            Object.assign(elements.floating.style, {
-                width: `${rects.reference.width}px`,
-            });
-        },
-    }),],
+    middleware: [
+        flip(), shift(), size({
+            apply ({ rects, elements }) {
+                Object.assign(elements.floating.style, { width: `${rects.reference.width}px` });
+            }
+        })
+    ],
     whileElementsMounted: autoUpdate
 });
 
