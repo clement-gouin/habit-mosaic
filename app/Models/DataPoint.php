@@ -47,6 +47,7 @@ class DataPoint extends Model
      */
     protected $casts = [
         'date' => 'datetime:Y-m-d',
+        'value' => 'float',
     ];
 
     public function tracker(): BelongsTo

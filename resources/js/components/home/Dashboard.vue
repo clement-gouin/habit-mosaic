@@ -1,9 +1,24 @@
 <template>
     <h1>Dashboard</h1>
-    <p>TODO</p>
+    <div class="d-flex flex-row flex-wrap">
+        <template v-for="(tracker,i) in trackers" v-bind:key="tracker.id">
+            <tracker-input class="mx-2 my-1" v-model="trackers[i]" />
+        </template>
+    </div>
 </template>
 
 <script setup lang="ts">
+import { Tracker } from '@interfaces';
+import TrackerInput from '@tools/TrackerInput.vue';
+import { ref } from 'vue';
+
+interface Props {
+    trackers: Tracker[]
+}
+
+const props = defineProps<Props>();
+
+const trackers = ref<Tracker[]>(props.trackers);
 </script>
 
 <script lang="ts">

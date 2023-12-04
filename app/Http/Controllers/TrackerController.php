@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Tracker;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\TrackerResource;
@@ -11,6 +12,7 @@ use App\Http\Requests\StoreTrackerRequest;
 use App\Http\Requests\UpdateTrackerRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TrackerController extends Controller
 {
@@ -20,6 +22,14 @@ class TrackerController extends Controller
     public function index(): Response
     {
         return response()->noContent(501); // TODO
+    }
+
+    public function list(Request $request): ResourceCollection
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        return TrackerResource::collection($user->trackers);
     }
 
     /**

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Authenticate;
 use App\Http\Controllers\TrackerController;
 use App\Http\Controllers\DataPointController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthenticatedSessionController;
 
 /*
@@ -26,13 +27,12 @@ Route::middleware(['guest', 'throttle'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::resource('trackers', TrackerController::class)->only([
         'index', 'store', 'update', 'destroy',
     ]);
+    Route::get('trackers/list', [TrackerController::class, 'list'])->name('trackers.list');
 
     Route::resource('data_points', DataPointController::class)->only([
         'update',

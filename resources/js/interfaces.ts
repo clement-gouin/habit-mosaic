@@ -35,13 +35,14 @@ export interface Tracker extends Base {
     id?: number
     name: string
     icon: string
+    order: number
     unit: string
     value_step: number
     default_value: number
     target_value: number
     target_score: number
+    target_max: boolean
     data_point: DataPoint
-    last_update?: string
 }
 
 export interface DataPoint extends Base {

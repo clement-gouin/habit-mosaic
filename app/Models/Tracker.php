@@ -57,6 +57,16 @@ class Tracker extends Model
         'target_max',
     ];
 
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'value_step' => 'float',
+        'default_value' => 'float',
+        'target_value' => 'float',
+        'target_score' => 'float',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

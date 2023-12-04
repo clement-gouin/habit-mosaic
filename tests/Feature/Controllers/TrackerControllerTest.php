@@ -12,6 +12,17 @@ class TrackerControllerTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
+    public function it_lists_tracker(): void
+    {
+        $tracker = Tracker::factory()->create();
+
+        $this->actingAs($tracker->user)
+            ->get(route('trackers.list'))
+            ->assertSuccessful()
+            ->assertJsonFragment(['id' => $tracker->id]);
+    }
+
+    /** @test */
     public function it_creates_tracker(): void
     {
         $user = User::factory()->create();
