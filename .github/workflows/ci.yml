@@ -37,6 +37,9 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
       - uses: php-actions/composer@v6
         with:
           php_version: 8.2
@@ -58,9 +61,10 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
-      - uses: php-actions/composer@v6
+      - uses: shivammathur/setup-php@v2
         with:
-          php_version: 8.2
+          php-version: '8.2'
+      - uses: php-actions/composer@v6
       - uses: php-actions/phpcs@v1
         with:
           path: ./
@@ -84,9 +88,10 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
-      - uses: php-actions/composer@v6
+      - uses: shivammathur/setup-php@v2
         with:
-          php_version: 8.2
+          php-version: '8.2'
+      - uses: php-actions/composer@v6
       - uses: php-actions/phpmd@v1
         with:
           path: app
@@ -111,9 +116,11 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
-      - uses: php-actions/composer@v6
+      - uses: shivammathur/setup-php@v2
         with:
-          php_version: 8.2
+          php-version: '8.2'
+          coverage: xdebug
+      - uses: php-actions/composer@v6
       - uses: php-actions/phpunit@v3
         with:
           configuration: phpunit.xml
