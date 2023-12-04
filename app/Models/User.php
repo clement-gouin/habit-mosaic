@@ -82,7 +82,7 @@ class User extends Authenticatable
 
     public function trackers(): HasMany
     {
-        return $this->hasMany(Tracker::class);
+        return $this->hasMany(Tracker::class)->orderBy('order');
     }
 
     public function dataPoints(): HasManyThrough

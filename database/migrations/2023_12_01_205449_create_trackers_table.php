@@ -16,12 +16,14 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->integer('order');
             $table->string('icon');
             $table->string('unit')->nullable();
             $table->float('value_step');
             $table->float('default_value');
             $table->float('target_value');
             $table->float('target_score');
+            $table->boolean('target_max');
             $table->timestamps();
         });
     }

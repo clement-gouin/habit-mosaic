@@ -20,11 +20,13 @@ class StoreTrackerRequest extends FormRequest
         return [
             'name' => 'required',
             'icon' => 'required',
+            'order' => 'numeric',
             'unit' => 'nullable',
             'value_step' => 'required|numeric|min:0',
             'default_value' => 'required|numeric',
             'target_value' => 'required|numeric',
             'target_score' => 'required|numeric',
+            'target_max' => 'required|boolean',
         ];
     }
 }

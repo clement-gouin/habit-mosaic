@@ -95,11 +95,13 @@ class TrackerControllerTest extends TestCase
         return [
             'name' => fake()->word(),
             'icon' => fake()->word(),
+            'order' => fake()->randomNumber(nbDigits: 3),
             'unit' => fake()->boolean() ? fake()->word() : null,
             'value_step' => fake()->randomFloat(),
             'default_value' => fake()->randomFloat(),
             'target_value' => fake()->randomFloat(),
             'target_score' => fake()->randomFloat(),
+            'target_max' => fake()->boolean,
         ];
     }
 }

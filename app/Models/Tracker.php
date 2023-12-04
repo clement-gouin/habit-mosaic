@@ -19,11 +19,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property int $user_id
  * @property string $name
  * @property string $icon
+ * @property int $order
  * @property string|null $unit
  * @property float $value_step
  * @property float $default_value
  * @property float $target_value
  * @property float $target_score
+ * @property bool $target_max
  * @property-read User $user
  * @property-read Collection|DataPoint[] $dataPoints
  * @property Carbon|null $created_at
@@ -46,11 +48,13 @@ class Tracker extends Model
     protected $fillable = [
         'name',
         'icon',
+        'order',
         'unit',
         'value_step',
         'default_value',
         'target_value',
         'target_score',
+        'target_max',
     ];
 
     public function user(): BelongsTo
