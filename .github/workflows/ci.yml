@@ -38,8 +38,6 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
       - uses: php-actions/composer@v6
-        with:
-          php_version: 8.2
       - run: vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=checkstyle > reports/phpstan.xml
       - uses: jwgmeligmeyling/checkstyle-github-action@master
         if: always()
