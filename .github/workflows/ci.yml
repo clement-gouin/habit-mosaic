@@ -38,6 +38,8 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
       - uses: php-actions/composer@v6
+        with:
+          php_version: 8.2
       - run: vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=checkstyle > reports/phpstan.xml
       - uses: jwgmeligmeyling/checkstyle-github-action@master
         if: always()
@@ -57,6 +59,8 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
       - uses: php-actions/composer@v6
+        with:
+          php_version: 8.2
       - uses: php-actions/phpcs@v1
         with:
           path: ./
@@ -81,6 +85,8 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
       - uses: php-actions/composer@v6
+        with:
+          php_version: 8.2
       - uses: php-actions/phpmd@v1
         with:
           path: app
@@ -106,6 +112,8 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ hashFiles('composer.lock') }}
       - uses: php-actions/composer@v6
+        with:
+          php_version: 8.2
       - uses: php-actions/phpunit@v3
         with:
           configuration: phpunit.xml
