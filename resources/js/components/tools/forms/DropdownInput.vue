@@ -37,7 +37,7 @@
                     v-if="selected?.key && !readonly && !disabled"
                     @click="clearSelection"
                     class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true">
-        </span>
+                </span>
                 <span v-else-if="!readonly && !disabled" :style="{right: cursorOffset}" class="glyphicon glyphicon-chevron-down form-control-feedback" aria-hidden="true" @click="onFocus"></span>
             </div>
 

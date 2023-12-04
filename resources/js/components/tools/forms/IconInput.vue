@@ -16,6 +16,8 @@
         with-highlight
         @change="onChange"
         :notice="notice"
+        :label-col-size="labelColSize"
+        :input-wrapper-col-size="inputWrapperColSize"
     >
         <template #item="option">
             <i :class="mapToClassName(option.value)"></i> {{ option.value }}
@@ -26,7 +28,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { Option } from '@interfaces';
-import { getIconList, searchIcon, mapToClassName } from '@utils/icons';
+import { searchIcon, mapToClassName } from '@utils/icons';
 import DropdownInput from '@tools/forms/DropdownInput.vue';
 
 interface Props{
@@ -40,6 +42,9 @@ interface Props{
     required?: boolean,
     readonly?: boolean,
     notice?: string,
+
+    labelColSize?: number,
+    inputWrapperColSize?: number,
 }
 
 function iconNameToOption (name: string): Option {
@@ -57,10 +62,14 @@ const icon = computed<Option|null>({
 
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue', 'change']);
-const options = ref<Option[]>(getIconList().map(iconNameToOption));
+const options = ref<Option[]>([]);
 
 async function onSearch (value = '') {
-    options.value = searchIcon(value).map(iconNameToOption);
+    if (value && value.length > 2) {
+        options.value = searchIcon(value).map(iconNameToOption);
+    } else {
+        options.value = [];
+    }
 }
 
 function onChange (value: Option | null) {

@@ -3,11 +3,52 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import fs from 'fs';
+import iconsManifest from '@fortawesome/fontawesome-free/metadata/icon-families.json';
+
+function computeIconsData() {
+    const output = {};
+    Object.keys(iconsManifest).forEach(name => {
+        const data = iconsManifest[name];
+        output[name] = {
+            'search': data.search.terms.concat(...((data.aliases ?? []).names ?? [])),
+            'styles': data.familyStylesByLicense.free.map(d => d.style),
+        };
+    })
+    return JSON.stringify(output);
+}
+
+function computeIconNames() {
+    return JSON.stringify(Object.keys(iconsManifest));
+}
+
+function computeIconSearch() {
+    const output = {};
+    Object.keys(iconsManifest).forEach(name => {
+        const terms = iconsManifest[name].search.terms.concat(...((iconsManifest[name].aliases ?? []).names ?? []));
+        if (terms.length) {
+            output[name] = terms;
+        }
+    })
+    return JSON.stringify(output);
+}
+
+function computeIconStyles() {
+    const output = {};
+    Object.keys(iconsManifest).forEach(name => {
+        output[name] = iconsManifest[name].familyStylesByLicense.free.map(d => d.style);
+    })
+    return JSON.stringify(output);
+}
 
 export default defineConfig(({ mode }) => {
     const env = { ...loadEnv(mode, process.cwd(), ''), ...process.env };
 
     return {
+        define: {
+            __ICONS__: computeIconNames(),
+            __ICON_SEARCHES__: computeIconSearch(),
+            __ICON_STYLES__: computeIconStyles(),
+        },
         server: {
             host: '0.0.0.0',
             port: env.VITE_HMR_PORT ?? 5173,
@@ -50,12 +91,11 @@ export default defineConfig(({ mode }) => {
                 '@constants': path.resolve(__dirname, 'resources/js/constants.ts'),
                 '@symbols': path.resolve(__dirname, 'resources/js/symbols.ts'),
                 '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
-                '~bootstrap-icons': path.resolve(__dirname, 'node_modules/bootstrap-icons'),
                 '~fontawesome': path.resolve(__dirname, 'node_modules/@fortawesome/fontawesome-free'),
                 '@css': path.resolve(__dirname, 'resources/css'),
                 '@fonts': path.resolve(__dirname, 'resources/fonts'),
                 '@images': path.resolve(__dirname, 'resources/images')
             }
-        }
+        },
     };
 });

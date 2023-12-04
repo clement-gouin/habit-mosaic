@@ -28,7 +28,7 @@
     </head>
     <body class="h-100 row" style="margin: auto">
         <x-menu class="col-2 col-md-1 col-lg-3 col-xxl-2">
-            <x-menu.item route="dashboard" pattern="dashboard" icon="house-door-fill">
+            <x-menu.item route="dashboard" pattern="dashboard" icon="fa-solid fa-house-chimney">
                 Dashboard
             </x-menu.item>
         </x-menu>

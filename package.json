@@ -29,7 +29,7 @@
         "@popperjs/core": "^2.11.8",
         "axios": "^1.1.2",
         "bootstrap": "^5.3.1",
-        "bootstrap-icons": "^1.10.5",
+        "js-levenshtein": "^1.1.6",
         "qs": "^6.11.2",
         "vue": "^3.3.4"
     }

@@ -4,6 +4,11 @@ module.exports = {
         browser: true,
         es2021: true
     },
+    globals: {
+        __ICONS__: true,
+        __ICON_SEARCHES__: true,
+        __ICON_STYLES__: true,
+    },
     ignorePatterns: ['.eslintrc.js'],
     extends: [
         'eslint:recommended',
