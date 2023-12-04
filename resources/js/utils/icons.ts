@@ -35,5 +35,6 @@ export function searchIcon (search: string | undefined): string[] {
 }
 
 export function mapToClassName (iconName: string): string {
-    return `fa-${__ICON_STYLES__[iconName][0]} fa-${iconName}`;
+    const style: string = __ICON_STYLES__[iconName][0];
+    return `fa-${style} fa-${iconName}`;
 }
