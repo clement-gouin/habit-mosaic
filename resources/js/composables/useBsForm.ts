@@ -24,7 +24,7 @@ export function useBsForm (props?: Record<string, unknown>): BsForm {
 
         return {
             'col-form-label': !isFloating.value && isHorizontal.value,
-            'form-label': !isFloating.value && !isHorizontal.value,
+            'form-label': isFloating.value || !isHorizontal.value,
             [`col-sm-${col}`]: isHorizontal.value && !isFloating.value
         };
     });

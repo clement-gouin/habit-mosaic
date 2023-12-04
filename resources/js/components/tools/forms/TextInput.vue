@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" :class="{'has-error': (error || fieldError), 'row': isHorizontal}">
+    <div class="form-group" :class="{'has-error': (error || fieldError), 'row': isHorizontal && !isFloating}">
         <label v-if="!isFloating" :class="labelClass" :for="name">
             <template v-if="helpText">
                 <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;<span
@@ -32,7 +32,7 @@
                 <span v-else-if="fieldError" :id="'help-' + name" class="form-text">{{ fieldError }}</span>
                 <span v-else-if="notice || $slots.notice" class="form-text"><slot name="notice">{{ notice }}</slot></span>
             </span>
-            <label v-if="isFloating" :for="name">{{ label }}<span v-if="required" class="text-danger">*</span></label>
+            <label v-if="isFloating" :class="labelClass" :for="name">{{ label }}<span v-if="required" class="text-danger">*</span></label>
         </div>
     </div>
 </template>

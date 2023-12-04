@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read User $user
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property Carbon|null $last_used_at
  * @property Carbon $expires_at
  * @method static Builder|UserToken newModelQuery()
  * @method static Builder|UserToken newQuery()
@@ -34,7 +33,6 @@ class UserToken extends Model
      */
     protected $fillable = [
         'expires_at',
-        'last_used_at',
         'token',
     ];
 
@@ -52,7 +50,6 @@ class UserToken extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'last_used_at' => 'datetime',
         'expires_at' => 'datetime',
     ];
 

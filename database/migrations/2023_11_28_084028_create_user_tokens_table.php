@@ -16,7 +16,6 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->string('token', 64)->unique();
-            $table->timestamp('last_used_at')->nullable();
             $table->timestamp('expires_at');
             $table->timestamps();
         });

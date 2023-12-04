@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\Authenticate;
 use App\Http\Controllers\TrackerController;
 use App\Http\Controllers\DataPointController;
 use App\Http\Controllers\AuthenticatedSessionController;
@@ -18,8 +19,8 @@ use App\Http\Controllers\AuthenticatedSessionController;
 
 Route::middleware(['guest', 'throttle'])->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])->name('login');
-    Route::post('/', [AuthenticatedSessionController::class, 'store']);
-    Route::get('/login/{token}', [AuthenticatedSessionController::class, 'login']);
+    Route::post('/', [AuthenticatedSessionController::class, 'store'])->name('login.store');
+    Route::get('/login/{token}', [AuthenticatedSessionController::class, 'login'])->name('login.token');
 });
 
 Route::middleware('auth')->group(function () {

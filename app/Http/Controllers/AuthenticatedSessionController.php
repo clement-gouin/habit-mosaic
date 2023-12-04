@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateInterval;
 use App\Models\User;
 use App\Models\UserToken;
 use App\Mail\NewTokenLink;
@@ -18,6 +19,8 @@ use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
+    public const TOKEN_EXPIRES = '1 hour';
+
     public function __construct()
     {
     }
@@ -83,8 +86,14 @@ class AuthenticatedSessionController extends Controller
 
     protected function sendToken(User $user): void
     {
+        $user->tokens()
+            ->where('expires_at', '>', Carbon::now())
+            ->update([
+                'expires_at' => Carbon::now(),
+            ]);
+
         $token = UserToken::query()->make([
-            'expires_at' => Carbon::now()->addHour(),
+            'expires_at' => Carbon::now()->add(static::TOKEN_EXPIRES),
             'token' => bin2hex(openssl_random_pseudo_bytes(20)),
         ]);
 
@@ -96,7 +105,7 @@ class AuthenticatedSessionController extends Controller
     protected function loginWithToken(UserToken $userToken): void
     {
         $userToken->update([
-            'last_used_at' => Carbon::now(),
+            'expires_at' => Carbon::now(),
         ]);
 
         if (! $userToken->user->email_verified_at) {

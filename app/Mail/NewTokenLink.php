@@ -33,8 +33,7 @@ class NewTokenLink extends Mailable
             with: [
                 'newUser' => $this->newUser,
                 'user' => $this->token->user->name,
-                'url' => config('app.url') . '/login/' . $this->token->token,
-                'expires' => $this->token->expires_at->toFormattedDayDateString()
+                'url' => config('app.url') . '/login/' . $this->token->token
             ]
         );
     }
