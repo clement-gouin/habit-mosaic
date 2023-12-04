@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" :class="{'has-error': (error || internalError)}">
+    <div class="form-group" :class="{'has-error': (error || internalError), 'row': isHorizontal}">
         <label :class="labelClass" :for="name" v-if="label">
             <template v-if="helpText">
                 <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;<span
@@ -9,26 +9,26 @@
                 {{ label }}<span v-if="required" class="text-danger">*</span>
             </template>
         </label>
-        <component :class="inputWrapperClass" :is="isHorizontal ? 'div' : 'template'">
-      <textarea
-          :name="name"
-          :rows="rows"
-          class="form-control"
-          :value="modelValue"
-          :disabled="disabled"
-          :aria-describedby="'help-' + name"
-          :required="required"
-          :placeholder="placeholder"
-          :autocomplete="autocomplete"
-          :readonly="readonly"
-          v-bind="$attrs"
-          @change="onChange"
-          @input="onInput"
-      ></textarea>
-            <span v-if="internalError" :id="`help-${name}`" class="help-block">{{ internalError }}</span>
-            <span v-else-if="error" :id="`help-${name}`" class="help-block">{{ error }}</span>
-            <span v-else-if="notice || $slots.notice" :id="`help-${name}`" class="help-block"><slot name="notice">{{ notice }}</slot></span>
-        </component>
+        <div :class="inputWrapperClass">
+          <textarea
+              :name="name"
+              :rows="rows"
+              class="form-control"
+              :value="modelValue"
+              :disabled="disabled"
+              :aria-describedby="'help-' + name"
+              :required="required"
+              :placeholder="placeholder"
+              :autocomplete="autocomplete"
+              :readonly="readonly"
+              v-bind="$attrs"
+              @change="onChange"
+              @input="onInput"
+          ></textarea>
+            <span v-if="internalError" :id="`help-${name}`" class="form-text">{{ internalError }}</span>
+            <span v-else-if="error" :id="`help-${name}`" class="form-text">{{ error }}</span>
+            <span v-else-if="notice || $slots.notice" :id="`help-${name}`" class="form-text"><slot name="notice">{{ notice }}</slot></span>
+        </div>
     </div>
 </template>
 <script setup lang="ts">

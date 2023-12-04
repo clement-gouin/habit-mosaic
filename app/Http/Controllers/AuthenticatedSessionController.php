@@ -84,7 +84,7 @@ class AuthenticatedSessionController extends Controller
     protected function sendToken(User $user): void
     {
         $token = UserToken::query()->make([
-            'expires_at' => Carbon::now()->addWeek(),
+            'expires_at' => Carbon::now()->addHour(),
             'token' => bin2hex(openssl_random_pseudo_bytes(20)),
         ]);
 

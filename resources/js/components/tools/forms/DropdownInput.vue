@@ -1,5 +1,5 @@
 <template>
-    <div :id="`dropdown-input-${name}`" class="form-group" :class="{ 'has-error': error || internalError, 'has-feedback': true }">
+    <div :id="`dropdown-input-${name}`" class="form-group" :class="{ 'has-error': error || internalError, 'has-feedback': true, 'row': isHorizontal }">
         <slot name="label">
             <label :class="labelClass" :for="name">
                 <template v-if="helpText">
@@ -10,7 +10,7 @@
                 </template>
             </label>
         </slot>
-        <component :is="isHorizontal ? 'div' : 'template'" :class="inputWrapperClass">
+        <div :class="inputWrapperClass">
             <div :class="$slots.addon ? 'input-group' : ''">
                 <div v-if="!showInput" class="form-control" @click="onClick" :class="{disabled}">
                     <div v-if="selected?.key"><slot name="item" v-bind="selected">{{ selected?.label }}</slot></div>
@@ -58,10 +58,10 @@
                     </div>
                 </div>
             </ul>
-            <span v-if="error" :id="`help-${name}`" class="help-block">{{ error }}</span>
-            <span v-else-if="internalError" :id="`help-${name}`" class="help-block">{{ internalError }}</span>
-            <span v-else-if="notice || $slots.notice" :id="`help-${name}`" class="help-block"><slot name="notice">{{ notice }}</slot></span>
-        </component>
+            <span v-if="error" :id="`help-${name}`" class="form-text">{{ error }}</span>
+            <span v-else-if="internalError" :id="`help-${name}`" class="form-text">{{ internalError }}</span>
+            <span v-else-if="notice || $slots.notice" :id="`help-${name}`" class="form-text"><slot name="notice">{{ notice }}</slot></span>
+        </div>
     </div>
 </template>
 
@@ -71,7 +71,7 @@ import Tooltip from '@tools/Tooltip.vue';
 import { Option } from '@interfaces';
 import { useBsForm } from '@composables/useBsForm';
 import { useDebouncedRef } from '@composables/useDebouncedRef';
-import { autoUpdate, flip, shift, useFloating } from '@floating-ui/vue';
+import {autoUpdate, flip, shift, size, useFloating} from '@floating-ui/vue';
 
 interface Props {
     name: string,
@@ -104,7 +104,13 @@ const internalError = ref<string|null>(null);
 const menu = ref(null);
 const { floatingStyles } = useFloating(input, menu, {
     placement: 'bottom-start',
-    middleware: [flip(), shift()],
+    middleware: [flip(), shift(),   size({
+        apply({rects, elements}) {
+            Object.assign(elements.floating.style, {
+                width: `${rects.reference.width}px`,
+            });
+        },
+    }),],
     whileElementsMounted: autoUpdate
 });
 
@@ -213,7 +219,6 @@ defineExpose({ select, highlight });
 ul.dropdown-menu {
     max-height: 20em;
     overflow: scroll;
-    width: 100%;
 }
 
 .dropdown-item {

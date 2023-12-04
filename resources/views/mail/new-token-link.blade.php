@@ -9,7 +9,7 @@
 Open App
 </x-mail::button>
 
-(Available for a week until: {{ $expires }})
+(Available for an hour until: {{ $expires }})
 
 Enjoy your stay !<br>
 {{ config('app.name') }}

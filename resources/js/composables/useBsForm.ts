@@ -23,8 +23,8 @@ export function useBsForm (props?: Record<string, unknown>): BsForm {
       12 - ((props?.inputWrapperColSize as number) ?? inputWrapperColSize?.value ?? 8);
 
         return {
-            'label-column': !isFloating.value,
-            'control-label': !isFloating.value,
+            'col-form-label': !isFloating.value && isHorizontal.value,
+            'form-label': !isFloating.value && !isHorizontal.value,
             [`col-sm-${col}`]: isHorizontal.value && !isFloating.value
         };
     });

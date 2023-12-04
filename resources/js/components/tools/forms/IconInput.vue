@@ -63,9 +63,11 @@ const icon = computed<Option|null>({
 const props = defineProps<Props>();
 const emit = defineEmits(['update:modelValue', 'change']);
 const options = ref<Option[]>([]);
+const loading = ref(false);
 
 async function onSearch (value = '') {
     if (value && value.length > 2) {
+        loading.value = true;
         options.value = searchIcon(value).map(iconNameToOption);
     } else {
         options.value = [];

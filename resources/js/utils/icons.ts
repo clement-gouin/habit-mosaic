@@ -13,7 +13,7 @@ export function searchIcon (search: string|null): string[] {
         if (iconName.toLowerCase().includes(search.toLowerCase())) {
             return true;
         }
-        if (__ICON_SEARCHES__hasOwnProperty('iconName')) {
+        if (iconName in __ICON_SEARCHES__) {
             for (const term: string of __ICON_SEARCHES__[iconName]) {
                 if (term.toLowerCase().includes(search.toLowerCase())) {
                     return true;

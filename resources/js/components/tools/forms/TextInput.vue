@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" :class="(error || fieldError) ? 'has-error' : ''">
+    <div class="form-group" :class="{'has-error': (error || fieldError), 'row': isHorizontal}">
         <label v-if="!isFloating" :class="labelClass" :for="name">
             <template v-if="helpText">
                 <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;<span
@@ -9,7 +9,7 @@
                 {{ label }}<span v-if="required" class="text-danger">*</span>
             </template>
         </label>
-        <component :class="inputWrapperClass" :is="isHorizontal ? 'div' : 'template'">
+        <div :class="inputWrapperClass">
             <input
                 ref="input"
                 :name="name"
@@ -28,12 +28,12 @@
                 @change="onChange"
             >
             <span v-if="!hideHelp">
-                <span v-if="error" :id="'help-' + name" class="help-block">{{ error }}</span>
-                <span v-else-if="fieldError" :id="'help-' + name" class="help-block">{{ fieldError }}</span>
-                <span v-else-if="notice || $slots.notice" class="help-block"><slot name="notice">{{ notice }}</slot></span>
+                <span v-if="error" :id="'help-' + name" class="form-text">{{ error }}</span>
+                <span v-else-if="fieldError" :id="'help-' + name" class="form-text">{{ fieldError }}</span>
+                <span v-else-if="notice || $slots.notice" class="form-text"><slot name="notice">{{ notice }}</slot></span>
             </span>
             <label v-if="isFloating" :for="name">{{ label }}<span v-if="required" class="text-danger">*</span></label>
-        </component>
+        </div>
     </div>
 </template>
 

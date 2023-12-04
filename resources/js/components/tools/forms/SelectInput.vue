@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group" :class="(error || emptyError) ? 'has-error' : ''">
+    <div class="form-group" :class="{'has-error': (error || emptyError), 'row': isHorizontal}">
         <label :class="labelClass" :for="name" v-if="label">
             <template v-if="helpText">
                 <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;
@@ -9,7 +9,7 @@
                 {{ label }}<span v-if="required" class="text-danger">*</span>
             </template>
         </label>
-        <component :is="isHorizontal ? 'div' : 'template'" :class="inputWrapperClass">
+        <div :class="inputWrapperClass">
             <select
                 ref="input"
                 :name="name"
@@ -26,9 +26,9 @@
                     {{ option.label }}
                 </option>
             </select>
-            <span v-if="error" :id="'help-' + name" class="help-block">{{ error }}</span>
-            <span v-else-if="emptyError" :id="'help-' + name" class="help-block">This field is required</span>
-        </component>
+            <span v-if="error" :id="'help-' + name" class="form-text">{{ error }}</span>
+            <span v-else-if="emptyError" :id="'help-' + name" class="form-text">This field is required</span>
+        </div>
     </div>
 </template>
 
