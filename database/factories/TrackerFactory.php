@@ -19,18 +19,31 @@ class TrackerFactory extends Factory
      */
     public function definition(): array
     {
-        return [
+        $data = [
             'user_id' => User::factory(),
             'name' => fake()->unique()->word(),
             'icon' => fake()->randomElement(['bath', 'spoon', 'chair', 'jar', 'toilet', 'soap', 'sink', 'shower', 'tv', 'faucet', 'blender', 'plug']),
             'order' => fake()->randomNumber(nbDigits: 3),
-            'unit' => fake()->boolean() ? fake()->randomElement(['kilometer', 'meter', 'step', 'time', 'hour', 'minute', 'second']) : null,
-            'value_step' => fake()->randomElement([.1, .5, 1, 5, 10]),
-            'default_value' => 0,
-            'target_value' => fake()->randomFloat(max: 30),
             'target_score' => fake()->randomFloat(min: -10, max: 10),
-            'target_max' => fake()->boolean(),
         ];
+
+        if (fake()->boolean()) {
+            return [
+                ...$data,
+                'unit' => null,
+                'value_step' => 1,
+                'target_value' => 1,
+                'single' => true,
+            ];
+        } else {
+            return [
+                ...$data,
+                'unit' => fake()->randomElement(['kilometer', 'meter', 'step', 'time', 'hour', 'minute', 'second']),
+                'value_step' => fake()->randomElement([.1, .5, 1, 5, 10]),
+                'target_value' => fake()->randomFloat(max: 30),
+                'single' => false,
+            ];
+        }
     }
 
     /**

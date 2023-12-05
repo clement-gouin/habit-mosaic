@@ -22,10 +22,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property int $order
  * @property string|null $unit
  * @property float $value_step
- * @property float $default_value
  * @property float $target_value
  * @property float $target_score
- * @property bool $target_max
+ * @property bool $single
  * @property-read User $user
  * @property-read Collection|DataPoint[] $dataPoints
  * @property Carbon|null $created_at
@@ -51,10 +50,9 @@ class Tracker extends Model
         'order',
         'unit',
         'value_step',
-        'default_value',
         'target_value',
         'target_score',
-        'target_max',
+        'single',
     ];
 
     /**
@@ -62,7 +60,6 @@ class Tracker extends Model
      */
     protected $casts = [
         'value_step' => 'float',
-        'default_value' => 'float',
         'target_value' => 'float',
         'target_score' => 'float',
     ];
@@ -80,7 +77,7 @@ class Tracker extends Model
     public function getLastDataPoint(): DataPoint|Model|null
     {
         return $this->dataPoints()
-            ->where('value', '!=', $this->default_value)
+            ->where('value', '!=', 0)
             ->first();
     }
 
@@ -89,8 +86,6 @@ class Tracker extends Model
         return $this->dataPoints()
             ->firstOrCreate([
                 'date' => $date,
-            ], [
-                'value' => $this->default_value,
-            ]);
+            ])->refresh();
     }
 }

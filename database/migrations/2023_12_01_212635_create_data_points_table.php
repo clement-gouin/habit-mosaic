@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Tracker::class)->constrained()->onDelete('cascade');
             $table->date('date');
-            $table->float('value');
+            $table->float('value')->default(0);
         });
     }
 

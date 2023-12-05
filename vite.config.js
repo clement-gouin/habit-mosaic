@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => {
                     key: fs.readFileSync(env.VITE_KEY_FILE),
                     cert: fs.readFileSync(env.VITE_CERT_FILE)
                 }
-                : {},
+                : false,
             hmr: {
                 protocol: 'ws',
                 host: env.VITE_HMR_HOST ?? env.APP_HOST,

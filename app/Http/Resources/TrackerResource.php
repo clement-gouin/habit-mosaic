@@ -31,10 +31,9 @@ class TrackerResource extends JsonResource
             'order' => $this->resource->order,
             'unit' => $this->resource->unit,
             'value_step' => $this->resource->value_step,
-            'default_value' => $this->resource->default_value,
             'target_value' => $this->resource->target_value,
             'target_score' => $this->resource->target_score,
-            'target_max' => $this->resource->target_max,
+            'single' => $this->resource->single,
             'data_point' => DataPointResource::make($this->resource->getDataPointAt($date)),
         ];
     }

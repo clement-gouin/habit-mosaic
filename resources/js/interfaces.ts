@@ -38,10 +38,9 @@ export interface Tracker extends Base {
     order: number
     unit: string
     value_step: number
-    default_value: number
     target_value: number
     target_score: number
-    target_max: boolean
+    single: boolean
     data_point: DataPoint
 }
 
