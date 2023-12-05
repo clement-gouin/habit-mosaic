@@ -42,6 +42,7 @@ export interface Tracker extends Base {
     target_score: number
     single: boolean
     data_point: DataPoint
+    score: number
 }
 
 export interface DataPoint extends Base {

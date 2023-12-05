@@ -13,6 +13,7 @@ import TrackerInput from '@tools/TrackerInput.vue';
 import { ref } from 'vue';
 
 interface Props {
+    date: number,
     trackers: Tracker[]
 }
 
