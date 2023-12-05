@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { Tracker } from '@interfaces';
-import {computed, defineProps, ref} from 'vue';
+import { computed, defineProps, ref } from 'vue';
 import { mapToClassName } from '@utils/icons';
 
 interface Props {
@@ -22,30 +22,30 @@ const props = defineProps<Props>();
 
 const tracker = ref<Tracker>(props.modelValue);
 
-const percent = computed(() => tracker.value.data_point.value > tracker.value.target_value ? 100 : 100 * tracker.value.data_point.value / tracker.value.target_value)
+const percent = computed(() => tracker.value.data_point.value > tracker.value.target_value ? 100 : 100 * tracker.value.data_point.value / tracker.value.target_value);
 
-function color(v, darker = '0%') {
-    return `color-mix(in srgb, var(--bs-dark) ${darker}, color-mix(in srgb, var(--bs-${tracker.value.target_score > 0 ? 'success' : 'danger'}-${v}) ${percent.value}%, var(--bs-light-${v}))) !important`
+function color (v, darker = '0%') {
+    return `color-mix(in srgb, var(--bs-dark) ${darker}, color-mix(in srgb, var(--bs-${tracker.value.target_score > 0 ? 'success' : 'danger'}-${v}) ${percent.value}%, var(--bs-light-${v}))) !important`;
 }
 const bgColor = computed(() => color('bg-subtle'));
 const bgColor2 = computed(() => color('bg-subtle', '2%'));
 const borderColor = computed(() => color('border-subtle'));
 const textColor = computed(() => color('text-emphasis'));
 
-function precision(a) {
+function precision (a) {
     let e = 1;
     while (Math.round(a * e) / e !== a) e *= 10;
     return Math.log(e) / Math.LN10;
 }
 
-function remove() {
+function remove () {
     if (tracker.value.data_point.value > 0) {
         tracker.value.data_point.value -= tracker.value.value_step;
     }
 }
 
-function add() {
-    if (! tracker.value.single || tracker.value.data_point.value === 0) {
+function add () {
+    if (!tracker.value.single || tracker.value.data_point.value === 0) {
         tracker.value.data_point.value += tracker.value.value_step;
     }
 }
