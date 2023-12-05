@@ -1,11 +1,11 @@
 <template>
-    <div :style="{color: textColor}" class="p-0 fs-3 text-nowrap text-center position-relative user-select-none lh-1" :title="tracker.name">
-        <i :style="{backgroundColor: bgColor2, borderColor: borderColor}" class="fa-solid fa-minus border border-2 ps-3 pe-2 py-2 rounded-start-pill" role="button" @click="remove"></i>
-        <span :style="{backgroundColor: bgColor, borderColor: borderColor}" class="d-inline-block border-top border-bottom border-2 px-3 py-2">
+    <div :style="{color: textColor}" class="p-0 fs-5 text-nowrap text-center position-relative user-select-none lh-1" :title="tracker.name">
+        <i :style="{backgroundColor: bgColor2, borderColor: borderColor}" class="fa-solid fa-minus border border-2 px-2 py-2 rounded-start-pill" role="button" @click="remove"></i>
+        <span :style="{backgroundColor: bgColor, borderColor: borderColor}" class="d-inline-block border-top border-bottom border-2 px-2 py-2">
             <i class="d-inline-block" :class="mapToClassName(tracker.icon)"></i>
             <span v-if="!tracker.single" class="d-inline-block ps-2">{{ tracker.data_point.value.toFixed(precision(tracker.value_step)) }}</span>
         </span>
-        <i :style="{backgroundColor: bgColor2, borderColor: borderColor}" class="fa-solid fa-plus border border-2 pe-3 ps-2 py-2 rounded-end-pill" role="button" @click="add"></i>
+        <i :style="{backgroundColor: bgColor2, borderColor: borderColor}" class="fa-solid fa-plus border border-2 px-2 py-2 rounded-end-pill" role="button" @click="add"></i>
     </div>
 </template>
 

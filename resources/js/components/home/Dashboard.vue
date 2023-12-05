@@ -2,7 +2,7 @@
     <h1>Dashboard</h1>
     <div class="d-flex flex-row flex-wrap">
         <template v-for="(tracker,i) in trackers" v-bind:key="tracker.id">
-            <tracker-input class="mx-2 my-1" v-model="trackers[i]" />
+            <tracker-input class="me-1 me-lg-2 mb-1 mb-lg-2" v-model="trackers[i]" />
         </template>
     </div>
 </template>

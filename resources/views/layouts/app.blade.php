@@ -32,7 +32,7 @@
                 Dashboard
             </x-menu.item>
         </x-menu>
-        <main style="background-color: #f5f5f5;" class="col-10 col-md-11 col-lg-9 col-xxl-10 h-100 overflow-scroll p-4">
+        <main style="background-color: #f5f5f5;" class="col-10 col-md-11 col-lg-9 col-xxl-10 h-100 overflow-scroll p-1 p-sm-2 p-md-4">
             @yield('content')
         </main>
         <div class="alert-container" id="alert-container"></div>
