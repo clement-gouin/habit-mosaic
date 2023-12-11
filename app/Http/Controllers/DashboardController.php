@@ -26,7 +26,7 @@ class DashboardController extends Controller
     protected function getData(Request $request): array
     {
         try {
-            $date = Carbon::parse($request->string('date', 'now'));
+            $date = Carbon::parse($request->string('date', 'today'));
         } catch (InvalidFormatException) {
             $date = Carbon::today();
         }

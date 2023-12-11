@@ -31,8 +31,16 @@ export interface ErrorResponse extends Base {
     errors: Record<string, string[]>
 }
 
+export interface Category extends Base {
+    id?: number
+    name: string
+    icon?: string
+    order: number
+}
+
 export interface Tracker extends Base {
     id?: number
+    category?: Category
     name: string
     icon: string
     order: number
