@@ -27,7 +27,10 @@ Route::middleware(['guest', 'throttle'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    Route::get('/dashboard', DashboardController::class)->name('dashboard');
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', DashboardController::class)->name('dashboard');
+        Route::get('data', [DashboardController::class, 'data'])->name('dashboard.data');
+    });
 
     Route::resource('trackers', TrackerController::class)->only([
         'index', 'store', 'update', 'destroy',

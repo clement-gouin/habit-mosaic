@@ -1,5 +1,5 @@
 <template>
-    <div :style="{color: textColor}" class="p-0 fs-5 text-nowrap text-center position-relative user-select-none lh-1" :title="tracker.name">
+    <div :style="{color: textColor}" class="p-0 fs-5 text-nowrap shadow-sm rounded-pill text-center position-relative user-select-none lh-1" :title="tracker.name">
         <template v-if="tracker.single">
             <span v-if="rawValue" @click="remove" role="button">
                 <span :style="{backgroundColor: bgColor, borderColor: borderColor}" class="d-inline-block align-bottom h-100 border border-2 px-3 py-2 lh-base rounded-start-pill"></span>
@@ -11,7 +11,7 @@
             </span>
         </template>
         <template v-else>
-            <i :style="{backgroundColor: bgColor2, borderColor: borderColor}" class="fa-solid fa-minus border border-2 px-2 py-2 rounded-start-pill" role="button" @click="remove"></i>
+            <i :style="{backgroundColor: bgColor2, borderColor: borderColor}" class="fa-solid  fa-minus border border-2 px-2 py-2 rounded-start-pill" role="button" @click="remove"></i>
             <span :style="{backgroundColor: bgColor, borderColor: borderColor}" class="d-inline-block border-top border-bottom border-2 px-2 py-2">
                 <i class="d-inline-block" :class="mapToClassName(tracker.icon)"></i>
                 <span v-if="!tracker.single" class="d-inline-block ps-2">{{ rawValue.toFixed(precision(tracker.value_step)) }}</span>
@@ -74,8 +74,16 @@ function update (dataPoint: DataPoint) {
 }
 
 watch(value, () => {
-    updateDataPoint({ ...tracker.value.data_point, value: value.value })
-        .then(update);
+    if (value.value !== tracker.value.data_point.value) {
+        updateDataPoint({ ...tracker.value.data_point, value: value.value })
+            .then(update);
+    }
+});
+
+watch(() => props.modelValue, () => {
+    tracker.value = props.modelValue;
+    rawValue.value = tracker.value.data_point.value;
+    value.value = tracker.value.data_point.value;
 });
 </script>
 
