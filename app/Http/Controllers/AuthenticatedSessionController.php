@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use DateInterval;
 use App\Models\User;
 use App\Models\UserToken;
 use App\Mail\NewTokenLink;
@@ -15,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\RedirectResponse;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Validation\ValidationException;
 
 class AuthenticatedSessionController extends Controller
 {

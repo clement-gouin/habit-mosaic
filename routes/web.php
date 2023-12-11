@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\Authenticate;
 use App\Http\Controllers\TrackerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DataPointController;
