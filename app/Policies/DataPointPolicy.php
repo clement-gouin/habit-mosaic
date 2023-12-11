@@ -2,9 +2,8 @@
 
 namespace App\Policies;
 
-use App\Models\DataPoint;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use App\Models\DataPoint;
 
 class DataPointPolicy
 {

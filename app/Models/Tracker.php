@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *
  * @property int $id
  * @property int $user_id
+ * @property int|null $category_id
  * @property string $name
  * @property string $icon
  * @property int $order
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property float $target_score
  * @property bool $single
  * @property-read User $user
+ * @property-read Category|null $category
  * @property-read Collection|DataPoint[] $dataPoints
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -67,6 +69,11 @@ class Tracker extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function dataPoints(): HasMany

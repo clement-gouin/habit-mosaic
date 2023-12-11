@@ -29,6 +29,7 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
  * @property-read int|null $notifications_count
  * @property-read Collection|UserToken[] $tokens
  * @property-read Collection|Tracker[] $trackers
+ * @property-read Collection|Tracker[] $categories
  * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -83,6 +84,11 @@ class User extends Authenticatable
     public function trackers(): HasMany
     {
         return $this->hasMany(Tracker::class)->orderBy('order');
+    }
+
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class)->orderByDesc('order');
     }
 
     public function dataPoints(): HasManyThrough

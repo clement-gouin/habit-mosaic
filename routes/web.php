@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Authenticate;
 use App\Http\Controllers\TrackerController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DataPointController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthenticatedSessionController;
@@ -36,6 +37,11 @@ Route::middleware('auth')->group(function () {
         'index', 'store', 'update', 'destroy',
     ]);
     Route::get('trackers/list', [TrackerController::class, 'list'])->name('trackers.list');
+
+    Route::resource('categories', CategoryController::class)->only([
+        'index', 'store', 'update', 'destroy',
+    ]);
+    Route::get('categories/list', [CategoryController::class, 'list'])->name('categories.list');
 
     Route::resource('data_points', DataPointController::class)->only([
         'update',

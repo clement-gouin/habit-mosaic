@@ -26,6 +26,7 @@ class TrackerResource extends JsonResource
 
         return [
             'id' => $this->resource->id,
+            'category' => $this->resource->category ? CategoryResource::make($this->resource->category) : null,
             'name' => $this->resource->name,
             'icon' => $this->resource->icon,
             'order' => $this->resource->order,

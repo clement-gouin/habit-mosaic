@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Tracker;
+use App\Models\Category;
 use Illuminate\Database\Seeder;
 
 class TrackerSeeder extends Seeder
@@ -14,6 +15,10 @@ class TrackerSeeder extends Seeder
 
         $user = User::whereEmail($targetMail)->first() ?? User::factory(['email' => $targetMail])->create();
 
-        $user->trackers()->saveMany(Tracker::factory(10)->make());
+        $user->categories()->saveMany(Category::factory(3)->make());
+
+        $user->trackers()->saveMany(Tracker::factory(10)->make([
+            'category_id' => fake()->randomElement($user->categories)->id,
+        ]));
     }
 }

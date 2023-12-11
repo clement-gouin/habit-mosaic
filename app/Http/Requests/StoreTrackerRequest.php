@@ -18,9 +18,10 @@ class StoreTrackerRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'category_id' => 'nullable|numeric|exists:App\Models\Category,id',
             'name' => 'required',
             'icon' => 'required',
-            'order' => 'numeric',
+            'order' => 'required|numeric',
             'unit' => 'nullable',
             'value_step' => 'required|numeric|min:0',
             'target_value' => 'required|numeric|min:0.001',
