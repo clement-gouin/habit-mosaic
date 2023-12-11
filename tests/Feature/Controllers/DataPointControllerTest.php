@@ -19,7 +19,7 @@ class DataPointControllerTest extends TestCase
         $targetData = $this->getTargetData();
 
         $this->actingAs(User::factory()->create())
-            ->put(route('data_points.update', $dataPoint), $targetData)
+            ->putJson(route('data_points.update', $dataPoint), $targetData)
             ->assertStatus(403);
 
         $this->assertDatabaseMissing('data_points', [
@@ -36,7 +36,7 @@ class DataPointControllerTest extends TestCase
         $targetData = $this->getTargetData();
 
         $this->actingAs($dataPoint->tracker->user)
-            ->put(route('data_points.update', $dataPoint), $targetData)
+            ->putJson(route('data_points.update', $dataPoint), $targetData)
             ->assertSuccessful();
 
         $this->assertDatabaseHas('data_points', [

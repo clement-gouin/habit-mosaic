@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,6 +19,7 @@ class CategoryFactory extends Factory
     public function definition(): array
     {
         return [
+            'user_id' => User::factory(),
             'name' => fake()->unique()->word(),
             'icon' => fake()->boolean() ? fake()->randomElement(['shower', 'tv', 'faucet', 'blender', 'plug']) : null,
             'order' => fake()->randomNumber(nbDigits: 3),

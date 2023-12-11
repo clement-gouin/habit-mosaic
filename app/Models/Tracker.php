@@ -47,6 +47,7 @@ class Tracker extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'category_id',
         'name',
         'icon',
         'order',

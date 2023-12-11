@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\User;
 use App\Models\Tracker;
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -21,6 +22,7 @@ class TrackerFactory extends Factory
     {
         $data = [
             'user_id' => User::factory(),
+            'category_id' => null,
             'name' => fake()->unique()->word(),
             'icon' => fake()->randomElement(['bath', 'spoon', 'chair', 'jar', 'toilet', 'soap', 'sink', 'shower', 'tv', 'faucet', 'blender', 'plug']),
             'order' => fake()->randomNumber(nbDigits: 3),

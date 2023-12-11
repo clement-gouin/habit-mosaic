@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Tracker;
+use App\Models\Category;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TrackerControllerTest extends TestCase
@@ -17,20 +18,45 @@ class TrackerControllerTest extends TestCase
         $tracker = Tracker::factory()->create();
 
         $this->actingAs($tracker->user)
-            ->get(route('trackers.list'))
+            ->getJson(route('trackers.list'))
             ->assertSuccessful()
             ->assertJsonFragment(['id' => $tracker->id]);
     }
 
     /** @test */
-    public function it_creates_tracker(): void
+    public function it_creates_tracker_without_category(): void
     {
         $user = User::factory()->create();
 
         $targetData = $this->getTargetData();
 
         $this->actingAs($user)
-            ->post(route('trackers.store'), $targetData)
+            ->postJson(route('trackers.store'), $targetData)
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('trackers', [
+            'user_id' => $user->id,
+            'category_id' => null,
+            ...$targetData,
+        ]);
+    }
+
+    /** @test */
+    public function it_creates_tracker_with_category(): void
+    {
+        $user = User::factory()->create();
+
+        $category = Category::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $targetData = [
+            'category_id' => $category->id,
+            ...$this->getTargetData(),
+        ];
+
+        $this->actingAs($user)
+            ->postJson(route('trackers.store'), $targetData)
             ->assertSuccessful();
 
         $this->assertDatabaseHas('trackers', [
@@ -40,15 +66,36 @@ class TrackerControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_forbid_data_point_update_for_another_user(): void
+    public function it_cannot_create_tracker_with_other_user_category(): void
+    {
+        $user = User::factory()->create();
+
+        $category = Category::factory()->create();
+
+        $targetData = [
+            'category_id' => $category->id,
+            ...$this->getTargetData(),
+        ];
+
+        $this->actingAs($user)
+            ->postJson(route('trackers.store'), $targetData)
+            ->assertUnprocessable();
+
+        $this->assertDatabaseMissing('trackers', [
+            ...$targetData,
+        ]);
+    }
+
+    /** @test */
+    public function it_forbid_tracker_update_for_another_user(): void
     {
         $tracker = Tracker::factory()->create();
 
         $targetData = $this->getTargetData();
 
         $this->actingAs(User::factory()->create())
-            ->put(route('trackers.update', $tracker), $targetData)
-            ->assertStatus(403);
+            ->putJson(route('trackers.update', $tracker), $targetData)
+            ->assertForbidden();
 
         $this->assertDatabaseMissing('trackers', [
             'id' => $tracker->id,
@@ -64,7 +111,7 @@ class TrackerControllerTest extends TestCase
         $targetData = $this->getTargetData();
 
         $this->actingAs($tracker->user)
-            ->put(route('trackers.update', $tracker), $targetData)
+            ->putJson(route('trackers.update', $tracker), $targetData)
             ->assertSuccessful();
 
         $this->assertDatabaseHas('trackers', [
@@ -74,13 +121,98 @@ class TrackerControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_forbid_data_point_deletion_for_another_user(): void
+    public function it_updates_tracker_removes_category(): void
+    {
+        $user = User::factory()->create();
+
+        $category = Category::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $tracker = Tracker::factory()->create([
+            'user_id' => $user->id,
+            'category_id' => $category->id,
+        ]);
+
+        $targetData = [
+            'category_id' => null,
+            ...$this->getTargetData(),
+        ];
+
+        $this->actingAs($tracker->user)
+            ->putJson(route('trackers.update', $tracker), $targetData)
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('trackers', [
+            'id' => $tracker->id,
+            ...$targetData,
+        ]);
+    }
+
+    /** @test */
+    public function it_updates_tracker_adds_category(): void
+    {
+        $user = User::factory()->create();
+
+        $category = Category::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $tracker = Tracker::factory()->create([
+            'user_id' => $user->id,
+            'category_id' => null,
+        ]);
+
+        $targetData = [
+            'category_id' => $category->id,
+            ...$this->getTargetData(),
+        ];
+
+        $this->actingAs($tracker->user)
+            ->putJson(route('trackers.update', $tracker), $targetData)
+            ->assertSuccessful();
+
+        $this->assertDatabaseHas('trackers', [
+            'id' => $tracker->id,
+            ...$targetData,
+        ]);
+    }
+
+    /** @test */
+    public function it_cannot_update_tracker_with_other_user_category(): void
+    {
+        $user = User::factory()->create();
+
+        $category = Category::factory()->create();
+
+        $tracker = Tracker::factory()->create([
+            'user_id' => $user->id,
+            'category_id' => null,
+        ]);
+
+        $targetData = [
+            'category_id' => $category->id,
+            ...$this->getTargetData(),
+        ];
+
+        $this->actingAs($tracker->user)
+            ->putJson(route('trackers.update', $tracker), $targetData)
+            ->assertUnprocessable();
+
+        $this->assertDatabaseMissing('trackers', [
+            'id' => $tracker->id,
+            ...$targetData,
+        ]);
+    }
+
+    /** @test */
+    public function it_forbid_tracker_deletion_for_another_user(): void
     {
         $tracker = Tracker::factory()->create();
 
         $this->actingAs(User::factory()->create())
-            ->delete(route('trackers.destroy', $tracker))
-            ->assertStatus(403);
+            ->deleteJson(route('trackers.destroy', $tracker))
+            ->assertForbidden();
 
         $this->assertDatabaseHas('trackers', [
             'id' => $tracker->id,
@@ -93,7 +225,7 @@ class TrackerControllerTest extends TestCase
         $tracker = Tracker::factory()->create();
 
         $this->actingAs($tracker->user)
-            ->delete(route('trackers.destroy', $tracker))
+            ->deleteJson(route('trackers.destroy', $tracker))
             ->assertSuccessful();
 
         $this->assertDatabaseMissing('trackers', [
@@ -108,9 +240,9 @@ class TrackerControllerTest extends TestCase
             'icon' => fake()->word(),
             'order' => fake()->randomNumber(nbDigits: 3),
             'unit' => fake()->boolean() ? fake()->word() : null,
-            'value_step' => fake()->randomFloat(),
+            'value_step' => fake()->randomFloat(min: 0.1),
             'target_value' => fake()->randomFloat(),
-            'target_score' => fake()->randomFloat(),
+            'target_score' => fake()->randomFloat(min: 0.1),
             'single' => fake()->boolean,
         ];
     }

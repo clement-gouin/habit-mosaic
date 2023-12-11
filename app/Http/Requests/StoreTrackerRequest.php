@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Closure;
+use App\Models\User;
+use App\Models\Category;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
 
@@ -17,8 +20,20 @@ class StoreTrackerRequest extends FormRequest
      */
     public function rules(): array
     {
+        /** @var User $user */
+        $user = $this->user();
+
         return [
-            'category_id' => 'nullable|numeric|exists:App\Models\Category,id',
+            'category_id' => [
+                'nullable',
+                'numeric',
+                'exists:App\Models\Category,id',
+                function (string $attribute, int $value, Closure $fail) use ($user) {
+                    if (Category::find($value)?->user?->id !== $user->id) {
+                        $fail("The {$attribute} is invalid.");
+                    }
+                },
+            ],
             'name' => 'required',
             'icon' => 'required',
             'order' => 'required|numeric',
