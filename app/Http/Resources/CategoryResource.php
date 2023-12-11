@@ -12,6 +12,7 @@ class CategoryResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameters)
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array

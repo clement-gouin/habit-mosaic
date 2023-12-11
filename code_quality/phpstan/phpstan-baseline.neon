@@ -1,2 +1,11 @@
 parameters:
-	ignoreErrors: []
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$attributes of class App\\\\Models\\\\Category constructor expects array, mixed given\\.$#"
+			count: 1
+			path: ../../app/Http/Controllers/CategoryController.php
+
+		-
+			message: "#^Parameter \\#1 \\$attributes of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:update\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
+			count: 1
+			path: ../../app/Http/Controllers/CategoryController.php
