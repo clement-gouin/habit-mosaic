@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\TrackerResource;
+use App\Http\Resources\CategoryResource;
 use Carbon\Exceptions\InvalidFormatException;
 
 class DashboardController extends Controller
@@ -36,6 +37,7 @@ class DashboardController extends Controller
 
         return [
             'date' => $date->timestamp,
+            'categories' => CategoryResource::collection($user->categories),
             'trackers' => TrackerResource::collection($user->trackers),
         ];
     }

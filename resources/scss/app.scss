@@ -54,3 +54,8 @@ $min-contrast-ratio: 0.5;
     border-bottom-left-radius: var(--bs-border-radius);
     border-bottom-right-radius: var(--bs-border-radius);
 }
+
+.superscript {
+    vertical-align: super;
+    font-size: .6em;
+}
