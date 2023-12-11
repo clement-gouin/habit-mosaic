@@ -35,7 +35,6 @@ class TrackerResource extends JsonResource
             'target_score' => $this->resource->target_score,
             'single' => $this->resource->single,
             'data_point' => DataPointResource::make($this->resource->getDataPointAt($date)),
-            'score' => $this->resource->getScoreAt($date),
         ];
     }
 }

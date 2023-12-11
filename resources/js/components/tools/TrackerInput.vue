@@ -1,30 +1,32 @@
 <template>
-    <div :style="{color: textColor}" class="p-0 fs-5 text-nowrap shadow-sm rounded-pill text-center position-relative user-select-none lh-1" :title="tracker.name">
+    <div :style="{color: color('text-emphasis')}" class="p-0 fs-5 text-nowrap shadow-sm rounded-pill text-center position-relative user-select-none lh-1" :title="tracker.name">
         <template v-if="tracker.single">
             <span v-if="rawValue" @click="remove" role="button">
-                <span :style="{backgroundColor: bgColor, borderColor: borderColor}" class="d-inline-block align-bottom h-100 border border-2 px-3 py-2 lh-base rounded-start-pill"></span>
-                <i class="d-inline-block border-end rounded-end-pill border-top border-bottom border-2 px-2 py-2" :style="{backgroundColor: bgColor2, borderColor: borderColor}" :class="mapToClassName(tracker.icon)"></i>
+                <span :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle')}" class="d-inline-block align-bottom h-100 border border-2 px-3 py-2 lh-base rounded-start-pill"></span>
+                <i class="d-inline-block border-end rounded-end-pill border-top border-bottom border-2 px-2 py-2" :style="{backgroundColor: color('bg-subtle', '2%'), borderColor: color('border-subtle')}" :class="mapToClassName(tracker.icon)"></i>
             </span>
             <span v-else @click="add" role="button">
-                <i class="d-inline-block border-start rounded-start-pill border-top border-bottom border-2 px-2 py-2" :style="{backgroundColor: bgColor2, borderColor: borderColor}" :class="mapToClassName(tracker.icon)"></i>
-                <span :style="{backgroundColor: bgColor, borderColor: borderColor}" class="d-inline-block align-bottom h-100 border border-2 px-3 py-2 lh-base rounded-end-pill"></span>
+                <i class="d-inline-block border-start rounded-start-pill border-top border-bottom border-2 px-2 py-2" :style="{backgroundColor: color('bg-subtle', '2%'), borderColor: color('border-subtle')}" :class="mapToClassName(tracker.icon)"></i>
+                <span :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle')}" class="d-inline-block align-bottom h-100 border border-2 px-3 py-2 lh-base rounded-end-pill"></span>
             </span>
         </template>
         <template v-else>
-            <i :style="{backgroundColor: bgColor2, borderColor: borderColor}" class="fa-solid  fa-minus border border-2 px-2 py-2 rounded-start-pill" role="button" @click="remove"></i>
-            <span :style="{backgroundColor: bgColor, borderColor: borderColor}" class="d-inline-block border-top border-bottom border-2 px-2 py-2">
+            <i :style="{backgroundColor: color('bg-subtle', '2%'), borderColor: color('border-subtle')}" class="fa-solid  fa-minus border border-2 px-2 py-2 rounded-start-pill" role="button" @click="remove"></i>
+            <span :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle')}" class="d-inline-block border-top border-bottom border-2 px-2 py-2">
                 <i class="d-inline-block" :class="mapToClassName(tracker.icon)"></i>
                 <span v-if="!tracker.single" class="d-inline-block ps-2">{{ rawValue.toFixed(precision(tracker.value_step)) }}</span>
             </span>
-            <i :style="{backgroundColor: bgColor2, borderColor: borderColor}" class="fa-solid fa-plus border border-2 px-2 py-2 rounded-end-pill" role="button" @click="add"></i>
+            <i :style="{backgroundColor: color('bg-subtle', '2%'), borderColor: color('border-subtle')}" class="fa-solid fa-plus border border-2 px-2 py-2 rounded-end-pill" role="button" @click="add"></i>
         </template>
     </div>
 </template>
 
 <script setup lang="ts">
 import { DataPoint, Tracker } from '@interfaces';
-import { computed, defineProps, ref, watch } from 'vue';
+import { defineProps, ref, watch } from 'vue';
 import { mapToClassName } from '@utils/icons';
+import { ratioColor } from '@utils/colors';
+import { precision } from '@utils/numbers';
 import { updateDataPoint } from '@requests/dataPoints';
 import { useDebouncedRef } from '@composables/useDebouncedRef';
 
@@ -39,34 +41,24 @@ const tracker = ref<Tracker>(props.modelValue);
 const value = useDebouncedRef(tracker.value.data_point.value, 500);
 const rawValue = ref<number>(tracker.value.data_point.value);
 
-const percent = computed(() => rawValue.value > tracker.value.target_value ? 100 : 100 * rawValue.value / tracker.value.target_value);
-
-function color (v, darker = '0%') {
-    return `color-mix(in srgb, var(--bs-dark) ${darker}, color-mix(in srgb, var(--bs-${tracker.value.target_score > 0 ? 'success' : 'danger'}-${v}) ${percent.value}%, var(--bs-light-${v}))) !important`;
-}
-const bgColor = computed(() => color('bg-subtle'));
-const bgColor2 = computed(() => color('bg-subtle', '2%'));
-const borderColor = computed(() => color('border-subtle'));
-const textColor = computed(() => color('text-emphasis'));
-
-function precision (a) {
-    let e = 1;
-    while (Math.round(a * e) / e !== a) e *= 10;
-    return Math.log(e) / Math.LN10;
-}
+const color = (variable, darker = '0%') => ratioColor(rawValue.value / tracker.value.target_value, tracker.value.target_score >= 0, variable, darker);
 
 function remove () {
     if (rawValue.value > 0) {
-        rawValue.value -= tracker.value.value_step;
-        value.value = rawValue.value;
+        updateValue(rawValue.value - tracker.value.value_step);
     }
 }
 
 function add () {
     if (!tracker.value.single || rawValue.value === 0) {
-        rawValue.value += tracker.value.value_step;
-        value.value = rawValue.value;
+        updateValue(rawValue.value + tracker.value.value_step);
     }
+}
+
+function updateValue (v: number) {
+    rawValue.value = v;
+    value.value = v;
+    tracker.value.data_point.score = tracker.value.target_score * v / tracker.value.target_value;
 }
 
 function update (dataPoint: DataPoint) {

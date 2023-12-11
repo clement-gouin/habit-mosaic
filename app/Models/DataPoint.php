@@ -54,4 +54,9 @@ class DataPoint extends Model
     {
         return $this->belongsTo(Tracker::class);
     }
+
+    public function score(): float
+    {
+        return $this->tracker->target_score * $this->value / $this->tracker->target_value;
+    }
 }

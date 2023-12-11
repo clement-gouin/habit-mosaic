@@ -81,14 +81,6 @@ class Tracker extends Model
             ->first();
     }
 
-    public function getScoreAt(Carbon $date): float
-    {
-        /** @var DataPoint $dataPoint */
-        $dataPoint = $this->getDataPointAt($date);
-
-        return $this->target_score * $dataPoint->value / $this->target_value;
-    }
-
     public function getDataPointAt(Carbon $date): DataPoint|Model
     {
         return $this->dataPoints()

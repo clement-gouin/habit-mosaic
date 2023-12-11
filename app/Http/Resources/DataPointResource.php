@@ -21,6 +21,7 @@ class DataPointResource extends JsonResource
             'id' => $this->resource->id,
             'date' => $this->resource->date,
             'value' => $this->resource->value,
+            'score' => $this->resource->score(),
         ];
     }
 
