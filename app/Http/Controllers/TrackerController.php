@@ -16,14 +16,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TrackerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(): Response
-    {
-        return response()->noContent(501); // TODO
-    }
-
     public function list(Request $request): ResourceCollection
     {
         /** @var User $user */

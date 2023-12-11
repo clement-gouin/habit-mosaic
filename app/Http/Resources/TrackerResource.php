@@ -19,7 +19,7 @@ class TrackerResource extends JsonResource
     public function toArray(Request $request): array
     {
         try {
-            $date = Carbon::parse($request->string('date', 'now'));
+            $date = Carbon::parse($request->string('date', 'today'));
         } catch (InvalidFormatException) {
             $date = Carbon::today();
         }

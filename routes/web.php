@@ -5,6 +5,7 @@ use App\Http\Controllers\TrackerController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DataPointController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\AuthenticatedSessionController;
 
 /*
@@ -32,13 +33,15 @@ Route::middleware('auth')->group(function () {
         Route::get('data', [DashboardController::class, 'data'])->name('dashboard.data');
     });
 
+    Route::get('configuration', ConfigurationController::class)->name('configuration');
+
     Route::resource('trackers', TrackerController::class)->only([
-        'index', 'store', 'update', 'destroy',
+        'store', 'update', 'destroy',
     ]);
     Route::get('trackers/list', [TrackerController::class, 'list'])->name('trackers.list');
 
     Route::resource('categories', CategoryController::class)->only([
-        'index', 'store', 'update', 'destroy',
+        'store', 'update', 'destroy',
     ]);
     Route::get('categories/list', [CategoryController::class, 'list'])->name('categories.list');
 

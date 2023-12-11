@@ -31,6 +31,9 @@
             <x-menu.item route="dashboard" pattern="dashboard" icon="fa-solid fa-house-chimney">
                 Dashboard
             </x-menu.item>
+            <x-menu.item route="configuration" pattern="configuration" icon="fa-solid fa-wrench">
+                Configuration
+            </x-menu.item>
         </x-menu>
         <main style="background-color: #f5f5f5;" class="col-10 col-md-11 col-lg-9 col-xxl-10 h-100 overflow-scroll p-0 m-0">
             @yield('content')
