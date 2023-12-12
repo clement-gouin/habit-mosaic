@@ -33,7 +33,7 @@ import DropdownInput from '@tools/forms/DropdownInput.vue';
 
 interface Props{
     name: string,
-    modelValue: string | null,
+    modelValue?: string,
     placeholder?: string,
     label?: string,
     helpText?: string,

@@ -10,7 +10,7 @@
               <button v-if="canClose" class="btn-close" type="button" @click.prevent="closeButton" />
             </slot>
           </div>
-          <div class="modal-body">
+          <div class="modal-body" v-if="!noBody">
             <slot></slot>
           </div>
           <div class="modal-footer">
@@ -35,6 +35,7 @@ interface Props {
     actionText?: string,
     actionColor?: string,
     autoClose?: boolean,
+    noBody?: boolean
 }
 
 interface Emits {

@@ -8,6 +8,7 @@
          @submit="confirm"
          @close="cancel"
          :auto-close="false"
+         :no-body="!body"
   >
     <template #modal-header v-if="!!$slots['header']">
       <slot name="header"></slot>

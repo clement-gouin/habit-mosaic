@@ -1,10 +1,24 @@
 <template>
-
+    <div class="p-1 p-sm-2 p-md-4">
+        <h1 class="border-bottom border-1 pb-2">Configuration</h1>
+        <div class="row">
+            <div class="col-12 col-xl-8">
+                <h2>Trackers</h2>
+                <tracker-list v-model="trackers" />
+            </div>
+            <div class="col-12 col-xl-4">
+                <h2>Categories</h2>
+                <category-list v-model="categories" />
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup lang="ts">
-import {Category, Tracker} from "@interfaces";
-import {ref} from "vue";
+import { Category, Tracker } from '@interfaces';
+import { ref } from 'vue';
+import CategoryList from '../categories/CategoryList.vue';
+import TrackerList from '../trackers/TrackerList.vue';
 
 interface Props {
     categories: Category[],

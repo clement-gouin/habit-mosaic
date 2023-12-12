@@ -6,7 +6,7 @@ export const ENDPOINT = '/trackers';
 
 let controller: AbortController;
 
-export async function listTrackers (params: QueryParameters): Promise<[Tracker[], number]> {
+export async function listTrackers (params: QueryParameters): Promise<Tracker[]> {
     const url = `${ENDPOINT}/list?${toURLParameters(params)}`;
 
     controller?.abort();
@@ -15,10 +15,10 @@ export async function listTrackers (params: QueryParameters): Promise<[Tracker[]
 
     try {
         return await axios.get(url)
-            .then(resp => [resp.data.data as Tracker[], resp.data.meta?.total]);
+            .then(resp => resp.data.data as Tracker[]);
     } catch (error) {
         if ((error as AxiosError).message === 'canceled') {
-            return [[], 0];
+            return [];
         }
         throw error;
     }

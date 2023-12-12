@@ -88,7 +88,7 @@ class User extends Authenticatable
 
     public function categories(): HasMany
     {
-        return $this->hasMany(Category::class)->orderByDesc('order');
+        return $this->hasMany(Category::class)->orderBy('order');
     }
 
     public function dataPoints(): HasManyThrough
