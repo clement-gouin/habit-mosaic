@@ -4,6 +4,7 @@ namespace Tests\Feature\Controllers;
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Category;
 use App\Models\UserToken;
 use App\Mail\NewTokenLink;
 use Illuminate\Support\Carbon;
@@ -137,7 +138,7 @@ class AuthenticatedSessionControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_logins_user(): void
+    public function it_logins_existing_user(): void
     {
         $user = User::factory()->create();
 
@@ -156,6 +157,40 @@ class AuthenticatedSessionControllerTest extends TestCase
         ]);
 
         $this->assertAuthenticatedAs($user);
+
+        $user = $user->refresh();
+
+        $this->assertEmpty($user->trackers);
+        $this->assertEmpty($user->categories);
+    }
+
+    /** @test */
+    public function it_logins_new_user(): void
+    {
+        $user = User::factory()->unverified()->create();
+
+        $token = UserToken::query()->make([
+            'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
+            'token' => fake()->md5(),
+        ]);
+
+        $user->tokens()->save($token);
+
+        $this->get(route('login.token', $token->token))->assertRedirect();
+
+        $this->assertDatabaseHas('user_tokens', [
+            'id' => $token->id,
+            'expires_at' => Carbon::now(),
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+
+        $user = $user->refresh();
+
+        $this->assertNotNull($user->email_verified_at);
+
+        $this->assertNotEmpty($user->trackers);
+        $this->assertNotEmpty($user->categories);
     }
 
     /** @test */

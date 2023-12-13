@@ -16,6 +16,6 @@ return [
     'failed' => 'These credentials do not match our records.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-    'expired' => 'Your token has expired',
+    'token' => 'Your token is invalid or has expired',
 
 ];

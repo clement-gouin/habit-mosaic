@@ -98,7 +98,7 @@ function fetchData () {
 
 function sortTrackers (data: Tracker[]) {
     return data
-        .sort((a, b) => (a.category?.order ?? 0) === (b.category?.order ?? 0) ? b.order - a.order : (a.category?.order ?? 0) - (b.category?.order ?? 0))
+        .sort((a, b) => (a.category?.order ?? 0) === (b.category?.order ?? 0) ? b.order - a.order : (b.category?.order ?? 0) - (a.category?.order ?? 0))
         .reverse();
 }
 

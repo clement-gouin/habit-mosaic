@@ -1,5 +1,9 @@
 <template>
-    <div :style="{color: color('text-emphasis')}" class="p-0 fs-5 text-nowrap shadow-sm rounded-pill text-center position-relative user-select-none lh-1" :title="tracker.name">
+    <div
+        :style="{color: color('text-emphasis')}"
+        class="p-0 fs-5 text-nowrap shadow-sm rounded-pill text-center position-relative user-select-none lh-1"
+        :title="`${tracker.name}: ${rawValue.toFixed(precision(tracker.value_step))} ${tracker.unit}`.trim()"
+    >
         <template v-if="tracker.single">
             <span v-if="rawValue" @click="remove" role="button">
                 <span :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle')}" class="d-inline-block align-bottom h-100 border border-2 px-3 py-2 lh-base rounded-start-pill"></span>

@@ -30,13 +30,13 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request): JsonResponse
     {
-        $category = new Category([
-            'order' => Category::count() + 1,
-            ...$request->validated()
-        ]);
-
         /** @var User $user */
         $user = $request->user();
+
+        $category = new Category([
+            'order' => $user->categories->pluck('order')->max() + 1,
+            ...$request->validated()
+        ]);
 
         $user->categories()->save($category);
 

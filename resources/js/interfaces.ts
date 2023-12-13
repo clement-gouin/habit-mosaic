@@ -31,25 +31,33 @@ export interface ErrorResponse extends Base {
     errors: Record<string, string[]>
 }
 
-export interface Category extends Base {
+export interface CategoryData extends Base {
     id?: number
     name: string
     icon?: string
-    order?: number
 }
 
-export interface Tracker extends Base {
+export interface Category extends CategoryData {
+    id: number
+    order: number
+}
+
+export interface TrackerData extends Base {
     id?: number
     category?: Category
     name: string
     icon: string
-    order?: number
     unit?: string
     value_step: number
     target_value: number
     target_score: number
     single: boolean
-    data_point?: DataPoint
+}
+
+export interface Tracker extends TrackerData {
+    id: number
+    order: number
+    data_point: DataPoint
 }
 
 export interface DataPoint extends Base {

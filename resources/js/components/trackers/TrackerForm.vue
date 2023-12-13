@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { Base, Tracker } from '@interfaces';
+import { Base, Tracker, TrackerData } from '@interfaces';
 import { ref, watch } from 'vue';
 import { handleFormErrors } from '@utils/forms';
 import TextInput from '@tools/forms/TextInput.vue';
@@ -83,7 +83,7 @@ import CheckboxInput from '@tools/forms/CheckboxInput.vue';
 import CategoryInput from '../categories/CategoryInput.vue';
 
 interface Props {
-    modelValue?: Tracker
+    modelValue?: TrackerData
 }
 
 const props = defineProps<Props>();
@@ -95,7 +95,7 @@ const singleStepValues: Base = {
     single: true
 };
 
-const formInitValues: Tracker = {
+const formInitValues: TrackerData = {
     category: undefined,
     name: '',
     icon: '',
@@ -107,7 +107,7 @@ const formInitValues: Tracker = {
     single: true
 };
 
-const tracker = ref<Tracker>(loadDataFromProps());
+const tracker = ref<TrackerData>(loadDataFromProps());
 const errors = ref<Record<string, string>>({});
 
 function reset () {
@@ -115,7 +115,7 @@ function reset () {
     tracker.value = loadDataFromProps();
 }
 
-function loadDataFromProps (): Tracker {
+function loadDataFromProps (): TrackerData {
     if (props.modelValue) {
         return {
             ...formInitValues,

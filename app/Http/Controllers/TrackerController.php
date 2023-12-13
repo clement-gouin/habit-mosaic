@@ -30,13 +30,13 @@ class TrackerController extends Controller
      */
     public function store(StoreTrackerRequest $request): JsonResponse
     {
-        $tracker = new Tracker([
-            'order' => Tracker::count() + 1,
-            ...$request->validated()
-        ]);
-
         /** @var User $user */
         $user = $request->user();
+
+        $tracker = new Tracker([
+            'order' => $user->trackers->pluck('order')->max() + 1,
+            ...$request->validated()
+        ]);
 
         $user->trackers()->save($tracker);
 

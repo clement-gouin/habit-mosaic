@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { Category } from '@interfaces';
+import { Category, CategoryData } from '@interfaces';
 import { ref, watch } from 'vue';
 import { createCategory, updateCategory } from '@requests/categories';
 import { handleFormErrors } from '@utils/forms';
@@ -30,17 +30,17 @@ import IconInput from '@tools/forms/IconInput.vue';
 import BsForm from '@tools/forms/BsForm.vue';
 
 interface Props {
-    modelValue?: Category
+    modelValue?: CategoryData
 }
 
 const props = defineProps<Props>();
 
-const formInitValues: Category = {
+const formInitValues: CategoryData = {
     name: '',
     icon: ''
 };
 
-const category = ref<Category>(loadDataFromProps());
+const category = ref<CategoryData>(loadDataFromProps());
 const errors = ref<Record<string, string>>({});
 
 function reset () {
@@ -48,7 +48,7 @@ function reset () {
     category.value = loadDataFromProps();
 }
 
-function loadDataFromProps (): Category {
+function loadDataFromProps (): CategoryData {
     if (props.modelValue) {
         return {
             ...formInitValues,

@@ -37,7 +37,9 @@ const date = ref<Date>(new Date(props.date * 1000));
 const score = computed<number>(() => trackers.value.map(tracker => tracker.data_point.score).reduce((a, b) => a + b, 0));
 
 // TODO compute average day
-const color = variable => referenceColor(score.value, 10, variable);
+const REF_SCORE = 0.75 * trackers.value.map(tracker => tracker.target_score).filter(score => score > 0)
+    .reduce((a, b) => a + b, 0);
+const color = variable => referenceColor(score.value, REF_SCORE, variable);
 
 const canShowNext = computed<boolean>(() => date.value.setHours(0, 0, 0, 0) < (new Date()).setHours(0, 0, 0, 0));
 

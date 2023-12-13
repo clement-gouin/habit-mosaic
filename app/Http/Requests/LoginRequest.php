@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class LoginRequest extends FormRequest
@@ -22,5 +23,19 @@ class LoginRequest extends FormRequest
             'new' => 'required|bool',
             'email' => 'required|email|exists:App\Models\User,email'
         ];
+    }
+
+    public function toUser(): User
+    {
+        if ($this->boolean('new')) {
+            return User::query()
+                ->create([
+                    'email' => $this->input('email'),
+                    'name' => $this->input('name'),
+                ]);
+        }
+
+        return User::whereEmail($this->input('email'))
+            ->firstOrFail();
     }
 }
