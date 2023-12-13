@@ -1,7 +1,7 @@
 import { Tracker, TrackerData } from '@interfaces';
 import axios, { AxiosError } from 'axios';
 
-export const ENDPOINT = '/trackers';
+export const ENDPOINT = '/api/trackers';
 
 let controller: AbortController;
 

@@ -1,7 +1,7 @@
 import { Category, CategoryData } from '@interfaces';
 import axios, { AxiosError } from 'axios';
 
-export const ENDPOINT = '/categories';
+export const ENDPOINT = '/api/categories';
 
 let controller: AbortController;
 

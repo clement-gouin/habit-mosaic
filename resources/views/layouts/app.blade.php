@@ -31,6 +31,9 @@
             <x-menu.item route="dashboard" pattern="dashboard" icon="fa-solid fa-house-chimney">
                 Dashboard
             </x-menu.item>
+            <x-menu.item route="day" pattern="day" icon="fa-solid fa-calendar-check">
+                Day to day
+            </x-menu.item>
             <x-menu.item route="configuration" pattern="configuration" icon="fa-solid fa-wrench">
                 Configuration
             </x-menu.item>

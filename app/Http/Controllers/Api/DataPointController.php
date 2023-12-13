@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\DataPoint;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\DataPointResource;
 use App\Http\Requests\UpdateDataPointRequest;
 use Illuminate\Http\Resources\Json\JsonResource;

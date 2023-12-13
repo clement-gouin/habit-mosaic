@@ -1,12 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TrackerController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\DataPointController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ConfigurationController;
-use App\Http\Controllers\AuthenticatedSessionController;
+use App\Http\Controllers\Api\TrackerController;
+use App\Http\Controllers\Web\DayViewController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\DataPointController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\ConfigurationController;
+use App\Http\Controllers\Api\DayDataController;
+use App\Http\Controllers\Web\AuthenticatedSessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,24 +30,31 @@ Route::middleware(['guest', 'throttle'])->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-    Route::prefix('dashboard')->group(function () {
-        Route::get('/', DashboardController::class)->name('dashboard');
-        Route::get('data', [DashboardController::class, 'data'])->name('dashboard.data');
-    });
-
+    Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('day', DayViewController::class)->name('day');
     Route::get('configuration', ConfigurationController::class)->name('configuration');
 
-    Route::resource('trackers', TrackerController::class)->only([
-        'store', 'update', 'destroy',
-    ]);
-    Route::get('trackers/list', [TrackerController::class, 'list'])->name('trackers.list');
+    Route::prefix('api')->group(function () {
+        Route::prefix('day')->group(function () {
+            Route::get('/', [DayDataController::class, 'data'])->name('day.data');
+        });
 
-    Route::resource('categories', CategoryController::class)->only([
-        'store', 'update', 'destroy',
-    ]);
-    Route::get('categories/list', [CategoryController::class, 'list'])->name('categories.list');
+        Route::prefix('categories')->group(function () {
+            Route::get('list', [CategoryController::class, 'list'])->name('categories.list');
+            Route::post('/', [CategoryController::class, 'store'])->name('categories.store');
+            Route::put('{category}', [CategoryController::class, 'update'])->name('categories.update');
+            Route::delete('{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+        });
 
-    Route::resource('data_points', DataPointController::class)->only([
-        'update',
-    ]);
+        Route::prefix('trackers')->group(function () {
+            Route::get('list', [TrackerController::class, 'list'])->name('trackers.list');
+            Route::post('/', [TrackerController::class, 'store'])->name('trackers.store');
+            Route::put('{tracker}', [TrackerController::class, 'update'])->name('trackers.update');
+            Route::delete('{tracker}', [TrackerController::class, 'destroy'])->name('trackers.destroy');
+        });
+
+        Route::prefix('data_points')->group(function () {
+            Route::put('{data_point}', [DataPointController::class, 'update'])->name('data_points.update');
+        });
+    });
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Controllers;
+namespace Tests\Feature\Controllers\Api;
 
 use Carbon\Carbon;
 use Tests\TestCase;
@@ -9,7 +9,7 @@ use App\Models\Tracker;
 use App\Models\Category;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class DashboardControllerTest extends TestCase
+class DayDataControllerTest extends TestCase
 {
     use DatabaseMigrations;
 
@@ -28,7 +28,7 @@ class DashboardControllerTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->getJson(route('dashboard.data'))
+            ->getJson(route('day.data'))
             ->assertSuccessful()
             ->assertJsonFragment(['date' => Carbon::today()->timestamp])
             ->assertJsonFragment(['id' => $tracker->id]);
@@ -40,7 +40,7 @@ class DashboardControllerTest extends TestCase
         $date = Carbon::today()->subDay();
 
         $this->actingAs(User::factory()->create())
-            ->getJson(route('dashboard.data', ['date' => $date->toIso8601String()]))
+            ->getJson(route('day.data', ['date' => $date->toIso8601String()]))
             ->assertSuccessful()
             ->assertJsonFragment(['date' => $date->timestamp]);
     }
@@ -49,7 +49,7 @@ class DashboardControllerTest extends TestCase
     public function it_shows_invalid_day_data_with_today_fallback(): void
     {
         $this->actingAs(User::factory()->create())
-            ->getJson(route('dashboard.data', ['date' => 'invalid']))
+            ->getJson(route('day.data', ['date' => 'invalid']))
             ->assertSuccessful()
             ->assertJsonFragment(['date' => Carbon::today()->timestamp]);
     }

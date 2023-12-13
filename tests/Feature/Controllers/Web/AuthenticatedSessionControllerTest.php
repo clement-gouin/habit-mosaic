@@ -1,10 +1,9 @@
 <?php
 
-namespace Tests\Feature\Controllers;
+namespace Tests\Feature\Controllers\Web;
 
 use Tests\TestCase;
 use App\Models\User;
-use App\Models\Category;
 use App\Models\UserToken;
 use App\Mail\NewTokenLink;
 use Illuminate\Support\Carbon;

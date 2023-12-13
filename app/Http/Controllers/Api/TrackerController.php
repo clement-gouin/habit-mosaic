@@ -1,46 +1,47 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\User;
-use App\Models\Category;
+use App\Models\Tracker;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use App\Http\Resources\CategoryResource;
-use App\Http\Requests\StoreCategoryRequest;
-use App\Http\Requests\UpdateCategoryRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\TrackerResource;
+use App\Http\Requests\StoreTrackerRequest;
+use App\Http\Requests\UpdateTrackerRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class CategoryController extends Controller
+class TrackerController extends Controller
 {
     public function list(Request $request): ResourceCollection
     {
         /** @var User $user */
         $user = $request->user();
 
-        return CategoryResource::collection($user->categories);
+        return TrackerResource::collection($user->trackers);
     }
 
     /**
      * Store a newly created resource in storage.
      * @throws AuthorizationException
      */
-    public function store(StoreCategoryRequest $request): JsonResponse
+    public function store(StoreTrackerRequest $request): JsonResponse
     {
         /** @var User $user */
         $user = $request->user();
 
-        $category = new Category([
-            'order' => $user->categories->pluck('order')->max() + 1,
+        $tracker = new Tracker([
+            'order' => $user->trackers->pluck('order')->max() + 1,
             ...$request->validated()
         ]);
 
-        $user->categories()->save($category);
+        $user->trackers()->save($tracker);
 
-        return CategoryResource::make($category->refresh())
+        return TrackerResource::make($tracker->refresh())
             ->toResponse($request)
             ->setStatusCode(201);
     }
@@ -49,22 +50,22 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      * @throws AuthorizationException
      */
-    public function update(UpdateCategoryRequest $request, Category $category): JsonResource
+    public function update(UpdateTrackerRequest $request, Tracker $tracker): JsonResource
     {
-        $category->update($request->validated());
+        $tracker->update($request->validated());
 
-        return CategoryResource::make($category->refresh());
+        return TrackerResource::make($tracker->refresh());
     }
 
     /**
      * Remove the specified resource from storage.
      * @throws AuthorizationException
      */
-    public function destroy(Category $category): Response
+    public function destroy(Tracker $tracker): Response
     {
-        $this->authorize('delete', $category);
+        $this->authorize('delete', $tracker);
 
-        $category->delete();
+        $tracker->delete();
 
         return response()->noContent();
     }

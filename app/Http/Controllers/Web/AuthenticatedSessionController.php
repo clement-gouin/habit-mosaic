@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Services\UserTokenService;
-use Illuminate\Http\JsonResponse;
-use App\Http\Requests\LoginRequest;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Services\UserTokenService;
+use Illuminate\Contracts\View\View;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Providers\RouteServiceProvider;
 
