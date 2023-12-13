@@ -1,13 +1,12 @@
-import { QueryParameters, Tracker } from '@interfaces';
+import { Tracker } from '@interfaces';
 import axios, { AxiosError } from 'axios';
-import { toURLParameters } from '@utils/url';
 
 export const ENDPOINT = '/trackers';
 
 let controller: AbortController;
 
-export async function listTrackers (params: QueryParameters): Promise<Tracker[]> {
-    const url = `${ENDPOINT}/list?${toURLParameters(params)}`;
+export async function listTrackers (): Promise<Tracker[]> {
+    const url = `${ENDPOINT}/list`;
 
     controller?.abort();
 
@@ -25,12 +24,18 @@ export async function listTrackers (params: QueryParameters): Promise<Tracker[]>
 }
 
 export async function createTracker (tracker: Tracker): Promise<Tracker> {
-    return await axios.post(ENDPOINT, tracker)
+    return await axios.post(ENDPOINT, {
+        ...tracker,
+        category_id: tracker.category?.id
+    })
         .then(resp => resp.data.data);
 }
 
 export async function updateTracker (tracker: Tracker): Promise<Tracker> {
-    return await axios.put(`${ENDPOINT}/${tracker.id as number}`, tracker)
+    return await axios.put(`${ENDPOINT}/${tracker.id as number}`, {
+        ...tracker,
+        category_id: tracker.category?.id
+    })
         .then(resp => resp.data.data);
 }
 

@@ -43,13 +43,13 @@ export interface Tracker extends Base {
     category?: Category
     name: string
     icon: string
-    order: number
-    unit: string
+    order?: number
+    unit?: string
     value_step: number
     target_value: number
     target_score: number
     single: boolean
-    data_point: DataPoint
+    data_point?: DataPoint
 }
 
 export interface DataPoint extends Base {

@@ -1,8 +1,7 @@
 <template>
     <datatable :total="categories.length" :data="categories" :columns="columns" :with-pagination="false" :loading="loading">
         <template #col-name="{row}">
-            <i class="fa-xs " v-if="row.icon" :class="mapToClassName(row.icon)"></i>
-            {{ row.name }}
+            <category-label :category="row" />
         </template>
         <template #col-actions="{index}">
             <category-actions
@@ -34,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import { mapToClassName } from '@utils/icons';
 import Datatable from '@tools/tables/Datatable.vue';
 import { Category, TableColumn } from '@interfaces';
 import { ref } from 'vue';
@@ -43,6 +41,7 @@ import CategoryForm from './CategoryForm.vue';
 import { createAlert } from '@utils/alerts';
 import { listCategories, updateCategory } from '@requests/categories';
 import CategoryActions from './CategoryActions.vue';
+import CategoryLabel from './CategoryLabel.vue';
 
 interface Props {
     modelValue: Category[],
@@ -69,7 +68,7 @@ const columns: TableColumn[] = [
 
 function fetchData () {
     loading.value = true;
-    listCategories({})
+    listCategories()
         .then(data => {
             categories.value = data;
         })

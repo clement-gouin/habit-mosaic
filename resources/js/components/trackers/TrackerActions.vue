@@ -7,21 +7,21 @@
     </div>
     <modal
         ref="updateModal"
-        title="Update category"
+        title="Update tracker"
         action-text="Update"
         close-text="Cancel"
         :auto-close="false"
         @close="updateForm.reset()"
         @submit="updateModalSubmit"
     >
-        <category-form
+        <tracker-form
             ref="updateForm"
-            v-model="category"
+            v-model="tracker"
         />
     </modal>
     <confirm-dialog
         ref="confirmDeleteDialog"
-        :title="`Delete category '${category.name}' ?`"
+        :title="`Delete tracker '${tracker.name}' ?`"
         confirm-button-text="Delete"
         confirm-buttom-color="danger"
         cancel-button-text="Cancel"
@@ -30,37 +30,37 @@
 
 <script setup lang="ts">
 
-import CategoryForm from './CategoryForm.vue';
 import Modal from '@tools/Modal.vue';
-import { Category } from '@interfaces';
+import { Tracker } from '@interfaces';
 import { createAlert } from '@utils/alerts';
 import { watch, ref } from 'vue';
-import { deleteCategory } from '@requests/categories';
 import ConfirmDialog from '@tools/dialogs/ConfirmDialog.vue';
+import TrackerForm from './TrackerForm.vue';
+import { deleteTracker } from '@requests/trackers';
 
 interface Props {
-    modelValue: Category
+    modelValue: Tracker
     first?: boolean
     last?: boolean
 }
 
 const props = defineProps<Props>();
 
-const category = ref<Category>(props.modelValue);
+const tracker = ref<Tracker>(props.modelValue);
 
 const emit = defineEmits(['update:modelValue', 'updated', 'moveUp', 'moveDown']);
 
 const updateModal = ref<InstanceType<typeof Modal> | null>(null);
-const updateForm = ref<InstanceType<typeof CategoryForm>|null>(null);
+const updateForm = ref<InstanceType<typeof TrackerForm>|null>(null);
 const confirmDeleteDialog = ref<InstanceType<typeof ConfirmDialog>|null>(null);
 
 function updateModalSubmit () {
     updateForm.value?.submit()
-        .then(category => {
+        .then(tracker => {
             updateModal.value?.close();
             updateForm.value?.reset();
-            createAlert('success', 'Category updated');
-            emit('update:modelValue', category);
+            createAlert('success', 'Tracker updated');
+            emit('update:modelValue', tracker);
             emit('updated');
         })
         .catch(() => {
@@ -70,9 +70,9 @@ function updateModalSubmit () {
 
 async function onDeleteClick () {
     if (await confirmDeleteDialog.value.show()) {
-        deleteCategory(category.value)
+        deleteTracker(tracker.value)
             .then(() => {
-                createAlert('success', 'Category deleted');
+                createAlert('success', 'Tracker deleted');
                 emit('updated');
             })
             .catch(() => { createAlert('danger', 'An error has occurred'); });
@@ -80,7 +80,7 @@ async function onDeleteClick () {
 }
 
 watch(() => props.modelValue, newValue => {
-    category.value = newValue;
+    tracker.value = newValue;
 });
 </script>
 

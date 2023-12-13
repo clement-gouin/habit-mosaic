@@ -1,8 +1,7 @@
 <template>
     <div v-if="trackers.length" class="p-1 p-sm-2 p-md-4">
         <h2 class="w-100 text-center">
-            <i class="fa-xs " v-if="category.icon" :class="mapToClassName(category.icon)"></i>
-            {{ category.name }}
+            <category-label :category="category"/>
             <small class="superscript fs-6 text-dark-emphasis rounded border p-1" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">{{ score.toFixed(1) }}</small>
         </h2>
         <div class="d-flex flex-row flex-wrap justify-content-center">
@@ -19,9 +18,9 @@
 <script setup lang="ts">
 import { Category, Tracker } from '@interfaces';
 import { computed, ref, watch } from 'vue';
-import { mapToClassName } from '@utils/icons';
 import TrackerInput from './TrackerInput.vue';
 import { referenceColor } from '@utils/colors';
+import CategoryLabel from '../categories/CategoryLabel.vue';
 
 interface Props {
     modelValue?: Category,

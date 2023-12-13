@@ -1,13 +1,12 @@
-import { Category, QueryParameters } from '@interfaces';
+import { Category } from '@interfaces';
 import axios, { AxiosError } from 'axios';
-import { toURLParameters } from '@utils/url';
 
 export const ENDPOINT = '/categories';
 
 let controller: AbortController;
 
-export async function listCategories (params: QueryParameters): Promise<Category[]> {
-    const url = `${ENDPOINT}/list?${toURLParameters(params)}`;
+export async function listCategories (): Promise<Category[]> {
+    const url = `${ENDPOINT}/list`;
 
     controller?.abort();
 

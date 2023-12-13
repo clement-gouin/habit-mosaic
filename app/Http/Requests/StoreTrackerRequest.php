@@ -36,7 +36,7 @@ class StoreTrackerRequest extends FormRequest
             ],
             'name' => 'required',
             'icon' => 'required',
-            'order' => 'required|numeric',
+            'order' => 'numeric',
             'unit' => 'nullable',
             'value_step' => 'required|numeric|min:0',
             'target_value' => 'required|numeric|min:0.001',
