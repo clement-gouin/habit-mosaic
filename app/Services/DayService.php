@@ -3,10 +3,9 @@
 namespace App\Services;
 
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Http\Resources\TrackerResource;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\TrackerFullResource;
 use Carbon\Exceptions\InvalidFormatException;
 
 class DayService
@@ -22,7 +21,7 @@ class DayService
         return [
             'date' => $date->timestamp,
             'categories' => CategoryResource::collection($user->categories),
-            'trackers' => TrackerResource::collection($user->trackers),
+            'trackers' => TrackerFullResource::collection($user->trackers),
         ];
     }
 }

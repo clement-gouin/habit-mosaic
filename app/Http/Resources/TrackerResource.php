@@ -14,16 +14,11 @@ class TrackerResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameters)
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
     {
-        try {
-            $date = Carbon::parse($request->string('date', 'today'));
-        } catch (InvalidFormatException) {
-            $date = Carbon::today();
-        }
-
         return [
             'id' => $this->resource->id,
             'category' => $this->resource->category ? CategoryResource::make($this->resource->category) : null,
@@ -35,7 +30,6 @@ class TrackerResource extends JsonResource
             'target_value' => $this->resource->target_value,
             'target_score' => $this->resource->target_score,
             'single' => $this->resource->single,
-            'data_point' => DataPointResource::make($this->resource->getDataPointAt($date)),
         ];
     }
 }

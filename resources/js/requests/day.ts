@@ -1,10 +1,10 @@
-import { Category, Tracker } from '@interfaces';
+import { Category, TrackerFull } from '@interfaces';
 import axios from 'axios';
 import { saveURLParameters, toURLParameters } from '@utils/url';
 
 export const ENDPOINT = '/api/day';
 
-export async function getDashboardData (date: Date): Promise<[number, Category[], Tracker[]]> {
+export async function getDayData (date: Date): Promise<[number, Category[], TrackerFull[]]> {
     const params = { date: date.toISOString() };
     saveURLParameters(params);
     return await axios.get(`${ENDPOINT}?${toURLParameters(params)}`)

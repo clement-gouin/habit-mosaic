@@ -2,17 +2,19 @@
 
 namespace App\Console;
 
+use Illuminate\Console\Scheduling\Schedule;
+use App\Console\Commands\ComputeAverageDay;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-//    /**
-//     * Define the application's command schedule.
-//     */
-//    protected function schedule(Schedule $schedule): void
-//    {
-//        // $schedule->command('inspire')->hourly();
-//    }
+    /**
+     * Define the application's command schedule.
+     */
+    protected function schedule(Schedule $schedule): void
+    {
+        $schedule->command(ComputeAverageDay::class)->daily();
+    }
 
     /**
      * Register the commands for the application.

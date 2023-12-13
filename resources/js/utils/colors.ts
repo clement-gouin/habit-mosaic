@@ -15,6 +15,9 @@ export function ratioColor (ratio: number, positive: boolean, variable = '', roo
 }
 
 export function referenceColor (value: number, reference: number, variable = '', root = 'light'): string {
+    if (reference === 0) {
+        reference = 1;
+    }
     const ratio = value / reference;
     return ratioColor(Math.abs(ratio), ratio >= 0, variable, root);
 }

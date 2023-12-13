@@ -10,7 +10,7 @@
 * [x] Configuration page
 * [x] Seed new users with default trackers and categories
 * [x] Rename dashboard as "Day view"
-* [ ] Compute average day each night
+* [x] Compute average day each night
 * [ ] "Fill average day" button
 * [ ] Mosaic view of score and trackers
 * [ ] Table view

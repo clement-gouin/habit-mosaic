@@ -93,7 +93,15 @@ class Tracker extends Model
     {
         return $this->dataPoints()
             ->firstOrCreate([
-                'date' => $date,
+                'date' => $date->startOfDay(),
+            ])->refresh();
+    }
+
+    public function getAverageDataPoint(): DataPoint|Model
+    {
+        return $this->dataPoints()
+            ->firstOrCreate([
+                'date' => Carbon::createFromTimestamp(0),
             ])->refresh();
     }
 }

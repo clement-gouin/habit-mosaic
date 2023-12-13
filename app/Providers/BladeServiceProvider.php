@@ -25,7 +25,7 @@ class BladeServiceProvider extends ServiceProvider
     {
         Blade::directive('vue', function ($componentName) {
             // phpcs:ignore:Generic.Files.LineLength.TooLong
-            return '<?php echo "<div id=\'app\' data-component=\'' . $componentName . '\' data-props=\'" . str_replace("\'", "\\u0027", json_encode($__data)) .  "\'></div>"; ?>';
+            return '<?php echo "<div id=\'app\' data-component=\'' . $componentName . '\' data-props=\'" . json_encode($__data, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) .  "\'></div>"; ?>';
         });
     }
 }

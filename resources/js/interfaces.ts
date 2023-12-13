@@ -57,7 +57,11 @@ export interface TrackerData extends Base {
 export interface Tracker extends TrackerData {
     id: number
     order: number
+}
+
+export interface TrackerFull extends Tracker {
     data_point: DataPoint
+    average: number
 }
 
 export interface DataPoint extends Base {

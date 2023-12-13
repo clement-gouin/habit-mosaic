@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { DataPoint, Tracker } from '@interfaces';
+import { DataPoint, TrackerFull } from '@interfaces';
 import { defineProps, ref, watch } from 'vue';
 import { mapToClassName } from '@utils/icons';
 import { darker, ratioColor } from '@utils/colors';
@@ -35,12 +35,12 @@ import { updateDataPoint } from '@requests/dataPoints';
 import { useDebouncedRef } from '@composables/useDebouncedRef';
 
 interface Props {
-    modelValue: Tracker
+    modelValue: TrackerFull
 }
 
 const props = defineProps<Props>();
 
-const tracker = ref<Tracker>(props.modelValue);
+const tracker = ref<TrackerFull>(props.modelValue);
 
 const value = useDebouncedRef(tracker.value.data_point.value, 500);
 const rawValue = ref<number>(tracker.value.data_point.value);
