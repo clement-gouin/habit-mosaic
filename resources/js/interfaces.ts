@@ -35,7 +35,7 @@ export interface Category extends Base {
     id?: number
     name: string
     icon?: string
-    order: number
+    order?: number
 }
 
 export interface Tracker extends Base {

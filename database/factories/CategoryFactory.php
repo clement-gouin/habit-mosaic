@@ -22,7 +22,7 @@ class CategoryFactory extends Factory
             'user_id' => User::factory(),
             'name' => fake()->unique()->word(),
             'icon' => fake()->boolean() ? fake()->randomElement(['shower', 'tv', 'faucet', 'blender', 'plug']) : null,
-            'order' => fake()->randomNumber(nbDigits: 3),
+            'order' => fn () => Category::count() + 1,
         ];
     }
 }

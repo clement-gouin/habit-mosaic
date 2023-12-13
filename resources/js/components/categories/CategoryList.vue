@@ -1,11 +1,18 @@
 <template>
-    <datatable :total="categories.length" :data="categories" :columns="columns" :with-pagination="false">
+    <datatable :total="categories.length" :data="categories" :columns="columns" :with-pagination="false" :loading="loading">
         <template #col-name="{row}">
             <i class="fa-xs " v-if="row.icon" :class="mapToClassName(row.icon)"></i>
             {{ row.name }}
         </template>
         <template #col-actions="{index}">
-            <category-actions v-model="categories[index]" @updated="fetchData" />
+            <category-actions
+                v-model="categories[index]"
+                @updated="fetchData"
+                @move-up="() => swapOrder(categories[index], categories[index - 1])"
+                @move-down="() => swapOrder(categories[index], categories[index + 1])"
+                :first="index === 0"
+                :last="index === categories.length - 1"
+            />
         </template>
     </datatable>
     <div class="d-grid">
@@ -34,7 +41,7 @@ import { ref } from 'vue';
 import Modal from '@tools/Modal.vue';
 import CategoryForm from './CategoryForm.vue';
 import { createAlert } from '@utils/alerts';
-import { listCategories } from '@requests/categories';
+import { listCategories, updateCategory } from '@requests/categories';
 import CategoryActions from './CategoryActions.vue';
 
 interface Props {
@@ -46,6 +53,7 @@ const props = defineProps<Props>();
 const categories = ref<Category[]>(props.modelValue);
 const createModal = ref<InstanceType<typeof Modal> | null>(null);
 const createForm = ref<InstanceType<typeof CategoryForm>|null>(null);
+const loading = ref<boolean>(false);
 
 const columns: TableColumn[] = [
     {
@@ -55,16 +63,26 @@ const columns: TableColumn[] = [
     {
         id: 'actions',
         label: '',
-        cssClass: 'text-left',
-        cssStyle: 'width: 10em; vertical-align: middle'
+        cssStyle: 'width: 11em; vertical-align: middle'
     }
 ];
 
 function fetchData () {
+    loading.value = true;
     listCategories({})
         .then(data => {
             categories.value = data;
+        })
+        .finally(() => {
+            loading.value = false;
         });
+}
+
+function swapOrder (category1: Category, category2: Category) {
+    loading.value = true;
+    [category1.order, category2.order] = [category2.order as number, category1.order as number];
+    Promise.all([updateCategory(category1), updateCategory(category2)])
+        .finally(fetchData);
 }
 
 function createModalSubmit () {

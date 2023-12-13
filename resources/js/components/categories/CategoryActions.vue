@@ -1,6 +1,8 @@
 <template>
-    <div class="btn-toolbar" role="toolbar">
-        <button type="button" class="btn btn-sm btn-outline-primary me-2" @click="updateModal.open()"><i class="fa-solid fa-pen" /></button>
+    <div class="btn-toolbar d-flex justify-content-end gap-2" role="toolbar">
+        <button type="button" class="btn btn-sm btn-outline-primary" :disabled="first" @click="$emit('moveUp')"><i class="fa-solid fa-arrow-up" /></button>
+        <button type="button" class="btn btn-sm btn-outline-primary" :disabled="last" @click="$emit('moveDown')"><i class="fa-solid fa-arrow-down" /></button>
+        <button type="button" class="btn btn-sm btn-outline-primary" @click="updateModal.open()"><i class="fa-solid fa-pen" /></button>
         <button type="button" class="btn btn-sm btn-outline-danger" @click="onDeleteClick"><i class="fa-solid fa-trash" /></button>
     </div>
     <modal
@@ -38,13 +40,15 @@ import ConfirmDialog from '@tools/dialogs/ConfirmDialog.vue';
 
 interface Props {
     modelValue: Category
+    first?: boolean
+    last?: boolean
 }
 
 const props = defineProps<Props>();
 
 const category = ref<Category>(props.modelValue);
 
-const emit = defineEmits(['update:modelValue', 'updated']);
+const emit = defineEmits(['update:modelValue', 'updated', 'moveUp', 'moveDown']);
 
 const updateModal = ref<InstanceType<typeof Modal> | null>(null);
 const updateForm = ref<InstanceType<typeof CategoryForm>|null>(null);

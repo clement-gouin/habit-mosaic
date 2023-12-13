@@ -30,7 +30,10 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request): JsonResponse
     {
-        $category = new Category($request->validated());
+        $category = new Category([
+            'order' => Category::count() + 1,
+            ...$request->validated()
+        ]);
 
         /** @var User $user */
         $user = $request->user();

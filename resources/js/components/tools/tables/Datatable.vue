@@ -83,8 +83,6 @@ import { Base, QueryParameters, TableColumn } from '@interfaces';
 import Pagination from './Pagination.vue';
 import QuickSearch from './QuickSearch.vue';
 
-const loading = ref(false);
-
 interface Props {
     columns: TableColumn[]
     data: Base[]

@@ -30,6 +30,10 @@ class TrackerController extends Controller
      */
     public function store(StoreTrackerRequest $request): JsonResponse
     {
+        $request->mergeIfMissing([
+            'order' => Tracker::count() + 1,
+        ]);
+
         $tracker = new Tracker($request->validated());
 
         /** @var User $user */
@@ -48,6 +52,10 @@ class TrackerController extends Controller
      */
     public function update(UpdateTrackerRequest $request, Tracker $tracker): JsonResource
     {
+        $request->mergeIfMissing([
+            'order' => Tracker::count() + 1,
+        ]);
+
         $tracker->update($request->validated());
 
         return TrackerResource::make($tracker->refresh());

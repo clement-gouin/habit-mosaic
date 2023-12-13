@@ -23,7 +23,7 @@ class TrackerFactory extends Factory
             'category_id' => null,
             'name' => fake()->unique()->word(),
             'icon' => fake()->randomElement(['bath', 'spoon', 'chair', 'jar', 'toilet', 'soap', 'sink', 'shower', 'tv', 'faucet', 'blender', 'plug']),
-            'order' => fake()->randomNumber(nbDigits: 3),
+            'order' => fn () => Tracker::count() + 1,
             'target_score' => fake()->randomFloat(min: -10, max: 10),
         ];
 

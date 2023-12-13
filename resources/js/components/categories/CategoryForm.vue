@@ -16,15 +16,6 @@
                 v-model="category.icon"
                 v-model:error="errors['icon']"
             />
-            <text-input
-                class="mb-2"
-                name="order"
-                label="Order"
-                v-model="category.order"
-                v-model:error="errors['order']"
-                type="number"
-                required
-            />
         </div>
     </bs-form>
 </template>
@@ -46,8 +37,7 @@ const props = defineProps<Props>();
 
 const formInitValues: Category = {
     name: '',
-    icon: '',
-    order: 0
+    icon: ''
 };
 
 const category = ref<Category>(loadDataFromProps());
