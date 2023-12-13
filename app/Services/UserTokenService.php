@@ -36,7 +36,7 @@ class UserTokenService
         $userToken = UserToken::whereToken($token)->first();
 
         if (! $userToken || $userToken->expires_at < Carbon::now()) {
-           return null;
+            return null;
         }
 
         $userToken->update([
