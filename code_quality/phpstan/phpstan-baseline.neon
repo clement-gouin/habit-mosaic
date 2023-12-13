@@ -3,9 +3,19 @@ parameters:
 		-
 			message: "#^Only iterables can be unpacked, mixed given\\.$#"
 			count: 1
-			path: ../../app/Http/Controllers/CategoryController.php
+			path: ../../app/Http/Controllers/Api/CategoryController.php
 
 		-
 			message: "#^Parameter \\#1 \\$attributes of method Illuminate\\\\Database\\\\Eloquent\\\\Model\\:\\:update\\(\\) expects array\\<string, mixed\\>, mixed given\\.$#"
 			count: 1
-			path: ../../app/Http/Controllers/CategoryController.php
+			path: ../../app/Http/Controllers/Api/CategoryController.php
+
+		-
+			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\DayService\\:\\:getDayData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
+			count: 1
+			path: ../../app/Http/Controllers/Api/DayDataController.php
+
+		-
+			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\DayService\\:\\:getDayData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
+			count: 1
+			path: ../../app/Http/Controllers/Web/DayViewController.php

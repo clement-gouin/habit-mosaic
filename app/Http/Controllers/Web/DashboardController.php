@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
-    public function __invoke(Request $request): View
+    public function __invoke(): View
     {
         return view('dashboard');
     }
