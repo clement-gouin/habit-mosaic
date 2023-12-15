@@ -41,6 +41,5 @@
         <main style="background-color: #f5f5f5;" class="col-10 col-md-11 col-lg-9 col-xxl-10 h-100 overflow-scroll p-0 m-0">
             @yield('content')
         </main>
-        <div class="alert-container" id="alert-container"></div>
     </body>
 </html>

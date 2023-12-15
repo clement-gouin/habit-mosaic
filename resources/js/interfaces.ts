@@ -1,6 +1,14 @@
 import { TableCellFunction } from '@types';
 export interface Base extends Record<string, unknown> {}
 
+export interface Notification {
+    id: number
+    type: string
+    title: string
+    text: string
+    show: boolean
+}
+
 export interface QueryParameters extends Base {
     sortBy?: string
     search?: string

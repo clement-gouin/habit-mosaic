@@ -32,7 +32,6 @@
 
 import Modal from '@tools/Modal.vue';
 import { Tracker } from '@interfaces';
-import { createAlert } from '@utils/alerts';
 import { watch, ref } from 'vue';
 import ConfirmDialog from '@tools/dialogs/ConfirmDialog.vue';
 import TrackerForm from './TrackerForm.vue';
@@ -59,7 +58,6 @@ function updateModalSubmit () {
         .then(tracker => {
             updateModal.value?.close();
             updateForm.value?.reset();
-            createAlert('success', 'Tracker updated');
             emit('update:modelValue', tracker);
             emit('updated');
         })
@@ -72,10 +70,8 @@ async function onDeleteClick () {
     if (await confirmDeleteDialog.value.show()) {
         deleteTracker(tracker.value)
             .then(() => {
-                createAlert('success', 'Tracker deleted');
                 emit('updated');
-            })
-            .catch(() => { createAlert('danger', 'An error has occurred'); });
+            });
     }
 }
 

@@ -5,38 +5,26 @@ import path from 'path';
 import fs from 'fs';
 import iconsManifest from '@fortawesome/fontawesome-free/metadata/icon-families.json';
 
-function computeIconsData() {
-    const output = {};
-    Object.keys(iconsManifest).forEach(name => {
-        const data = iconsManifest[name];
-        output[name] = {
-            'search': data.search.terms.concat(...((data.aliases ?? []).names ?? [])),
-            'styles': data.familyStylesByLicense.free.map(d => d.style),
-        };
-    })
-    return JSON.stringify(output);
-}
-
-function computeIconNames() {
+function computeIconNames () {
     return JSON.stringify(Object.keys(iconsManifest));
 }
 
-function computeIconSearch() {
+function computeIconSearch () {
     const output = {};
     Object.keys(iconsManifest).forEach(name => {
         const terms = iconsManifest[name].search.terms.concat(...((iconsManifest[name].aliases ?? []).names ?? []));
         if (terms.length) {
             output[name] = terms;
         }
-    })
+    });
     return JSON.stringify(output);
 }
 
-function computeIconStyles() {
+function computeIconStyles () {
     const output = {};
     Object.keys(iconsManifest).forEach(name => {
         output[name] = iconsManifest[name].familyStylesByLicense.free.map(d => d.style);
-    })
+    });
     return JSON.stringify(output);
 }
 
@@ -47,7 +35,7 @@ export default defineConfig(({ mode }) => {
         define: {
             __ICONS__: computeIconNames(),
             __ICON_SEARCHES__: computeIconSearch(),
-            __ICON_STYLES__: computeIconStyles(),
+            __ICON_STYLES__: computeIconStyles()
         },
         server: {
             host: '0.0.0.0',
@@ -64,9 +52,7 @@ export default defineConfig(({ mode }) => {
                 host: env.VITE_HMR_HOST ?? env.APP_HOST,
                 port: env.VITE_HMR_PORT ?? 5173
             },
-            watch: {
-                usePolling: true,
-            }
+            watch: { usePolling: true }
         },
         plugins: [
             laravel({ input: ['resources/js/app.js'] }),
@@ -85,6 +71,7 @@ export default defineConfig(({ mode }) => {
                 '@utils': path.resolve(__dirname, 'resources/js/utils'),
                 '@requests': path.resolve(__dirname, 'resources/js/requests'),
                 '@tools': path.resolve(__dirname, 'resources/js/components/tools'),
+                '@stores': path.resolve(__dirname, 'resources/js/stores'),
                 '@composables': path.resolve(__dirname, 'resources/js/composables'),
                 '@types': path.resolve(__dirname, 'resources/js/types.ts'),
                 '@interfaces': path.resolve(__dirname, 'resources/js/interfaces.ts'),
@@ -96,6 +83,6 @@ export default defineConfig(({ mode }) => {
                 '@fonts': path.resolve(__dirname, 'resources/fonts'),
                 '@images': path.resolve(__dirname, 'resources/images')
             }
-        },
+        }
     };
 });

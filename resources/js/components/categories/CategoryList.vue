@@ -38,7 +38,6 @@ import { Category, TableColumn } from '@interfaces';
 import { ref } from 'vue';
 import Modal from '@tools/Modal.vue';
 import CategoryForm from './CategoryForm.vue';
-import { createAlert } from '@utils/alerts';
 import { listCategories, updateCategory } from '@requests/categories';
 import CategoryActions from './CategoryActions.vue';
 import CategoryLabel from './CategoryLabel.vue';
@@ -89,7 +88,6 @@ function createModalSubmit () {
         .then(() => {
             createModal.value?.close();
             createForm.value?.reset();
-            createAlert('success', 'Category created');
             fetchData();
         })
         .catch(() => {

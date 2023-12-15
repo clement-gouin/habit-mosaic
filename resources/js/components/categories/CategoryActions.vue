@@ -33,7 +33,6 @@
 import CategoryForm from './CategoryForm.vue';
 import Modal from '@tools/Modal.vue';
 import { Category } from '@interfaces';
-import { createAlert } from '@utils/alerts';
 import { watch, ref } from 'vue';
 import { deleteCategory } from '@requests/categories';
 import ConfirmDialog from '@tools/dialogs/ConfirmDialog.vue';
@@ -59,7 +58,6 @@ function updateModalSubmit () {
         .then(category => {
             updateModal.value?.close();
             updateForm.value?.reset();
-            createAlert('success', 'Category updated');
             emit('update:modelValue', category);
             emit('updated');
         })
@@ -72,10 +70,8 @@ async function onDeleteClick () {
     if (await confirmDeleteDialog.value.show()) {
         deleteCategory(category.value)
             .then(() => {
-                createAlert('success', 'Category deleted');
                 emit('updated');
-            })
-            .catch(() => { createAlert('danger', 'An error has occurred'); });
+            });
     }
 }
 

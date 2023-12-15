@@ -48,7 +48,6 @@ import { ref } from 'vue';
 import { listTrackers, updateTracker } from '@requests/trackers';
 import Modal from '@tools/Modal.vue';
 import TrackerForm from './TrackerForm.vue';
-import { createAlert } from '@utils/alerts';
 import TrackerActions from './TrackerActions.vue';
 import CategoryLabel from '../categories/CategoryLabel.vue';
 import TrackerLabel from './TrackerLabel.vue';
@@ -114,7 +113,6 @@ function createModalSubmit () {
         .then(() => {
             createModal.value?.close();
             createForm.value?.reset();
-            createAlert('success', 'Tracker created');
             fetchData();
         })
         .catch(() => {

@@ -106,6 +106,7 @@
             "@utils/*": ["./resources/js/utils/*"],
             "@requests/*": ["./resources/js/requests/*"],
             "@tools/*": ["./resources/js/components/tools/*"],
+            "@stores/*": ["./resources/js/stores/*"],
             "@composables/*": ["./resources/js/composables/*"],
             "@types": ["./resources/js/types.ts"],
             "@interfaces": ["./resources/js/interfaces.ts"],

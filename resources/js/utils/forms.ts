@@ -1,4 +1,3 @@
-import { createAlert } from './alerts';
 import { AxiosError } from 'axios';
 import { ErrorResponse } from '@interfaces';
 
@@ -15,10 +14,6 @@ export function handleFormErrors (error: AxiosError): Record<string, string> {
             }
         });
         return outErrors;
-    } else if (error.response?.status !== undefined && error.response?.status < 500) {
-        void createAlert('danger', 'Unauthorized action');
-    } else {
-        void createAlert('danger', 'An error has occurred');
     }
     return {};
 }

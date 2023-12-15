@@ -1,7 +1,10 @@
 import { Tracker, TrackerData } from '@interfaces';
 import axios, { AxiosError } from 'axios';
+import { useNotificationsStore } from '@stores/notifications';
 
 export const ENDPOINT = '/api/trackers';
+
+const { notifyAxiosError, notifySuccess } = useNotificationsStore();
 
 let controller: AbortController;
 
@@ -28,7 +31,11 @@ export async function createTracker (tracker: TrackerData): Promise<Tracker> {
         ...tracker,
         category_id: tracker.category?.id
     })
-        .then(resp => resp.data.data);
+        .then(resp => {
+            notifySuccess('Tracker created');
+            return resp.data.data;
+        })
+        .catch(notifyAxiosError);
 }
 
 export async function updateTracker (tracker: TrackerData): Promise<Tracker> {
@@ -36,9 +43,18 @@ export async function updateTracker (tracker: TrackerData): Promise<Tracker> {
         ...tracker,
         category_id: tracker.category?.id
     })
-        .then(resp => resp.data.data);
+        .then(resp => {
+            notifySuccess('Tracker updated');
+            return resp.data.data;
+        })
+        .catch(notifyAxiosError);
 }
 
-export async function deleteTracker (tracker: TrackerData): Promise<never> {
-    return await axios.delete(`${ENDPOINT}/${tracker.id as number}`);
+export async function deleteTracker (tracker: TrackerData): Promise<void> {
+    await axios.delete(`${ENDPOINT}/${tracker.id as number}`)
+        .then(resp => {
+            notifySuccess('Tracker deleted');
+            return resp.data.data;
+        })
+        .catch(notifyAxiosError);
 }
