@@ -1,10 +1,10 @@
 import { Category, CategoryData } from '@interfaces';
 import axios, { AxiosError } from 'axios';
-import { useNotificationsStore } from '@stores/notifications';
+import { useAlertsStore } from '@stores/alerts';
 
 export const ENDPOINT = '/api/categories';
 
-const { notifyAxiosError, notifySuccess } = useNotificationsStore();
+const { alertAxiosError, alertSuccess } = useAlertsStore();
 
 let controller: AbortController;
 
@@ -29,25 +29,25 @@ export async function listCategories (): Promise<Category[]> {
 export async function createCategory (category: CategoryData): Promise<Category> {
     return await axios.post(ENDPOINT, category)
         .then(resp => {
-            notifySuccess('Category created');
+            alertSuccess('Category created');
             return resp.data.data;
         })
-        .catch(notifyAxiosError);
+        .catch(alertAxiosError);
 }
 
 export async function updateCategory (category: CategoryData): Promise<Category> {
     return await axios.put(`${ENDPOINT}/${category.id as number}`, category)
         .then(resp => {
-            notifySuccess('Category updated');
+            alertSuccess('Category updated');
             return resp.data.data;
         })
-        .catch(notifyAxiosError);
+        .catch(alertAxiosError);
 }
 
 export async function deleteCategory (category: CategoryData): Promise<void> {
     await axios.delete(`${ENDPOINT}/${category.id as number}`)
         .then(() => {
-            notifySuccess('Category deleted');
+            alertSuccess('Category deleted');
         })
-        .catch(notifyAxiosError);
+        .catch(alertAxiosError);
 }

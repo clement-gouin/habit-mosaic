@@ -1,10 +1,10 @@
 import { TableCellFunction } from '@types';
 export interface Base extends Record<string, unknown> {}
 
-export interface Notification {
+export interface Alert {
     id: number
     type: string
-    title: string
+    title?: string
     text: string
     show: boolean
 }

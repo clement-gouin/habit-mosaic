@@ -3,7 +3,7 @@ import './bootstrap';
 import { createApp, h } from 'vue';
 import Components from './components/index.ts';
 import { createPinia } from 'pinia';
-import Notifications from './components/notifications/Notifications.vue';
+import AlertsContainer from './components/alerts/AlertsContainer.vue';
 
 const element = document.getElementById('app');
 
@@ -13,7 +13,7 @@ if (element) {
 
     const parsedData = JSON.parse(componentPropsRaw) ?? {};
 
-    const app = createApp({ render: () => [h(Components[componentName], parsedData), h(Notifications)] });
+    const app = createApp({ render: () => [h(Components[componentName], parsedData), h(AlertsContainer)] });
 
     element.removeAttribute('data-component');
     element.removeAttribute('data-props');
