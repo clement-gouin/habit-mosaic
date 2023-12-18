@@ -122,4 +122,7 @@ return [
         ],
     ],
 
+    'error' => [
+        'to' => env('ERROR_TO_ADDRESS'),
+    ],
 ];
