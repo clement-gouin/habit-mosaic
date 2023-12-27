@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Eloquent;
 use Illuminate\Support\Carbon;
+use Database\Factories\DataPointFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $date
  * @property float $value
  * @property-read Tracker $tracker
- * @method static DataPoint factory($count = null, $state = [])
+ * @method static DataPointFactory factory($count = null, $state = [])
  * @method static Builder|DataPoint newModelQuery()
  * @method static Builder|DataPoint newQuery()
  * @method static Builder|DataPoint query()

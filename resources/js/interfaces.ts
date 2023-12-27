@@ -74,6 +74,7 @@ export interface TrackerFull extends Tracker {
 
 export interface DataPoint extends Base {
     id: number
+    tracker_id: number
     date: string
     value: number
     score: number

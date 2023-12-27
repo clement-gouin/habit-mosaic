@@ -52,7 +52,7 @@ export const useAlertsStore = defineStore('alerts', () => {
     }
 
     function alertAxiosError (error: AxiosError): never {
-        if (error.message === 'canceled') {
+        if (error.message !== 'canceled' && error.message !== 'Request aborted') {
             alertError(
                 error.response?.data?.message ?? error.response?.statusText ?? error.message,
                 `Error ${error.response?.status ?? 0}`
