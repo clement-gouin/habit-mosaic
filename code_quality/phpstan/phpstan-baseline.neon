@@ -16,6 +16,26 @@ parameters:
 			path: ../../app/Http/Controllers/Api/DayDataController.php
 
 		-
+			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\TableService\\:\\:getTableData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
+			count: 1
+			path: ../../app/Http/Controllers/Api/TableDataController.php
+
+		-
 			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\DayService\\:\\:getDayData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
 			count: 1
 			path: ../../app/Http/Controllers/Web/DayViewController.php
+
+		-
+			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\TableService\\:\\:getTableData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
+			count: 1
+			path: ../../app/Http/Controllers/Web/TableViewController.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of function ucfirst expects string, mixed given\\.$#"
+			count: 1
+			path: ../../app/Mail/ErrorNotification.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:map\\(\\) expects callable\\(mixed, int\\|string\\)\\: Illuminate\\\\Database\\\\Eloquent\\\\Model, Closure\\(App\\\\Models\\\\Tracker\\)\\: Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			count: 1
+			path: ../../app/Services/TableService.php

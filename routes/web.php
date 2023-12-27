@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DataPointController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Api\TableDataController;
+use App\Http\Controllers\Web\TableViewController;
 use App\Http\Controllers\Web\ConfigurationController;
 use App\Http\Controllers\Api\DayDataController;
 use App\Http\Controllers\Web\AuthenticatedSessionController;
@@ -33,6 +34,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::get('day', DayViewController::class)->name('day');
+    Route::get('table', TableViewController::class)->name('table');
     Route::get('configuration', ConfigurationController::class)->name('configuration');
 
     Route::prefix('api')->group(function () {
