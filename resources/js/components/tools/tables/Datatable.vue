@@ -1,6 +1,6 @@
 <template>
-    <div class="table-responsive">
-        <div>
+    <div class="table-responsive" :class="{overflow: overflow}">
+        <div v-if="$slots.toolbar || withSearch">
             <div class="d-flex flex-row mb-3 justify-content-between">
                 <div>
                     <slot name="toolbar"></slot>
@@ -21,17 +21,18 @@
                 <th v-for="col in filteredColumns" :key="col.id"
                     :class="typeof col.cssClass === 'function' ? col.cssClass(null) : col.cssClass"
                     :style="typeof col.cssStyle === 'function' ? col.cssStyle(null) : col.cssStyle"
+                    :title="col.title"
                 >
                     <a v-if="col.sortable" href="#"
                        class="text-decoration-none"
                        @click.prevent="toggleSort(col.id)"
                     >
-                        <span class="text-body"><slot :name="'head-' + col.id" :col="col">{{ col.label }}</slot></span>
+                        <span class="text-body"><slot :name="'head-' + col.id" :col="col"><i v-if="col.icon" :class="mapToClassName(col.icon)"></i>{{ col.label }}</slot></span>
                         <span class="caret-sort" :class="(descending ? 'caret-down' : 'caret-up')"
                               v-if="params.sortBy?.endsWith(col.id)"></span>
                         <span class="caret-sort caret-up disabled" v-else></span>
                     </a>
-                    <span v-else><slot :name="'head-' + col.id" :col="col">{{ col.label }}</slot></span>
+                    <span v-else><slot :name="'head-' + col.id" :col="col"><i v-if="col.icon" :class="mapToClassName(col.icon)"></i>{{ col.label }}</slot></span>
                 </th>
             </tr>
             </thead>
@@ -47,6 +48,7 @@
                         :data-bs-toggle="withSubRows && col.clickable ? 'collapse' : ''"
                         :href="withSubRows && col.clickable ? `#subrow-${index}` : ''"
                         :aria-controls="withSubRows && col.clickable ? `subrow-${index}` : ''"
+                        :title="col.title"
                     >
                         <slot :name="'col-' + col.id" :row="row" :value="row[col.id] ?? undefined" :index="index">{{ row[col.id] ?? '' }}</slot>
                     </td>
@@ -82,6 +84,7 @@ import { computed, onBeforeMount, onMounted, ref } from 'vue';
 import { Base, QueryParameters, TableColumn } from '@interfaces';
 import Pagination from './Pagination.vue';
 import QuickSearch from './QuickSearch.vue';
+import { mapToClassName } from '@utils/icons';
 
 interface Props {
     columns: TableColumn[]
@@ -93,6 +96,7 @@ interface Props {
     autoFetch?: boolean
     withSubRows?: boolean
     loading?: boolean
+    overflow?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -213,5 +217,13 @@ defineExpose({ updateParams });
 
 .table-hover > tbody > tr.subrow > * {
     --bs-table-bg-state: var(--bs-gray-100);
+}
+
+.overflow {
+    overflow-x: scroll;
+}
+
+.overflow .table {
+    width: max-content;
 }
 </style>

@@ -34,6 +34,9 @@
             <x-menu.item route="day" pattern="day" icon="fa-solid fa-calendar-check">
                 Day to day
             </x-menu.item>
+            <x-menu.item route="table" pattern="table" icon="fa-solid fa-table-cells">
+                Table view
+            </x-menu.item>
             <x-menu.item route="configuration" pattern="configuration" icon="fa-solid fa-wrench">
                 Configuration
             </x-menu.item>

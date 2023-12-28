@@ -20,7 +20,9 @@ export interface QueryParameters extends Base {
 
 export interface TableColumn extends Base {
     id: string
-    label: string
+    label?: string
+    icon?: string
+    title?: string
     cssClass?: TableCellFunction | string
     cssStyle?: TableCellFunction | string
     sortable?: boolean
@@ -79,4 +81,5 @@ export interface DataPoint extends Base {
     value: number
     score: number
     tracker?: Tracker
+    tableElement?: HTMLDivElement
 }
