@@ -6,9 +6,6 @@ ARG WWW_GROUP=100
 # Set working directory
 WORKDIR /var/www
 
-# https://stackoverflow.com/questions/38002543/apt-get-update-returned-a-non-zero-code-100
-RUN apt-get update && apt-get install -y apt-transport-https
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     libpng-dev \
