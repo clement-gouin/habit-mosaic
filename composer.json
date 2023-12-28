@@ -6,11 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-openssl": "*",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/tinker": "^2.8",
-        "spatie/laravel-data": "^3.7",
-        "ext-openssl": "*"
+        "predis/predis": "^2.2",
+        "spatie/laravel-data": "^3.7"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.3",

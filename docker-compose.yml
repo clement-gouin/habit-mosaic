@@ -1,0 +1,57 @@
+version: "3"
+
+networks:
+  backend:
+
+volumes:
+  postgres-data:
+  redis-data:
+
+services:
+  nginx:
+    image: nginx
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT}:80"
+    networks:
+      - backend
+    volumes:
+      - "./docker/nginx.conf:/etc/nginx/nginx.conf:ro"
+      - "./public:/var/www/habit-mosaic:ro"
+  redis:
+    image: redis
+    networks:
+      - backend
+    restart: unless-stopped
+    volumes:
+      - "redis-data:/data"
+    command: redis-server --appendonly yes
+  postgres:
+    image: 'postgres:14.4'
+    networks:
+      - backend
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+  maildev:
+    image: maildev/maildev
+    networks:
+      - backend
+    ports:
+      - ${MAILDEV_PORT:-1080}:${MAILDEV_PORT:-1080}
+    command: '-s ${MAIL_PORT:-1025} -w ${MAILDEV_PORT:-1080}'
+  app:
+    build:
+      context: .
+      args:
+        WWW_USER: '1000'
+        WWW_GROUP: '100'
+    networks:
+      - backend
+    volumes:
+      - '.:/var/www'
+    user: '1000'
+
