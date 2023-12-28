@@ -54,4 +54,26 @@ services:
     volumes:
       - '.:/var/www'
     user: '1000'
-
+  app-cron:
+    build:
+      context: .
+      args:
+        WWW_USER: '1000'
+        WWW_GROUP: '100'
+    command: 'cron -f -l 2'
+    networks:
+      - backend
+    volumes:
+      - '.:/var/www'
+#  app-queue-default:
+#    build:
+#      context: .
+#      args:
+#        WWW_USER: '1000'
+#        WWW_GROUP: '100'
+#    networks:
+#      - backend
+#    volumes:
+#      - '.:/var/www'
+#    user: '1000'
+#    command: 'queue:work --queue=default'

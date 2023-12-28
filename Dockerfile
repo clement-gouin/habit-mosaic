@@ -8,8 +8,6 @@ WORKDIR /var/www
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
@@ -18,19 +16,11 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libzip-dev \
     libcurl4-openssl-dev \
-    zip \
-    unzip
-
-# Enable xdebug
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+    cron
 
 # Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip curl intl
-
-# Get latest Composer
-RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd zip curl intl
 
 # Clean cache
 RUN apt-get -y autoremove \
@@ -40,3 +30,10 @@ RUN apt-get -y autoremove \
 # Create user
 RUN groupadd --force -g $WWW_GROUP webapp
 RUN useradd -ms /bin/bash --no-user-group -g $WWW_GROUP -u $WWW_USER webapp
+
+# cron config https://stackoverflow.com/questions/43323754/cannot-make-remove-an-entry-for-the-specified-session-cron
+RUN rm -rf /etc/cron.*/* \
+    && sed -i '/session    required     pam_loginuid.so/c\#session    required   pam_loginuid.so' /etc/pam.d/cron \
+    && echo '* * * * * su webapp -c "/usr/local/bin/php /var/www/artisan schedule:run" > /proc/1/fd/1 2>/proc/1/fd/2' > /etc/cron.d/cron \
+    && chmod 0644 /etc/cron.d/cron \
+    && crontab /etc/cron.d/cron
