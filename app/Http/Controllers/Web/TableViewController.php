@@ -19,7 +19,7 @@ class TableViewController extends Controller
         return view('table_view', $this->tableService->getTableData(
             $request->user(),
             $request->string('date', 'today'),
-            $request->integer('days', 31))
-        );
+            $request->integer('days', 31)
+        ));
     }
 }

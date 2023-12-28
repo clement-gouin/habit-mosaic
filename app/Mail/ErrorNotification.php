@@ -57,4 +57,3 @@ class ErrorNotification extends Mailable
         return [];
     }
 }
-
