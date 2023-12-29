@@ -155,4 +155,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          script: make pull-habit-mosaic
+          script: ${{ secrets.SSH_SCRIPT }}
