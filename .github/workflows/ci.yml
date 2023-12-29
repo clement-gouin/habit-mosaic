@@ -145,7 +145,7 @@ jobs:
           show_class_names: true
   deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master
+    if: github.ref == 'refs/heads/master'
     needs: [eslint,phpcs,phpunit]
     steps:
       - uses: appleboy/ssh-action@v1.0.1
