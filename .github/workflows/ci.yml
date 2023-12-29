@@ -140,3 +140,15 @@ jobs:
           show_line: true
           show_branch: true
           show_class_names: true
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') && github.ref == 'refs/heads/master' }}
+    needs: [eslint,phpstan,phpcs,phpmd,phpunit]
+    steps:
+      - uses: appleboy/ssh-action@v1.0.1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          script: make pull-habit-mosaic
