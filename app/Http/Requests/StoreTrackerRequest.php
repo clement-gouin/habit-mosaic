@@ -42,6 +42,7 @@ class StoreTrackerRequest extends FormRequest
             'target_value' => 'required|numeric|min:0.001',
             'target_score' => 'required|numeric',
             'single' => 'required|boolean',
+            'overflow' => 'required|boolean'
         ];
     }
 }

@@ -244,6 +244,7 @@ class TrackerControllerTest extends TestCase
             'target_value' => fake()->randomFloat(),
             'target_score' => fake()->randomFloat(min: 0.1),
             'single' => fake()->boolean,
+            'overflow' => fake()->boolean,
         ];
     }
 }
