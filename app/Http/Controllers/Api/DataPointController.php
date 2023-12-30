@@ -17,7 +17,7 @@ class DataPointController extends Controller
      */
     public function update(UpdateDataPointRequest $request, DataPoint $dataPoint): JsonResource
     {
-        $dataPoint->update($request->validated());
+        $dataPoint->updateValue($request->float('value'));
 
         return DataPointResource::make($dataPoint->refresh());
     }

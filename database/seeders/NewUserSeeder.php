@@ -23,6 +23,7 @@ class NewUserSeeder extends Seeder
                     'single' => false,
                     'unit' => 'hours slept',
                     'target_value' => 8,
+                    'overflow' => true,
                 ],
                 [
                     'name' => 'Brush teeth',
@@ -49,6 +50,7 @@ class NewUserSeeder extends Seeder
                     'unit' => 'steps',
                     'value_step' => 1000,
                     'target_value' => 20000,
+                    'overflow' => true,
                 ],
                 [
                     'name' => 'Drink water',
@@ -57,6 +59,7 @@ class NewUserSeeder extends Seeder
                     'unit' => 'litters',
                     'value_step' => 0.25,
                     'target_value' => 1,
+                    'overflow' => true,
                 ],
             ],
         ],
@@ -70,6 +73,7 @@ class NewUserSeeder extends Seeder
                     'single' => false,
                     'unit' => 'chapters',
                     'target_value' => 2,
+                    'overflow' => true,
                 ],
                 [
                     'name' => 'Alcohol',
@@ -78,6 +82,7 @@ class NewUserSeeder extends Seeder
                     'unit' => 'units',
                     'target_value' => 2,
                     'target_score' => -1,
+                    'overflow' => true,
                 ],
             ],
         ],
@@ -89,6 +94,7 @@ class NewUserSeeder extends Seeder
         'value_step' => 1,
         'target_value' => 1,
         'target_score' => 1,
+        'overflow' => false,
     ];
 
     public function run(?User $user = null): void

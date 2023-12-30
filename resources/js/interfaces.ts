@@ -62,6 +62,7 @@ export interface TrackerData extends Base {
     target_value: number
     target_score: number
     single: boolean
+    overflow: boolean
 }
 
 export interface Tracker extends TrackerData {

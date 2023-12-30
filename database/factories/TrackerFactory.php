@@ -34,6 +34,7 @@ class TrackerFactory extends Factory
                 'value_step' => 1,
                 'target_value' => 1,
                 'single' => true,
+                'overflow' => false,
             ];
         } else {
             return [
@@ -42,6 +43,7 @@ class TrackerFactory extends Factory
                 'value_step' => fake()->randomElement([.1, .5, 1, 5, 10]),
                 'target_value' => fake()->randomFloat(max: 30),
                 'single' => false,
+                'overflow' => true,
             ];
         }
     }

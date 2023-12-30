@@ -58,6 +58,12 @@
                     required
                 />
             </template>
+            <checkbox-input
+                class="mb-2"
+                name="overflow"
+                label="Tracker can overflow"
+                v-model:checked="tracker.overflow"
+            />
             <text-input
                 class="mb-2"
                 name="target_score"
@@ -92,7 +98,8 @@ const singleStepValues: Base = {
     unit: undefined,
     value_step: 1,
     target_value: 1,
-    single: true
+    single: true,
+    overflow: false
 };
 
 const formInitValues: TrackerData = {
@@ -104,7 +111,8 @@ const formInitValues: TrackerData = {
     unit: undefined,
     value_step: 1,
     target_value: 1,
-    single: true
+    single: true,
+    overflow: false
 };
 
 const tracker = ref<TrackerData>(loadDataFromProps());
@@ -149,6 +157,8 @@ function onCheckSingle (value: boolean) {
             ...tracker.value,
             ...singleStepValues
         };
+    } else {
+        tracker.value.overflow = true;
     }
 }
 

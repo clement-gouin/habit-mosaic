@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property float $target_value
  * @property float $target_score
  * @property bool $single
+ * @property bool $overflow
  * @property-read User $user
  * @property-read Category|null $category
  * @property-read Collection|DataPoint[] $dataPoints
@@ -56,6 +57,7 @@ class Tracker extends Model
         'target_value',
         'target_score',
         'single',
+        'overflow',
     ];
 
     /**

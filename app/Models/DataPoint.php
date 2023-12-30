@@ -59,4 +59,15 @@ class DataPoint extends Model
     {
         return $this->tracker->target_score * $this->value / $this->tracker->target_value;
     }
+
+    public function updateValue(float $value): void
+    {
+        $value = max($value, 0);
+
+        if (! $this->tracker->overflow) {
+            $value = min($value, $this->tracker->target_value);
+        }
+
+        $this->update(['value' => $value]);
+    }
 }
