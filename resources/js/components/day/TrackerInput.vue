@@ -4,7 +4,7 @@
         class="p-0 fs-6 text-nowrap shadow-sm rounded-pill text-center position-relative user-select-none lh-1"
         :title="`${tracker.name}: ${rawValue.toFixed(precision(tracker.value_step))} ${tracker.unit}`.trim()"
     >
-        <template v-if="tracker.single && (!tracker.overflow || rawValue < tracker.value_step)">
+        <template v-if="tracker.single && (!tracker.overflow || rawValue < tracker.target_value)">
             <span v-if="rawValue" @click="remove" role="button">
                 <span :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle')}" class="d-inline-block shadow-sm align-bottom h-100 border border-2 px-3 py-2 lh-base rounded-start-pill"></span>
                 <i class="d-inline-block border-end rounded-end-pill border-top border-bottom border-2 px-2 py-2" :style="{backgroundColor: colorDark('bg-subtle'), borderColor: color('border-subtle')}" :class="mapToClassName(tracker.icon)"></i>
@@ -55,7 +55,7 @@ function remove () {
 }
 
 function add () {
-    if (!tracker.value.single || tracker.value.overflow) {
+    if (rawValue.value < tracker.value.target_value || tracker.value.overflow) {
         updateValue(rawValue.value + tracker.value.value_step);
     }
 }

@@ -8,7 +8,7 @@
         </template>
         <template v-for="slot in slots" v-bind:key="slot.id" v-slot:[slot.id]="{ value }" >
             <div>
-                <input v-if="(slot.tracker as Tracker).single && (!(slot.tracker as Tracker).overflow || (value as DataPoint).value < (slot.tracker as Tracker).value_step)" type="checkbox" :checked="(value as DataPoint).value >= (slot.tracker as Tracker).value_step" @input="changedSingle(slot.tracker, value, $event.target.checked)">
+                <input v-if="(slot.tracker as Tracker).single && (!(slot.tracker as Tracker).overflow || (value as DataPoint).value < (slot.tracker as Tracker).target_value)" type="checkbox" :checked="(value as DataPoint).value >= (slot.tracker as Tracker).target_value" @input="changedSingle(slot.tracker, value, $event.target.checked)">
                 <div :ref="(el) => (value as DataPoint).tableElement = el" v-else contenteditable @focusin="selectAll" @blur="changed(slot.tracker, value, $event.target)" @keydown="keyDown(slot.tracker, value, $event)">
                     {{ (value as DataPoint).value.toFixed(precision(slot.tracker.value_step)) }}
                 </div>
