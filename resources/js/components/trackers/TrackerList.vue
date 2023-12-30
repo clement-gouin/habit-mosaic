@@ -9,8 +9,14 @@
             </template>
             <template v-else>(none)</template>
         </template>
-        <template #col-target_score="{row}">
-            {{ row.target_score.toFixed(1) }}
+        <template #col-target_score="{value}">
+            {{ value.toFixed(1) }}
+        </template>
+        <template #col-value_step="{value}">
+            {{ value.toFixed(1) }}
+        </template>
+        <template #col-target_value="{value}">
+            {{ value.toFixed(1) }}
         </template>
         <template #col-actions="{index}">
             <tracker-actions
@@ -75,6 +81,18 @@ const columns: TableColumn[] = [
     {
         id: 'target_score',
         label: 'Target score'
+    },
+    {
+        id: 'value_step',
+        label: 'Value step'
+    },
+    {
+        id: 'target_value',
+        label: 'Target value'
+    },
+    {
+        id: 'unit',
+        label: 'Unit'
     },
     {
         id: 'actions',
