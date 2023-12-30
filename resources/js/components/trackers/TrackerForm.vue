@@ -34,13 +34,6 @@
             <template v-if="!tracker.single">
                 <text-input
                     class="mb-2"
-                    name="unit"
-                    label="Unit"
-                    v-model="tracker.unit"
-                    v-model:error="errors['unit']"
-                />
-                <text-input
-                    class="mb-2"
                     name="value_step"
                     label="Value step"
                     v-model="tracker.value_step"
@@ -58,6 +51,13 @@
                     required
                 />
             </template>
+            <text-input
+                class="mb-2"
+                name="unit"
+                label="Unit"
+                v-model="tracker.unit"
+                v-model:error="errors['unit']"
+            />
             <checkbox-input
                 class="mb-2"
                 name="overflow"
@@ -108,7 +108,7 @@ const formInitValues: TrackerData = {
     icon: '',
     target_score: 1,
 
-    unit: undefined,
+    unit: 'times',
     value_step: 1,
     target_value: 1,
     single: true,
