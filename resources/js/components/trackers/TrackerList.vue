@@ -80,19 +80,23 @@ const columns: TableColumn[] = [
     },
     {
         id: 'target_score',
-        label: 'Target score'
+        label: 'Target score',
+        cssClass: 'd-none d-xl-table-cell'
     },
     {
         id: 'value_step',
-        label: 'Value step'
+        label: 'Value step',
+        cssClass: 'd-none d-xl-table-cell'
     },
     {
         id: 'target_value',
-        label: 'Target value'
+        label: 'Target value',
+        cssClass: 'd-none d-xl-table-cell'
     },
     {
         id: 'unit',
-        label: 'Unit'
+        label: 'Unit',
+        cssClass: 'd-none d-md-table-cell'
     },
     {
         id: 'actions',

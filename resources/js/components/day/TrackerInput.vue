@@ -2,7 +2,7 @@
     <div
         :style="{color: color('text-emphasis')}"
         class="p-0 fs-6 text-nowrap shadow-sm rounded-pill text-center position-relative user-select-none lh-1"
-        :title="`${tracker.name}: ${rawValue.toFixed(precision(tracker.value_step))} ${tracker.unit}`.trim()"
+        :title="`${tracker.name}: ${rawValue.toFixed(precision(tracker.value_step))} ${tracker.unit ?? ''}`.trim()"
     >
         <template v-if="tracker.single && (!tracker.overflow || rawValue < tracker.target_value)">
             <span v-if="rawValue" @click="remove" role="button">
