@@ -62,7 +62,8 @@
                 class="mb-2"
                 name="overflow"
                 label="Tracker can overflow"
-                v-model:checked="tracker.overflow"
+                :checked="tracker.overflow"
+                @change="v => tracker.overflow = v"
             />
             <text-input
                 class="mb-2"
