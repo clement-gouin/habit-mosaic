@@ -95,7 +95,6 @@ interface Props {
 const props = defineProps<Props>();
 
 const singleStepValues: Base = {
-    unit: undefined,
     value_step: 1,
     target_value: 1,
     single: true,
