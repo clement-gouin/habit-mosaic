@@ -40,6 +40,7 @@ const color = variable => referenceColor(score.value, averageScore.value, variab
 
 watch(() => props.modelValue, () => {
     category.value = props.modelValue ?? DEFAULT_CATEGORY;
+    trackers.value = props.trackers;
 });
 </script>
 
