@@ -1,10 +1,10 @@
 <template>
-    <h1 class="w-100 text-center border-bottom border-1 py-2 user-select-none" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">
+    <h2 class="w-100 text-center border-bottom border-1 py-2 user-select-none" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">
         <i class="fa-solid fa-caret-left" role="button" @click="previous"></i>
         {{ date.toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' }) }}
         <span class="text-dark-emphasis superscript rounded">{{ score.toFixed(1) }}</span>
         <i v-if="canShowNext" class="fa-solid fa-caret-right" role="button" @click="next"></i>
-    </h1>
+    </h2>
     <category-panel
         v-for="(category,i) in categories"
         v-bind:key="category.id"

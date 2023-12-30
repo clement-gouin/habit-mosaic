@@ -1,9 +1,9 @@
 <template>
     <div v-if="trackers.length" class="p-1 p-sm-2 p-md-4">
-        <h2 class="w-100 text-center">
+        <h3 class="w-100 text-center">
             <category-label :category="category"/>
             <small class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">{{ score.toFixed(1) }}</small>
-        </h2>
+        </h3>
         <div class="d-flex flex-row flex-wrap justify-content-center">
             <tracker-input
                 v-for="(tracker,i) in trackers"
