@@ -19,7 +19,7 @@ class DayService
         }
 
         return [
-            'date' => $date->timestamp,
+            'date' => $date->format('Y-m-d'),
             'categories' => CategoryResource::collection($user->categories),
             'trackers' => TrackerFullResource::collection($user->trackers),
         ];

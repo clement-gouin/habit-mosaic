@@ -31,7 +31,7 @@ class DayViewControllerTest extends TestCase
             ->getJson(route('day'))
             ->assertSuccessful()
             ->assertViewIs('day_view')
-            ->assertViewHas('date', Carbon::today()->timestamp)
+            ->assertViewHas('date', Carbon::today()->format('Y-m-d'))
             ->assertViewHas('categories')
             ->assertViewHas('trackers');
     }

@@ -25,7 +25,7 @@ class TableService
 
         for ($i = 0; $i < $days; $i++) {
             $date = $endDate->clone()->subDays($i);
-            $data[$date->timestamp] = $user->trackers->map(fn (Tracker $tracker) => $tracker->getDataPointAt($date));
+            $data[$date->format('Y-m-d')] = $user->trackers->map(fn (Tracker $tracker) => $tracker->getDataPointAt($date));
         }
 
         return [

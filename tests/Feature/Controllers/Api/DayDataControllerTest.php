@@ -30,7 +30,7 @@ class DayDataControllerTest extends TestCase
         $this->actingAs($user)
             ->getJson(route('day.data'))
             ->assertSuccessful()
-            ->assertJsonFragment(['date' => Carbon::today()->timestamp])
+            ->assertJsonFragment(['date' => Carbon::today()->format('Y-m-d')])
             ->assertJsonFragment(['id' => $tracker->id]);
     }
 
@@ -42,7 +42,7 @@ class DayDataControllerTest extends TestCase
         $this->actingAs(User::factory()->create())
             ->getJson(route('day.data', ['date' => $date->toIso8601String()]))
             ->assertSuccessful()
-            ->assertJsonFragment(['date' => $date->timestamp]);
+            ->assertJsonFragment(['date' => $date->format('Y-m-d')]);
     }
 
     /** @test */
@@ -51,6 +51,6 @@ class DayDataControllerTest extends TestCase
         $this->actingAs(User::factory()->create())
             ->getJson(route('day.data', ['date' => 'invalid']))
             ->assertSuccessful()
-            ->assertJsonFragment(['date' => Carbon::today()->timestamp]);
+            ->assertJsonFragment(['date' => Carbon::today()->format('Y-m-d')]);
     }
 }

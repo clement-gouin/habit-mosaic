@@ -241,7 +241,7 @@ class TrackerControllerTest extends TestCase
             'order' => fake()->randomNumber(nbDigits: 3),
             'unit' => fake()->boolean() ? fake()->word() : null,
             'value_step' => fake()->randomFloat(min: 0.1),
-            'target_value' => fake()->randomFloat(),
+            'target_value' => fake()->randomFloat(min: 0.1),
             'target_score' => fake()->randomFloat(min: 0.1),
             'single' => fake()->boolean,
             'overflow' => fake()->boolean,

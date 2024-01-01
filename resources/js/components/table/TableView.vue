@@ -28,7 +28,7 @@ import { precision } from '@utils/numbers';
 interface Props {
     categories: Category[],
     trackers: TrackerFull[],
-    data: Record<number, DataPoint[]>
+    data: Record<string, DataPoint[]>
 }
 
 const props = defineProps<Props>();
@@ -80,13 +80,13 @@ function sortTrackers (data: Tracker[]) {
 }
 
 function computeData (): Record<string, unknown>[] {
-    return Object.keys(props.data).reverse()
-        .map((timestamp: number) => {
+    return Object.keys(props.data)
+        .map((date: string) => {
             const row: Record<string, unknown> = {
-                date: new Date(timestamp * 1000),
+                date: new Date(Date.parse(date)),
                 score: 0
             };
-            props.data[timestamp].forEach(dataPoint => {
+            props.data[date].forEach(dataPoint => {
                 const tracker = props.trackers.find(tracker => tracker.id === dataPoint.tracker_id);
                 if (tracker) {
                     dataPoint.tracker = tracker;
