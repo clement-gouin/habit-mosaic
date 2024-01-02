@@ -25,7 +25,7 @@ const props = defineProps<Props>();
 const data = ref<(number|null)[]>([]);
 const validData = computed<number[]>(() => data.value.filter(d => d !== null && d !== 0));
 const max = computed<number>(() => Math.max(0, Math.max(...validData.value)));
-const score = computed<number>(() => validData.value.reduce((a, b) => a + b, 0));
+const score = computed<number>(() => validData.value.reduce((a, b) => a + b, 0) / Math.max(1, validData.value.length));
 const color = variable => referenceColor(score.value, max.value, variable);
 
 function fetchData (days: number) {
