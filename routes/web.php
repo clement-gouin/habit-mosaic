@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\DataPointController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Api\TableDataController;
 use App\Http\Controllers\Web\TableViewController;
+use App\Http\Controllers\Api\MosaicDataController;
 use App\Http\Controllers\Web\ConfigurationController;
 use App\Http\Controllers\Api\DayDataController;
 use App\Http\Controllers\Web\AuthenticatedSessionController;
@@ -40,6 +41,12 @@ Route::middleware('auth')->group(function () {
     Route::prefix('api')->group(function () {
         Route::prefix('day')->group(function () {
             Route::get('/', [DayDataController::class, 'data'])->name('day.data');
+        });
+
+        Route::prefix('mosaic')->group(function () {
+            Route::get('day', [MosaicDataController::class, 'day'])->name('mosaic.day');
+            Route::get('category/{category}', [MosaicDataController::class, 'category'])->name('mosaic.category');
+            Route::get('trackers/{tracker}', [MosaicDataController::class, 'tracker'])->name('mosaic.tracker');
         });
 
         Route::prefix('table')->group(function () {

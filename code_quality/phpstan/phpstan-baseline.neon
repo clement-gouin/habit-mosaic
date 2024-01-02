@@ -6,6 +6,11 @@ parameters:
 			path: ../../app/Http/Controllers/Api/DayDataController.php
 
 		-
+			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\MosaicService\\:\\:getDayMosaicData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
+			count: 1
+			path: ../../app/Http/Controllers/Api/MosaicDataController.php
+
+		-
 			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\TableService\\:\\:getTableData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
 			count: 1
 			path: ../../app/Http/Controllers/Api/TableDataController.php
@@ -24,6 +29,11 @@ parameters:
 			message: "#^Parameter \\#1 \\$string of function ucfirst expects string, mixed given\\.$#"
 			count: 1
 			path: ../../app/Mail/ErrorNotification.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
+			count: 2
+			path: ../../app/Services/MosaicService.php
 
 		-
 			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:map\\(\\) expects callable\\(mixed, int\\|string\\)\\: Illuminate\\\\Database\\\\Eloquent\\\\Model, Closure\\(App\\\\Models\\\\Tracker\\)\\: Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
