@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @property Category $resource */
-class CategoryResource extends JsonResource
+class CategoryFullResource extends CategoryResource
 {
     /**
      * Transform the resource into an array.
@@ -18,11 +18,8 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'id' => $this->resource->id,
-            'name' => $this->resource->name,
-            'icon' => $this->resource->icon,
-            'order' => $this->resource->order,
-        ];
+        return array_merge(parent::toArray($request), [
+            'average' => $this->resource->trackers->sum(fn (Tracker $tracker) => $tracker->getAverageScore()),
+        ]);
     }
 }

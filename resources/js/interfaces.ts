@@ -52,6 +52,10 @@ export interface Category extends CategoryData {
     order: number
 }
 
+export interface CategoryFull extends Category {
+    average: number
+}
+
 export interface TrackerData extends Base {
     id?: number
     category?: Category

@@ -10,14 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import { Category, TrackerFull } from '@interfaces';
+import { CategoryFull, TrackerFull } from '@interfaces';
 import Mosaic from './Mosaic.vue';
 import { ref } from 'vue';
 import { getDayMosaicData } from '@requests/mosaic';
 import CategoryMosaic from './CategoryMosaic.vue';
 
 interface Props {
-    categories: Category[],
+    categories: CategoryFull[],
     trackers: TrackerFull[],
 }
 

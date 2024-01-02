@@ -9,6 +9,7 @@ use App\Services\MosaicService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TrackerResource;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CategoryFullResource;
 
 class DashboardController extends Controller
 {
@@ -18,7 +19,7 @@ class DashboardController extends Controller
         $user = $request->user();
 
         return view('dashboard', [
-            'categories' => CategoryResource::collection($user->categories),
+            'categories' => CategoryFullResource::collection($user->categories),
             'trackers' => TrackerResource::collection($user->trackers),
         ]);
     }

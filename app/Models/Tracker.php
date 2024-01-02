@@ -113,4 +113,11 @@ class Tracker extends Model
                 'date' => Carbon::createFromTimestamp(0),
             ])->refresh();
     }
+
+    public function getAverageScore(): float
+    {
+        $value = $this->getAverageDataPoint()?->value ?? 0;
+
+        return $this->target_score * $value / $this->target_value;
+    }
 }
