@@ -27,7 +27,7 @@ class MosaicService
     protected function mapThroughTime(callable $callable, int $days): array
     {
         $today = Carbon::today();
-        $endDate = $today->clone()->startOfWeek()->addWeek();
+        $endDate = $today->clone()->startOfWeek()->addWeek()->subDay();
 
         $data = [];
 

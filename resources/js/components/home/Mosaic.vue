@@ -7,7 +7,6 @@ import { onMounted, ref, watch } from 'vue';
 
 interface Props {
     data: (number|null)[]
-    loading?: boolean
 }
 
 const props = defineProps<Props>();
@@ -44,6 +43,12 @@ function draw () {
     context.clearRect(0, 0, width, height);
 
     if (props.data.length) {
+        const today = ((new Date()).getDay() + 6) % 7;
+
+        context.strokeStyle = 'rgba(0, 0, 0, 0.125)';
+        context.lineWidth = spacing * 1;
+        context.strokeRect(xValue(0), yValue(6 - today), square, square);
+
         props.data.forEach((value, i) => {
             const x = Math.floor(i / 7);
             const y = i % 7;
@@ -54,15 +59,17 @@ function draw () {
                 context.fillRect(xValue(x), yValue(y), square, square);
             }
         });
+    } else {
+        context.fillStyle = 'rgba(0, 0, 0, 0.125)';
 
-        const today = ((new Date()).getDay() + 6) % 7;
-
-        context.strokeStyle = 'rgba(0, 0, 0, 0.125)';
-        context.lineWidth = spacing * 0.5;
-        context.strokeRect(xValue(0), yValue(6 - today), square, square);
+        for (let x = 0; x < Math.floor(width / (square + spacing)) + 1; x++) {
+            for (let y = 0; y < 7; y++) {
+                context.fillRect(xValue(x), yValue(y), square, square);
+            }
+        }
     }
 
-    const total = Math.floor(width / (square + spacing)) * 7;
+    const total = Math.floor(width / (square + spacing)) * 7 + 7;
 
     if (total > days.value) {
         days.value = total;

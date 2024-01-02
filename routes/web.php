@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function () {
 
         Route::prefix('mosaic')->group(function () {
             Route::get('day', [MosaicDataController::class, 'day'])->name('mosaic.day');
-            Route::get('category/{category}', [MosaicDataController::class, 'category'])->name('mosaic.category');
+            Route::get('categories/{category}', [MosaicDataController::class, 'category'])->name('mosaic.category');
             Route::get('trackers/{tracker}', [MosaicDataController::class, 'tracker'])->name('mosaic.tracker');
         });
 
