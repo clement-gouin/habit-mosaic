@@ -5,11 +5,20 @@ namespace Tests\Feature\Controllers\Api;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Category;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class CategoryControllerTest extends TestCase
 {
     use DatabaseMigrations;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Event::fake();
+    }
 
     /** @test */
     public function it_lists_categories(): void

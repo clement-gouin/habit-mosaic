@@ -6,11 +6,19 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Tracker;
 use App\Models\Category;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TrackerControllerTest extends TestCase
 {
     use DatabaseMigrations;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Event::fake();
+    }
 
     /** @test */
     public function it_lists_tracker(): void

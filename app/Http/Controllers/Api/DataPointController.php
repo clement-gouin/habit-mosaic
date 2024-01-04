@@ -18,12 +18,9 @@ class DataPointController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @throws AuthorizationException
      */
     public function update(UpdateDataPointRequest $request, DataPoint $dataPoint): JsonResource
     {
-        $this->authorize('update', $dataPoint);
-
         $this->dataPointService->updateValue($dataPoint, $request->float('value'));
 
         return DataPointResource::make($dataPoint->refresh());

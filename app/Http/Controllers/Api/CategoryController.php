@@ -11,12 +11,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CategoryController extends Controller
 {
+    public function __construct(protected CategoryMosaicService $mosaicService)
+    {
+    }
+
     public function list(Request $request): ResourceCollection
     {
         /** @var User $user */
@@ -41,6 +46,8 @@ class CategoryController extends Controller
 
         $user->categories()->save($category);
 
+        $this->mosaicService->wipeData($category);
+
         return CategoryResource::make($category->refresh())
             ->toResponse($request)
             ->setStatusCode(201);
@@ -64,6 +71,8 @@ class CategoryController extends Controller
     public function destroy(Category $category): Response
     {
         $this->authorize('delete', $category);
+
+        $this->mosaicService->wipeData($category);
 
         $category->delete();
 

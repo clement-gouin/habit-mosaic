@@ -5,11 +5,19 @@ namespace Tests\Feature\Controllers\Api;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\DataPoint;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class DataPointControllerTest extends TestCase
 {
     use DatabaseMigrations;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Event::fake();
+    }
 
     /** @test */
     public function it_forbid_data_point_update_for_another_user(): void

@@ -6,17 +6,26 @@ use App\Models\User;
 use App\Models\Tracker;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Services\TrackerService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TrackerResource;
 use App\Http\Requests\StoreTrackerRequest;
 use App\Http\Requests\UpdateTrackerRequest;
+use App\Services\Mosaic\TrackerMosaicService;
+use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class TrackerController extends Controller
 {
+    public function __construct(
+        protected TrackerService $trackerService,
+        protected TrackerMosaicService $trackerMosaicService,
+    ) {
+    }
+
     public function list(Request $request): ResourceCollection
     {
         /** @var User $user */
@@ -41,6 +50,8 @@ class TrackerController extends Controller
 
         $user->trackers()->save($tracker);
 
+        $this->trackerMosaicService->wipeData($tracker);
+
         return TrackerResource::make($tracker->refresh())
             ->toResponse($request)
             ->setStatusCode(201);
@@ -48,11 +59,10 @@ class TrackerController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @throws AuthorizationException
      */
     public function update(UpdateTrackerRequest $request, Tracker $tracker): JsonResource
     {
-        $tracker->update($request->validated());
+        $this->trackerService->update($tracker, $request->validated());
 
         return TrackerResource::make($tracker->refresh());
     }
@@ -64,6 +74,8 @@ class TrackerController extends Controller
     public function destroy(Tracker $tracker): Response
     {
         $this->authorize('delete', $tracker);
+
+        $this->trackerMosaicService->wipeData($tracker);
 
         $tracker->delete();
 
