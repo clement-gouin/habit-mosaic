@@ -16,7 +16,18 @@ class DashboardControllerTest extends TestCase
     /** @test */
     public function it_shows_view(): void
     {
-        $this->actingAs(User::factory()->create())
+        $user = User::factory()->create();
+
+        $category = Category::factory()->create([
+            'user_id' => $user->id,
+        ]);
+
+        $tracker = Tracker::factory()->create([
+            'category_id' => $category->id,
+            'user_id' => $user->id,
+        ]);
+
+        $this->actingAs($tracker->user)
             ->getJson(route('dashboard'))
             ->assertSuccessful()
             ->assertViewIs('dashboard');

@@ -41,7 +41,7 @@ class TrackerFactory extends Factory
                 ...$data,
                 'unit' => fake()->randomElement(['kilometer', 'meter', 'step', 'time', 'hour', 'minute', 'second']),
                 'value_step' => fake()->randomElement([.1, .5, 1, 5, 10]),
-                'target_value' => fake()->randomFloat(max: 30),
+                'target_value' => fake()->randomFloat(min: 0.1, max: 30),
                 'single' => false,
                 'overflow' => true,
             ];

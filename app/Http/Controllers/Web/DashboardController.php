@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Services\MosaicService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TrackerResource;
-use App\Http\Resources\CategoryResource;
 use App\Http\Resources\CategoryFullResource;
 
 class DashboardController extends Controller

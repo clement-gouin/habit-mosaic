@@ -84,13 +84,6 @@ class Tracker extends Model
         return $this->hasMany(DataPoint::class)->orderByDesc('date');
     }
 
-    public function getLastDataPoint(): DataPoint|Model|null
-    {
-        return $this->dataPoints()
-            ->where('value', '!=', 0)
-            ->first();
-    }
-
     public function getDataPointAt(Carbon $date): DataPoint|Model
     {
         return $this->dataPoints()

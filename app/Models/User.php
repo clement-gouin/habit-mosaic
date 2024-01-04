@@ -90,9 +90,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Category::class)->orderBy('order');
     }
-
-    public function dataPoints(): HasManyThrough
-    {
-        return $this->hasManyThrough(Tracker::class, DataPoint::class);
-    }
 }
