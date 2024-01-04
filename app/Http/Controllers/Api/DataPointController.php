@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\DataPoint;
+use App\Services\DataPointService;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataPointResource;
 use App\Http\Requests\UpdateDataPointRequest;
@@ -11,13 +12,19 @@ use Illuminate\Auth\Access\AuthorizationException;
 
 class DataPointController extends Controller
 {
+    public function __construct(protected DataPointService $dataPointService)
+    {
+    }
+
     /**
      * Update the specified resource in storage.
      * @throws AuthorizationException
      */
     public function update(UpdateDataPointRequest $request, DataPoint $dataPoint): JsonResource
     {
-        $dataPoint->updateValue($request->float('value'));
+        $this->authorize('update', $dataPoint);
+
+        $this->dataPointService->updateValue($dataPoint, $request->float('value'));
 
         return DataPointResource::make($dataPoint->refresh());
     }
