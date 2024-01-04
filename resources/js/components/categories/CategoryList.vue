@@ -41,6 +41,7 @@ import CategoryForm from './CategoryForm.vue';
 import { listCategories, updateCategory } from '@requests/categories';
 import CategoryActions from './CategoryActions.vue';
 import CategoryLabel from './CategoryLabel.vue';
+import useIdleWatcher from '@composables/useIdleWatcher';
 
 interface Props {
     modelValue: Category[],
@@ -94,6 +95,8 @@ function createModalSubmit () {
             // ignore
         });
 }
+
+useIdleWatcher(fetchData);
 </script>
 
 <style scoped>

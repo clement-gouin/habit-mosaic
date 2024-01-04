@@ -29,6 +29,8 @@ class TableService
         }
 
         return [
+            'date' => $endDate->format('Y-m-d'),
+            'days' => $days,
             'categories' => CategoryResource::collection($user->categories),
             'trackers' => TrackerResource::collection($user->trackers),
             'data' => $data,

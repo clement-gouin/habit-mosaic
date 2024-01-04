@@ -24,8 +24,12 @@ import Datatable from '@tools/tables/Datatable.vue';
 import { updateDataPoint } from '@requests/dataPoints';
 import { round } from '@popperjs/core/lib/utils/math';
 import { precision } from '@utils/numbers';
+import { getTableData } from '@requests/table';
+import useIdleWatcher from '@composables/useIdleWatcher';
 
 interface Props {
+    date: string,
+    days: number,
     categories: Category[],
     trackers: TrackerFull[],
     data: Record<string, DataPoint[]>
@@ -33,9 +37,13 @@ interface Props {
 
 const props = defineProps<Props>();
 
+const date = ref<number>(Date.parse(props.date));
+const days = ref<number>(props.days);
+const categories = ref(props.categories);
+const trackers = ref(props.trackers);
 const loading = ref(false);
 
-const slots = computed<{id: string, tracker: Tracker}[]>(() => props.trackers.map(tracker => {
+const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.map(tracker => {
     return {
         id: `col-tracker-${tracker.id}`,
         tracker
@@ -58,7 +66,7 @@ const columns = computed<TableColumn[]>(() => {
             title: '',
             cssClass: 'align-middle w-fit text-center'
         },
-        ...sortTrackers(props.trackers).map(tracker => {
+        ...sortTrackers(trackers.value).map(tracker => {
             return {
                 id: `tracker-${tracker.id}`,
                 label: '',
@@ -71,7 +79,7 @@ const columns = computed<TableColumn[]>(() => {
     ];
 });
 
-const tableData = ref<Record<string, unknown>[]>(computeData());
+const tableData = ref<Record<string, unknown>[]>(computeData(props.data));
 
 function sortTrackers (data: Tracker[]) {
     return data
@@ -79,15 +87,15 @@ function sortTrackers (data: Tracker[]) {
         .reverse();
 }
 
-function computeData (): Record<string, unknown>[] {
-    return Object.keys(props.data)
+function computeData (data: Record<string, DataPoint[]>): Record<string, unknown>[] {
+    return Object.keys(data)
         .map((date: string) => {
             const row: Record<string, unknown> = {
                 date: new Date(Date.parse(date)),
                 score: 0
             };
-            props.data[date].forEach(dataPoint => {
-                const tracker = props.trackers.find(tracker => tracker.id === dataPoint.tracker_id);
+            data[date].forEach(dataPoint => {
+                const tracker = trackers.value.find(tracker => tracker.id === dataPoint.tracker_id);
                 if (tracker) {
                     dataPoint.tracker = tracker;
                     dataPoint.score = tracker.target_score * dataPoint.value / tracker.target_value;
@@ -100,7 +108,7 @@ function computeData (): Record<string, unknown>[] {
 
 function recomputeScore () {
     tableData.value.forEach(row => {
-        row.score = props.trackers.map(tracker => (row[`tracker-${tracker.id}`] as DataPoint).score).reduce((a, b) => a + b, 0);
+        row.score = trackers.value.map(tracker => (row[`tracker-${tracker.id}`] as DataPoint).score).reduce((a, b) => a + b, 0);
     });
 }
 
@@ -149,5 +157,20 @@ function selectAll (event: FocusEvent) {
     }
 }
 
+function getData () {
+    getTableData(new Date(date.value), days.value)
+        .then(([newCategories, newTrackers, newData]) => {
+            categories.value = newCategories;
+            trackers.value = newTrackers;
+            tableData.value = computeData(newData);
+        });
+}
+
 onMounted(recomputeScore);
+
+useIdleWatcher(getData);
+</script>
+
+<script lang="ts">
+export default { inheritAttrs: false };
 </script>

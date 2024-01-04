@@ -22,6 +22,7 @@ import { computed, ref } from 'vue';
 import { getDayData } from '@requests/day';
 import { referenceColor } from '@utils/colors';
 import CategoryPanel from './CategoryPanel.vue';
+import useIdleWatcher from '@composables/useIdleWatcher';
 
 interface Props {
     date: string,
@@ -34,12 +35,12 @@ const props = defineProps<Props>();
 const categories = ref<Category[]>(props.categories);
 const trackers = ref<TrackerFull[]>(props.trackers);
 const date = ref<number>(Date.parse(props.date));
+
 const score = computed<number>(() => trackers.value.map(tracker => tracker.data_point.score).reduce((a, b) => a + b, 0));
-
 const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.target_score * tracker.average / tracker.target_value).reduce((a, b) => a + b, 0)));
-const color = variable => referenceColor(score.value, averageScore.value, variable);
-
 const canShowNext = computed<boolean>(() => (new Date(date.value)).setHours(0, 0, 0, 0) < (new Date()).setHours(0, 0, 0, 0));
+
+const color = variable => referenceColor(score.value, averageScore.value, variable);
 
 function getData () {
     getDayData(new Date(date.value))
@@ -64,12 +65,9 @@ function next () {
     getData();
 }
 
+useIdleWatcher(getData);
 </script>
 
 <script lang="ts">
 export default { inheritAttrs: false };
 </script>
-
-<style scoped>
-
-</style>

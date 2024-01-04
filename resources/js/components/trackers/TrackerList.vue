@@ -57,6 +57,7 @@ import TrackerForm from './TrackerForm.vue';
 import TrackerActions from './TrackerActions.vue';
 import CategoryLabel from '../categories/CategoryLabel.vue';
 import TrackerLabel from './TrackerLabel.vue';
+import useIdleWatcher from '@composables/useIdleWatcher';
 
 interface Props {
     modelValue: Tracker[],
@@ -141,6 +142,8 @@ function createModalSubmit () {
             // ignore
         });
 }
+
+useIdleWatcher(fetchData);
 </script>
 
 <style scoped>
