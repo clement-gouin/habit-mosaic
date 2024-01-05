@@ -4,9 +4,13 @@ namespace Tests\Feature\Services;
 
 use Tests\TestCase;
 use App\Models\Tracker;
+use App\Models\Category;
 use App\Models\DataPoint;
 use Illuminate\Support\Carbon;
+use App\Events\TrackerUpdated;
+use App\Events\CategoryUpdated;
 use App\Services\TrackerService;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TrackerServiceTest extends TestCase
@@ -101,30 +105,92 @@ class TrackerServiceTest extends TestCase
     /** @test */
     public function it_update_tracker_without_change(): void
     {
-        $this->markTestSkipped('TODO'); // TODO
+        $tracker = Tracker::factory()->create();
+
+        $this->service->update($tracker, $tracker->attributesToArray());
+
+        Event::assertNotDispatched(TrackerUpdated::class);
     }
 
     /** @test */
     public function it_update_tracker_with_target_change(): void
     {
-        $this->markTestSkipped('TODO'); // TODO
+        $tracker = Tracker::factory()->create();
+
+        $this->service->update($tracker, [
+            ...$tracker->attributesToArray(),
+            'target_score' => 15,
+        ]);
+
+        Event::assertDispatched(
+            TrackerUpdated::class,
+            fn (TrackerUpdated $event) => $event->tracker->id === $tracker->id
+        );
     }
 
     /** @test */
     public function it_update_tracker_with_category_change(): void
     {
-        $this->markTestSkipped('TODO'); // TODO
+        $category1 = Category::factory()->create();
+        $category2 = Category::factory()->create();
+
+        $tracker = Tracker::factory()->create([
+            'category_id' => $category1->id,
+        ]);
+
+        $this->service->update($tracker, [
+            ...$tracker->attributesToArray(),
+            'category_id' => $category2->id,
+        ]);
+
+        Event::assertDispatched(
+            CategoryUpdated::class,
+            fn (CategoryUpdated $event) => $event->category->id === $category1->id
+        );
+
+        Event::assertDispatched(
+            CategoryUpdated::class,
+            fn (CategoryUpdated $event) => $event->category->id === $category2->id
+        );
     }
 
     /** @test */
     public function it_update_tracker_adds_category(): void
     {
-        $this->markTestSkipped('TODO'); // TODO
+        $category = Category::factory()->create();
+
+        $tracker = Tracker::factory()->create([
+            'category_id' => null,
+        ]);
+
+        $this->service->update($tracker, [
+            ...$tracker->attributesToArray(),
+            'category_id' => $category->id,
+        ]);
+
+        Event::assertDispatched(
+            CategoryUpdated::class,
+            fn (CategoryUpdated $event) => $event->category->id === $category->id
+        );
     }
 
     /** @test */
     public function it_update_tracker_removes_category(): void
     {
-        $this->markTestSkipped('TODO'); // TODO
+        $category = Category::factory()->create();
+
+        $tracker = Tracker::factory()->create([
+            'category_id' => $category->id,
+        ]);
+
+        $this->service->update($tracker, [
+            ...$tracker->attributesToArray(),
+            'category_id' => null,
+        ]);
+
+        Event::assertDispatched(
+            CategoryUpdated::class,
+            fn (CategoryUpdated $event) => $event->category->id === $category->id
+        );
     }
 }

@@ -15,6 +15,8 @@ class DataPointService
             $value = min($value, $dataPoint->tracker->target_value);
         }
 
+        $value = round($value / $dataPoint->tracker->value_step) * $dataPoint->tracker->value_step;
+
         if ($dataPoint->value !== $value) {
             $dataPoint->update(['value' => $value]);
 

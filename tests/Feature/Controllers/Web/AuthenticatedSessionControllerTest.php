@@ -166,7 +166,9 @@ class AuthenticatedSessionControllerTest extends TestCase
     /** @test */
     public function it_logins_new_user(): void
     {
-        $user = User::factory()->unverified()->create();
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
 
         $token = UserToken::query()->make([
             'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),

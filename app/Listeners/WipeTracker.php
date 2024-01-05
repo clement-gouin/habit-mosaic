@@ -3,7 +3,6 @@
 namespace App\Listeners;
 
 use App\Events\TrackerUpdated;
-use App\Events\CategoryUpdated;
 use App\Services\Mosaic\TrackerMosaicService;
 
 class WipeTracker
@@ -16,9 +15,5 @@ class WipeTracker
     public function handle(TrackerUpdated $event): void
     {
         $this->mosaicService->wipeData($event->tracker);
-
-        if ($event->tracker->category !== null) {
-            CategoryUpdated::dispatch($event->tracker->category);
-        }
     }
 }

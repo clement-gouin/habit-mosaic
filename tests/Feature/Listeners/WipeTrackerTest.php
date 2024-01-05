@@ -37,32 +37,5 @@ class WipeTrackerTest extends TestCase
         $listener = new WipeTracker($mosaicService);
 
         $listener->handle(new TrackerUpdated($tracker));
-
-        Event::assertNotDispatched(CategoryUpdated::class);
-    }
-
-    /** @test */
-    public function it_process_event_with_category(): void
-    {
-        $category = Category::factory()->create();
-
-        $tracker = Tracker::factory()->create([
-            'category_id' => $category->id,
-        ]);
-
-        /** @var TrackerMosaicService|MockInterface $mosaic */
-        $mosaicService = $this->mock(TrackerMosaicService::class);
-        $mosaicService
-            ->expects('wipeData')
-            ->with($tracker);
-
-        $listener = new WipeTracker($mosaicService);
-
-        $listener->handle(new TrackerUpdated($tracker));
-
-        Event::assertDispatched(
-            CategoryUpdated::class,
-            fn (CategoryUpdated $event) => $event->category->id === $category->id
-        );
     }
 }

@@ -23,10 +23,12 @@ class TrackerService
 
         $tracker = $tracker->refresh();
 
-        if ($targetChange || $categoryChange) {
+        if ($targetChange) {
             TrackerUpdated::dispatch($tracker);
+        }
 
-            $this->updateAverage($tracker);
+        if ($categoryChange && $tracker->category) {
+            CategoryUpdated::dispatch($tracker->category);
         }
     }
 
