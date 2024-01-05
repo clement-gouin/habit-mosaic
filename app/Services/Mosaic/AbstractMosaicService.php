@@ -19,7 +19,7 @@ abstract class AbstractMosaicService
     {
         $result = collect();
         $date = Carbon::today();
-        for ($i = 0; $i <= $days / 7; $i++) {
+        for ($i = 0; $i < $days / 7; $i++) {
             $result->push(...$this->getWeekData($value, $date));
             $date = $date->subWeek();
         }
@@ -76,10 +76,10 @@ abstract class AbstractMosaicService
     {
         $rootCacheKey = $this->getRootCacheKey($value);
 
-        $maxDate = Cache::get($rootCacheKey . 'max', $date);
+        $maxDate = Cache::get($rootCacheKey . '.max');
 
-        if ($date->isBefore($maxDate)) {
-            Cache::put($rootCacheKey . 'max', $date);
+        if (!$maxDate || $date->isBefore($maxDate)) {
+            Cache::put($rootCacheKey . '.max', $date);
         }
 
         return $this->getRootCacheKey($value) .  '.' . $date->year . '.' . $date->week;
@@ -102,18 +102,18 @@ abstract class AbstractMosaicService
     public function wipeData($value): void
     {
         /** @var ?Carbon $date */
-        $date = Cache::get($this->getRootCacheKey($value) . 'max');
+        $date = Cache::get($this->getRootCacheKey($value) . '.max');
 
         if ($date) {
-            $today = Carbon::today();
+            $max = Carbon::today()->addDay();
 
-            while ($today->isAfter($date)) {
+            while ($max->isAfter($date)) {
                 $this->clearData($value, $date);
 
                 $date = $date->addWeek();
             }
 
-            Cache::forget($this->getRootCacheKey($value) . 'max');
+            Cache::forget($this->getRootCacheKey($value) . '.max');
         }
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Services\Mosaic;
 
-use Cache;
 use App\Models\Tracker;
 use Illuminate\Support\Carbon;
 
@@ -11,12 +10,6 @@ use Illuminate\Support\Carbon;
  */
 class TrackerMosaicService extends AbstractMosaicService
 {
-//    public function __construct(
-//        protected CategoryMosaicService $catMosaicService,
-//        protected DayMosaicService $dayMosaicService
-//    ) {
-//    }
-
     /** @param Tracker $value */
     protected function computeWeekData($value, Carbon $startDate): array
     {
