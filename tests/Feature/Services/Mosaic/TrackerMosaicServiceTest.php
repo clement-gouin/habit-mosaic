@@ -32,7 +32,13 @@ class TrackerMosaicServiceTest extends TestCase
     }
 
     /** @test */
-    public function it_can_clear_data_for_week(): void
+    public function it_can_clear_data(): void
+    {
+        $this->markTestSkipped('TODO');
+    }
+
+    /** @test */
+    public function it_can_clear_data_with_category(): void
     {
         $this->markTestSkipped('TODO');
     }

@@ -7,6 +7,8 @@ use App\Listeners\WipeTracker;
 use App\Events\TrackerUpdated;
 use App\Listeners\WipeCategory;
 use App\Events\CategoryUpdated;
+use App\Events\DataPointUpdated;
+use App\Listeners\ClearTrackerWeek;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -17,12 +19,15 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        CategoryUpdated::class => [
-            WipeCategory::class,
-            WipeDay::class,
+        DataPointUpdated::class => [
+            ClearTrackerWeek::class
         ],
         TrackerUpdated::class => [
             WipeTracker::class,
+            WipeDay::class,
+        ],
+        CategoryUpdated::class => [
+            WipeCategory::class,
             WipeDay::class,
         ],
     ];

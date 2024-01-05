@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers\Api;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\DataPoint;
+use App\Events\DataPointUpdated;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
@@ -44,6 +45,11 @@ class DataPointControllerTest extends TestCase
             'id' => $dataPoint->id,
             ...$targetData,
         ]);
+
+        Event::assertDispatched(
+            DataPointUpdated::class,
+            fn (DataPointUpdated $event) => $event->dataPoint->id === $dataPoint->id
+        );
     }
 
     protected function getTargetData(): array

@@ -3,14 +3,10 @@
 namespace App\Services;
 
 use App\Models\DataPoint;
-use App\Services\Mosaic\TrackerMosaicService;
+use App\Events\DataPointUpdated;
 
 class DataPointService
 {
-    public function __construct(protected TrackerMosaicService $trackerMosaicService)
-    {
-    }
-
     public function updateValue(DataPoint $dataPoint, float $value): void
     {
         $value = max($value, 0);
@@ -22,7 +18,7 @@ class DataPointService
         if ($dataPoint->value !== $value) {
             $dataPoint->update(['value' => $value]);
 
-            $this->trackerMosaicService->clearData($dataPoint->tracker, $dataPoint->date);
+            DataPointUpdated::dispatch($dataPoint);
         }
     }
 }

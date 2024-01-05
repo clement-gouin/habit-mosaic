@@ -11,6 +11,12 @@ use Illuminate\Support\Carbon;
  */
 class TrackerMosaicService extends AbstractMosaicService
 {
+    public function __construct(
+        protected CategoryMosaicService $catMosaicService,
+        protected DayMosaicService $dayMosaicService
+    ) {
+    }
+
     /** @param Tracker $value */
     protected function computeWeekData($value, Carbon $startDate): array
     {
@@ -28,5 +34,19 @@ class TrackerMosaicService extends AbstractMosaicService
     protected function getRootCacheKey($value): string
     {
         return 'mosaic.tracker.' . $value->id;
+    }
+
+    /**
+     * @param Tracker $value
+     */
+    public function clearData($value, Carbon $date): void
+    {
+        parent::clearData($value, $date);
+
+        if ($value->category) {
+            $this->catMosaicService->clearData($value->category, $date);
+        }
+
+        $this->dayMosaicService->clearData($value->user, $date);
     }
 }
