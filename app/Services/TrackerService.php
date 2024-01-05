@@ -17,7 +17,7 @@ class TrackerService
 
     public function update(Tracker $tracker, array $attributes): void
     {
-        $categoryChange = $attributes['category_id'] !== $tracker->category_id;
+        $categoryChange = ($attributes['category_id'] ?? null) !== $tracker->category_id;
         $targetChange = $attributes['target_value'] !== $tracker->target_value ||
             $attributes['target_score'] !== $tracker->target_score;
 
