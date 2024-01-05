@@ -23,48 +23,41 @@ class UserTokenServiceTest extends TestCase
     public function it_sends_new_token_to_new_user(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_sends_new_token_to_existing_user(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_sends_new_token_and_invalidates_old_tokens(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_cannot_consume_invalid_token(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_cannot_consume_expired_token(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_consume_token_for_existing_user(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_consume_token_for_new_user(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 }

@@ -23,20 +23,17 @@ class DayServiceTest extends TestCase
     public function it_gets_today_data(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_gets_another_day_data(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_gets_today_data_on_parse_fail(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 }

@@ -23,27 +23,23 @@ class TableServiceTest extends TestCase
     public function it_gets_current_month_data(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_gets_another_day_data(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_gets_another_span_data(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_gets_current_month_data_on_parse_fail(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 }

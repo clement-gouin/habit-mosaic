@@ -102,34 +102,29 @@ class TrackerServiceTest extends TestCase
     public function it_update_tracker_without_change(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_update_tracker_with_target_change(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_update_tracker_with_category_change(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_update_tracker_adds_category(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 
     /** @test */
     public function it_update_tracker_removes_category(): void
     {
         $this->markTestSkipped('TODO');
-
     }
 }
