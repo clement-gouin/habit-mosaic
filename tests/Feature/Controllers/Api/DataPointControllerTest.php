@@ -20,24 +20,24 @@ class DataPointControllerTest extends TestCase
         $dataPoint = DataPoint::factory()->create([
             'tracker_id' => Tracker::factory()->create([
                 'overflow' => true,
-                'value_step' => 0.5,
+                'value_step' => 1,
             ]),
         ]);
 
-        $rootValue = fake()->randomNumber();
-
         $targetData = [
-            'value' => $rootValue + 0.34,
+            'value' => fake()->randomNumber(),
         ];
 
         $this->actingAs(User::factory()->create())
             ->putJson(route('data_points.update', $dataPoint), $targetData)
             ->assertStatus(403);
 
-        $this->assertDatabaseHas('data_points', [
+        $this->assertDatabaseMissing('data_points', [
             'id' => $dataPoint->id,
-            'value' => $dataPoint->value,
+            ...$targetData,
         ]);
+
+        Event::assertNotDispatched(DataPointUpdated::class);
     }
 
     /** @test */
@@ -46,14 +46,12 @@ class DataPointControllerTest extends TestCase
         $dataPoint = DataPoint::factory()->create([
             'tracker_id' => Tracker::factory()->create([
                 'overflow' => true,
-                'value_step' => 0.5,
+                'value_step' => 1,
             ]),
         ]);
 
-        $rootValue = fake()->randomNumber();
-
         $targetData = [
-            'value' => $rootValue + 0.34,
+            'value' => fake()->randomNumber(),
         ];
 
         $this->actingAs($dataPoint->tracker->user)
@@ -62,7 +60,7 @@ class DataPointControllerTest extends TestCase
 
         $this->assertDatabaseHas('data_points', [
             'id' => $dataPoint->id,
-            'value' => $rootValue + 0.5,
+            ...$targetData,
         ]);
 
         Event::assertDispatched(
