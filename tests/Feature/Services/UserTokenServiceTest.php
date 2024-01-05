@@ -3,7 +3,12 @@
 namespace Tests\Feature\Services;
 
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\UserToken;
+use App\Mail\NewTokenLink;
+use Illuminate\Support\Carbon;
 use App\Services\UserTokenService;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class UserTokenServiceTest extends TestCase
@@ -17,47 +22,121 @@ class UserTokenServiceTest extends TestCase
         parent::setUp();
 
         $this->service = $this->app[UserTokenService::class];
+
+        Mail::fake();
+
+        $this->freezeTime();
     }
 
     /** @test */
-    public function it_sends_new_token_to_new_user(): void
+    public function it_sends_new_token_to_user(): void
     {
-        $this->markTestSkipped('TODO');
-    }
+        $user = User::factory()->create();
 
-    /** @test */
-    public function it_sends_new_token_to_existing_user(): void
-    {
-        $this->markTestSkipped('TODO');
+        $this->service->sendNewToken($user);
+
+        $this->assertDatabaseHas('user_tokens', [
+            'user_id' => $user->id,
+            'expires_at' => Carbon::now()->addHour(),
+        ]);
+
+        Mail::assertSent(NewTokenLink::class);
     }
 
     /** @test */
     public function it_sends_new_token_and_invalidates_old_tokens(): void
     {
-        $this->markTestSkipped('TODO');
+        $user = User::factory()->create();
+
+        $token = UserToken::query()->make([
+            'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
+            'token' => fake()->md5(),
+        ]);
+
+        $user->tokens()->save($token);
+
+        $this->service->sendNewToken($user);
+
+        $this->assertDatabaseHas('user_tokens', [
+            'id' => $token->id,
+            'expires_at' => Carbon::now(),
+        ]);
     }
 
     /** @test */
     public function it_cannot_consume_invalid_token(): void
     {
-        $this->markTestSkipped('TODO');
+        $this->assertNull($this->service->consumeToken(fake()->md5));
     }
 
     /** @test */
     public function it_cannot_consume_expired_token(): void
     {
-        $this->markTestSkipped('TODO');
+        $user = User::factory()->create();
+
+        $token = UserToken::query()->make([
+            'expires_at' => fake()->dateTimeBetween('-1 day', '-1 second'),
+            'token' => fake()->md5(),
+        ]);
+
+        $user->tokens()->save($token);
+
+        $this->assertNull($this->service->consumeToken($token->token));
     }
 
     /** @test */
     public function it_consume_token_for_existing_user(): void
     {
-        $this->markTestSkipped('TODO');
+        $user = User::factory()->create();
+
+        $token = UserToken::query()->make([
+            'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
+            'token' => fake()->md5(),
+        ]);
+
+        $user->tokens()->save($token);
+
+        $result = $this->service->consumeToken($token->token);
+
+        $this->assertNotNull($result);
+        $this->assertEquals($user->id, $result?->id);
+
+        $this->assertDatabaseHas('user_tokens', [
+            'id' => $token->id,
+            'expires_at' => Carbon::now(),
+        ]);
+
+        $this->assertDatabaseMissing('trackers', [
+            'user_id' => $user->id,
+        ]);
     }
 
     /** @test */
     public function it_consume_token_for_new_user(): void
     {
-        $this->markTestSkipped('TODO');
+        $user = User::factory()->create([
+            'email_verified_at' => null,
+        ]);
+
+        $token = UserToken::query()->make([
+            'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
+            'token' => fake()->md5(),
+        ]);
+
+        $user->tokens()->save($token);
+
+        $result = $this->service->consumeToken($token->token);
+
+        $this->assertNotNull($result);
+        $this->assertEquals($user->id, $result?->id);
+
+        $this->assertDatabaseHas('users', [
+            'id' => $user->id,
+            'email_verified_at' => Carbon::now(),
+        ]);
+
+        $this->assertDatabaseHas('trackers', [
+            'user_id' => $user->id,
+        ]);
     }
 }

@@ -22,24 +22,24 @@ class DayMosaicServiceTest extends TestCase
     /** @test */
     public function it_gets_mosaic_data_empty(): void
     {
-        $this->markTestSkipped('TODO');
+        $this->markTestSkipped('TODO'); // TODO
     }
 
     /** @test */
     public function it_gets_mosaic_data_with_data(): void
     {
-        $this->markTestSkipped('TODO');
+        $this->markTestSkipped('TODO'); // TODO
     }
 
     /** @test */
     public function it_can_clear_data_for_week(): void
     {
-        $this->markTestSkipped('TODO');
+        $this->markTestSkipped('TODO'); // TODO
     }
 
     /** @test */
     public function it_wipe_data(): void
     {
-        $this->markTestSkipped('TODO');
+        $this->markTestSkipped('TODO'); // TODO
     }
 }
