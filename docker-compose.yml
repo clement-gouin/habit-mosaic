@@ -1,8 +1,5 @@
 version: "3"
 
-networks:
-  backend:
-
 volumes:
   postgres-data:
   redis-data:
@@ -13,23 +10,17 @@ services:
     restart: unless-stopped
     ports:
       - "${APP_PORT}:80"
-    networks:
-      - backend
     volumes:
       - "./docker/nginx.conf:/etc/nginx/nginx.conf:ro"
       - "./public:/var/www/habit-mosaic:ro"
   redis:
     image: redis
-    networks:
-      - backend
     restart: unless-stopped
     volumes:
       - "redis-data:/data"
     command: redis-server --appendonly yes
   postgres:
     image: 'postgres:14.4'
-    networks:
-      - backend
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -38,8 +29,6 @@ services:
       POSTGRES_PASSWORD: '${DB_PASSWORD}'
   maildev:
     image: maildev/maildev
-    networks:
-      - backend
     ports:
       - ${MAILDEV_PORT:-1080}:${MAILDEV_PORT:-1080}
     command: '-s ${MAIL_PORT:-1025} -w ${MAILDEV_PORT:-1080}'
@@ -47,33 +36,29 @@ services:
     build:
       context: .
       args:
-        WWW_USER: '1000'
-        WWW_GROUP: '100'
-    networks:
-      - backend
+        WWW_USER: '${WWW_USER}'
+        WWW_GROUP: '${WWW_GROUP}'
     volumes:
       - '.:/var/www'
-    user: '1000'
+    user: '${WWW_USER}'
   app-cron:
     build:
       context: .
       args:
-        WWW_USER: '1000'
-        WWW_GROUP: '100'
+        WWW_USER: '${WWW_USER}'
+        WWW_GROUP: '${WWW_GROUP}'
     command: 'cron -f -l 2'
+    volumes:
+      - '.:/var/www'
+  app-queue-default:
+    build:
+      context: .
+      args:
+        WWW_USER: '${WWW_USER}'
+        WWW_GROUP: '${WWW_GROUP}'
     networks:
       - backend
     volumes:
       - '.:/var/www'
-#  app-queue-default:
-#    build:
-#      context: .
-#      args:
-#        WWW_USER: '1000'
-#        WWW_GROUP: '100'
-#    networks:
-#      - backend
-#    volumes:
-#      - '.:/var/www'
-#    user: '1000'
-#    command: 'queue:work --queue=default'
+    user: '${WWW_USER}'
+    command: 'queue:work --queue=default'

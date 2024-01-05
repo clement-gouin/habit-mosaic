@@ -17,18 +17,21 @@ class TrackerService
 
     public function update(Tracker $tracker, array $attributes): void
     {
-        $lastCategory = $tracker->category;
+        $categoryChange = $attributes['category_id'] !== $tracker->category_id;
+        $targetChange = $attributes['target_value'] !== $tracker->target_value ||
+            $attributes['target_score'] !== $tracker->target_score;
+
+        if ($categoryChange && $tracker->category) {
+            $this->catMosaicService->wipeData($tracker->category);
+        }
 
         $tracker->update($attributes);
 
         $tracker = $tracker->refresh();
 
-        $this->updateAverage($tracker);
-
-        $this->trackerMosaicService->wipeData($tracker);
-
-        if ($lastCategory && $tracker->category && $tracker->category->id !== $lastCategory->id) {
-            $this->catMosaicService->wipeData($lastCategory);
+        if ($targetChange || $categoryChange) {
+            $this->updateAverage($tracker);
+            $this->trackerMosaicService->wipeData($tracker);
         }
     }
 
