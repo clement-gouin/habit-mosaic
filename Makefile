@@ -5,13 +5,16 @@ export
 
 lint:
 	npm run lint
-	composer exec phpcs
-	composer exec phpstan
-	composer exec phpmd app ansi phpmd.xml
+	vendor/bin/phpcs
+	vendor/bin/phpstan -c phpstan.neon
+	vendor/bin/phpmd app ansi phpmd.xml
 
 fix:
 	npm run fix
 	composer phpcbf
+
+baseline:
+	vendor/bin/phpstan -c phpstan.neon --generate-baseline=code_quality/phpstan/phpstan-baseline.neon
 
 test:
 	php artisan test

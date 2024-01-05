@@ -79,7 +79,7 @@ class DataPointServiceTest extends TestCase
                 'target_value' => $max,
                 'value_step' => 1,
             ]),
-            'value' => fake()->randomNumber(nbDigits: 2),
+            'value' => fake()->randomNumber(nbDigits: 2, strict: true),
         ]);
 
         $this->service->updateValue($dataPoint, $max + 1);
@@ -106,7 +106,7 @@ class DataPointServiceTest extends TestCase
                 'target_value' => $max,
                 'value_step' => 1,
             ]),
-            'value' => fake()->randomNumber(nbDigits: 2),
+            'value' => fake()->randomNumber(nbDigits: 2, strict: true),
         ]);
 
         $this->service->updateValue($dataPoint, $max + 1);
@@ -132,7 +132,7 @@ class DataPointServiceTest extends TestCase
                 'overflow' => true,
                 'value_step' => 0.5,
             ]),
-            'value' => fake()->randomNumber(nbDigits: 2),
+            'value' => fake()->randomNumber(nbDigits: 2, strict: true),
         ]);
 
         $this->service->updateValue($dataPoint, $rootValue + 0.34);

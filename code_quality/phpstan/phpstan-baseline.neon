@@ -46,6 +46,6 @@ parameters:
 			path: ../../app/Services/Mosaic/AbstractMosaicService.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:map\\(\\) expects callable\\(mixed, int\\|string\\)\\: Illuminate\\\\Database\\\\Eloquent\\\\Model, Closure\\(App\\\\Models\\\\Tracker\\)\\: Illuminate\\\\Database\\\\Eloquent\\\\Model given\\.$#"
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:map\\(\\) expects callable\\(mixed, int\\|string\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource, Closure\\(App\\\\Models\\\\Tracker\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource given\\.$#"
 			count: 1
 			path: ../../app/Services/TableService.php
