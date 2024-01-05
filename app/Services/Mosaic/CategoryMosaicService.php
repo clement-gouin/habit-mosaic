@@ -2,9 +2,7 @@
 
 namespace App\Services\Mosaic;
 
-use App\Models\Tracker;
 use App\Models\Category;
-use App\Events\CategoryWiped;
 use Illuminate\Support\Carbon;
 
 /**
@@ -26,13 +24,5 @@ class CategoryMosaicService extends AbstractMosaicService
     protected function getRootCacheKey($value): string
     {
         return 'mosaic.category.' . $value->id;
-    }
-
-    /** @param Category $value */
-    public function wipeData($value): void
-    {
-        parent::wipeData($value);
-
-        CategoryWiped::dispatch($value);
     }
 }

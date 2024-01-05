@@ -4,17 +4,11 @@ namespace App\Services;
 
 use App\Models\Tracker;
 use App\Models\DataPoint;
-use App\Services\Mosaic\TrackerMosaicService;
-use App\Services\Mosaic\CategoryMosaicService;
+use App\Events\TrackerUpdated;
+use App\Events\CategoryUpdated;
 
 class TrackerService
 {
-    public function __construct(
-        protected TrackerMosaicService $trackerMosaicService,
-        protected CategoryMosaicService $catMosaicService,
-    ) {
-    }
-
     public function update(Tracker $tracker, array $attributes): void
     {
         $categoryChange = ($attributes['category_id'] ?? null) !== $tracker->category_id;
@@ -22,7 +16,7 @@ class TrackerService
             $attributes['target_score'] !== $tracker->target_score;
 
         if ($categoryChange && $tracker->category) {
-            $this->catMosaicService->wipeData($tracker->category);
+            CategoryUpdated::dispatch($tracker->category);
         }
 
         $tracker->update($attributes);
@@ -30,8 +24,9 @@ class TrackerService
         $tracker = $tracker->refresh();
 
         if ($targetChange || $categoryChange) {
+            TrackerUpdated::dispatch($tracker);
+
             $this->updateAverage($tracker);
-            $this->trackerMosaicService->wipeData($tracker);
         }
     }
 

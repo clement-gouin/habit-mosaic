@@ -4,7 +4,6 @@ namespace App\Services\Mosaic;
 
 use Cache;
 use App\Models\Tracker;
-use App\Events\TrackerWiped;
 use Illuminate\Support\Carbon;
 
 /**
@@ -29,13 +28,5 @@ class TrackerMosaicService extends AbstractMosaicService
     protected function getRootCacheKey($value): string
     {
         return 'mosaic.tracker.' . $value->id;
-    }
-
-    /** @param Tracker $value */
-    public function wipeData($value): void
-    {
-        parent::wipeData($value);
-
-        TrackerWiped::dispatch($value);
     }
 }

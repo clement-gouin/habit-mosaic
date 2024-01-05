@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Event;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -13,6 +14,8 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->withoutVite();
+
+        Event::fake();
     }
 
     protected static function invokeMethod(mixed $object, string $name, mixed ...$args): mixed

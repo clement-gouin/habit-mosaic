@@ -19,8 +19,10 @@ class DataPointService
             $value = min($value, $dataPoint->tracker->target_value);
         }
 
-        $dataPoint->update(['value' => $value]);
+        if ($dataPoint->value !== $value) {
+            $dataPoint->update(['value' => $value]);
 
-        $this->trackerMosaicService->clearData($dataPoint->tracker, $dataPoint->date);
+            $this->trackerMosaicService->clearData($dataPoint->tracker, $dataPoint->date);
+        }
     }
 }

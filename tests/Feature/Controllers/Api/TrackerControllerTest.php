@@ -13,13 +13,6 @@ class TrackerControllerTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Event::fake();
-    }
-
     /** @test */
     public function it_lists_tracker(): void
     {
@@ -249,7 +242,7 @@ class TrackerControllerTest extends TestCase
             'order' => fake()->randomNumber(nbDigits: 3),
             'unit' => fake()->boolean() ? fake()->word() : null,
             'value_step' => fake()->randomFloat(min: 0.1),
-            'target_value' => fake()->randomFloat(min: 0.1),
+            'target_value' => fake()->randomFloat(min: 1),
             'target_score' => fake()->randomFloat(min: 0.1),
             'single' => fake()->boolean,
             'overflow' => fake()->boolean,

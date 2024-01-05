@@ -12,13 +12,6 @@ class DataPointControllerTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Event::fake();
-    }
-
     /** @test */
     public function it_forbid_data_point_update_for_another_user(): void
     {

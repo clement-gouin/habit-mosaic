@@ -50,8 +50,6 @@ class TrackerController extends Controller
 
         $user->trackers()->save($tracker);
 
-        $this->trackerMosaicService->wipeData($tracker);
-
         return TrackerResource::make($tracker->refresh())
             ->toResponse($request)
             ->setStatusCode(201);

@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 
-use App\Events\TrackerWiped;
-use App\Events\CategoryWiped;
-use App\Listeners\PropagateTrackerWipe;
-use App\Listeners\PropagateCategoryWipe;
+use App\Listeners\WipeDay;
+use App\Listeners\WipeTracker;
+use App\Events\TrackerUpdated;
+use App\Listeners\WipeCategory;
+use App\Events\CategoryUpdated;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -16,11 +17,13 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        CategoryWiped::class => [
-            PropagateCategoryWipe::class,
+        CategoryUpdated::class => [
+            WipeCategory::class,
+            WipeDay::class,
         ],
-        TrackerWiped::class => [
-            PropagateTrackerWipe::class
+        TrackerUpdated::class => [
+            WipeTracker::class,
+            WipeDay::class,
         ],
     ];
 

@@ -13,13 +13,6 @@ class CategoryControllerTest extends TestCase
 {
     use DatabaseMigrations;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Event::fake();
-    }
-
     /** @test */
     public function it_lists_categories(): void
     {
