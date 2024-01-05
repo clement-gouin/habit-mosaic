@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers\Api;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Category;
+use App\Events\CategoryUpdated;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -97,6 +98,11 @@ class CategoryControllerTest extends TestCase
         $this->actingAs($category->user)
             ->deleteJson(route('categories.destroy', $category))
             ->assertSuccessful();
+
+        Event::assertDispatched(
+            CategoryUpdated::class,
+            fn (CategoryUpdated $event) => $event->category->id === $category->id
+        );
 
         $this->assertDatabaseMissing('categories', [
             'id' => $category->id,

@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use App\Events\CategoryUpdated;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
@@ -18,10 +19,6 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class CategoryController extends Controller
 {
-    public function __construct(protected CategoryMosaicService $mosaicService)
-    {
-    }
-
     public function list(Request $request): ResourceCollection
     {
         /** @var User $user */
@@ -45,8 +42,6 @@ class CategoryController extends Controller
         ]);
 
         $user->categories()->save($category);
-
-        $this->mosaicService->wipeData($category);
 
         return CategoryResource::make($category->refresh())
             ->toResponse($request)
@@ -72,7 +67,7 @@ class CategoryController extends Controller
     {
         $this->authorize('delete', $category);
 
-        $this->mosaicService->wipeData($category);
+        CategoryUpdated::dispatch($category);
 
         $category->delete();
 

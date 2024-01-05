@@ -49,7 +49,7 @@ class DataPointControllerTest extends TestCase
     protected function getTargetData(): array
     {
         return [
-            'value' => fake()->randomFloat(-30, 30),
+            'value' => fake()->randomFloat(),
         ];
     }
 }

@@ -60,8 +60,9 @@ class WipeTrackerTest extends TestCase
 
         $listener->handle(new TrackerUpdated($tracker));
 
-        Event::assertDispatched(CategoryUpdated::class, function (CategoryUpdated $event) use ($category) {
-            return $category->id === $event->category->id;
-        });
+        Event::assertDispatched(
+            CategoryUpdated::class,
+            fn (CategoryUpdated $event) => $event->category->id === $category->id
+        );
     }
 }
