@@ -3,7 +3,8 @@
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "lint": "eslint resources/js --ext .ts,.js,.vue --cache --fix",
+        "lint": "eslint resources/js --ext .ts,.js,.vue --cache",
+        "fix": "eslint resources/js --ext .ts,.js,.vue --cache --fix",
         "test": "eslint resources/js --ext .ts,.js,.vue --cache --format @microsoft/eslint-formatter-sarif --output-file reports/eslint.sarif"
     },
     "devDependencies": {
