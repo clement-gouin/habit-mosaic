@@ -27,7 +27,7 @@ class TrackerService
             TrackerUpdated::dispatch($tracker);
         }
 
-        if ($categoryChange && $tracker->category) {
+        if (($targetChange || $categoryChange) && $tracker->category) {
             CategoryUpdated::dispatch($tracker->category);
         }
     }

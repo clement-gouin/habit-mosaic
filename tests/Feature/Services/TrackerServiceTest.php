@@ -129,6 +129,31 @@ class TrackerServiceTest extends TestCase
     }
 
     /** @test */
+    public function it_update_tracker_with_target_change_with_category(): void
+    {
+        $category = Category::factory()->create();
+
+        $tracker = Tracker::factory()->create([
+            'category_id' => $category->id,
+        ]);
+
+        $this->service->update($tracker, [
+            ...$tracker->attributesToArray(),
+            'target_score' => 15,
+        ]);
+
+        Event::assertDispatched(
+            TrackerUpdated::class,
+            fn (TrackerUpdated $event) => $event->tracker->id === $tracker->id
+        );
+
+        Event::assertDispatched(
+            CategoryUpdated::class,
+            fn (CategoryUpdated $event) => $event->category->id === $category->id
+        );
+    }
+
+    /** @test */
     public function it_update_tracker_with_category_change(): void
     {
         $category1 = Category::factory()->create();
