@@ -41,7 +41,7 @@
                 Configuration
             </x-menu.item>
         </x-menu>
-        <main style="background-color: #f5f5f5;" class="col-10 col-md-11 col-lg-9 col-xxl-10 h-100 overflow-scroll p-0 m-0">
+        <main style="background-color: #f5f5f5;" class="col-10 col-md-11 col-lg-9 col-xxl-10 h-100 overflow-auto p-0 m-0">
             @yield('content')
         </main>
     </body>
