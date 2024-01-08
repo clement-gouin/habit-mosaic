@@ -26,7 +26,7 @@ import { round } from '@popperjs/core/lib/utils/math';
 import { precision } from '@utils/numbers';
 import { getTableData } from '@requests/table';
 import useIdleWatcher from '@composables/useIdleWatcher';
-import { ratioColor } from '@utils/colors';
+import { referenceColor } from '@utils/colors';
 
 interface Props {
     date: string,
@@ -54,8 +54,8 @@ const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.ma
     };
 }));
 
-const color = (tracker: Tracker, value: number, variable: string) => ratioColor(value / tracker.target_value, tracker.target_score >= 0, variable);
-const colorDay = (value: number, variable: string) => ratioColor(Math.abs(value / average.value), value >= 0, variable);
+const color = (tracker: Tracker, value: number, variable: string) => referenceColor(value, tracker.target_value, variable);
+const colorDay = (value: number, variable: string) => referenceColor(value, average.value, variable);
 
 const columns = computed<TableColumn[]>(() => {
     return [

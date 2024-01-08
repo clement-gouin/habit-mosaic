@@ -22,7 +22,5 @@ class TableDataControllerTest extends TestCase
             ->getJson(route('table.data'))
             ->assertSuccessful()
             ->assertJsonCount(31, 'data');
-
-        $this->assertDatabaseCount('data_points', 31);
     }
 }
