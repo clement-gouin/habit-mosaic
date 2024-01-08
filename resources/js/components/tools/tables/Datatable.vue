@@ -15,7 +15,7 @@
                 </template>
             </div>
         </div>
-        <table class="table table-bordered table-hover rounded-5" style="table-layout: fixed" cellspacing="0" cellpadding="0" border="0" :class="{'table-striped': !withSubRows}" >
+        <table class="table table-bordered table-hover rounded-5" style="table-layout: fixed" :class="{'table-striped': !withSubRows&&stripped}" >
             <thead>
             <tr>
                 <th v-for="col in filteredColumns" :key="col.id"
@@ -97,6 +97,7 @@ interface Props {
     withSubRows?: boolean
     loading?: boolean
     overflow?: boolean
+    stripped?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {

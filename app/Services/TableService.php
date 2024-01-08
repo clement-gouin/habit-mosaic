@@ -33,6 +33,7 @@ class TableService
         return [
             'date' => $endDate->format('Y-m-d'),
             'days' => $days,
+            'average' => $user->trackers->sum(fn (Tracker $tracker) => $tracker->getAverageScore()),
             'categories' => CategoryResource::collection($user->categories),
             'trackers' => TrackerResource::collection($user->trackers),
             'data' => $data,

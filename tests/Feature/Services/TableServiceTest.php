@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Tracker;
 use App\Models\Category;
+use App\Models\DataPoint;
 use App\Services\TableService;
 use Illuminate\Support\Carbon;
 use App\Http\Resources\TrackerResource;
@@ -41,12 +42,23 @@ class TableServiceTest extends TestCase
         $tracker = Tracker::factory()->create([
             'user_id' => $user->id,
             'category_id' => $category->id,
+            'single' => false,
+            'target_value' => 2,
+            'target_score' => 1.5,
         ]);
+
+        $tracker->dataPoints()->save(
+            DataPoint::factory()->make([
+                'date' => Carbon::createFromTimestamp(0),
+                'value' => 2,
+            ])
+        );
 
         $result = $this->service->getTableData($user, 'today', $span);
 
         $this->assertEquals(Carbon::today()->format('Y-m-d'), $result['date']);
         $this->assertEquals($span, $result['days']);
+        $this->assertEquals(1.5, $result['average']);
 
         $this->assertInstanceOf(ResourceCollection::class, $result['categories']);
         $this->assertCount(1, $result['categories']);

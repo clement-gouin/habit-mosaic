@@ -49,3 +49,8 @@ parameters:
 			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:map\\(\\) expects callable\\(mixed, int\\|string\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource, Closure\\(App\\\\Models\\\\Tracker\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource given\\.$#"
 			count: 1
 			path: ../../app/Services/TableService.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
+			count: 1
+			path: ../../app/Services/TableService.php

@@ -1,5 +1,5 @@
 <template>
-    <datatable :total="trackers.length" :data="trackers" :columns="columns" :with-pagination="false" :loading="loading">
+    <datatable :total="trackers.length" :data="trackers" :columns="columns" :with-pagination="false" :loading="loading" stripped>
         <template #col-name="{row}">
             <tracker-label :tracker="row" />
         </template>

@@ -7,7 +7,7 @@
             {{ (value as number).toFixed(1) }}
         </template>
         <template v-for="slot in slots" v-bind:key="slot.id" v-slot:[slot.id]="{ value }" >
-            <div>
+            <div style="" :style="{backgroundColor: color(slot.tracker, value.value, 'bg-subtle'), color: color(slot.tracker, value.value, 'text-emphasis')}">
                 <input v-if="(slot.tracker as Tracker).single && (!(slot.tracker as Tracker).overflow || (value as DataPoint).value < (slot.tracker as Tracker).target_value)" type="checkbox" :checked="(value as DataPoint).value >= (slot.tracker as Tracker).target_value" @input="changedSingle(slot.tracker, value, $event.target.checked)">
                 <div :ref="(el) => (value as DataPoint).tableElement = el" v-else contenteditable @focusin="selectAll" @blur="changed(slot.tracker, value, $event.target)" @keydown="keyDown(slot.tracker, value, $event)">
                     {{ (value as DataPoint).value.toFixed(precision(slot.tracker.value_step)) }}
@@ -26,10 +26,12 @@ import { round } from '@popperjs/core/lib/utils/math';
 import { precision } from '@utils/numbers';
 import { getTableData } from '@requests/table';
 import useIdleWatcher from '@composables/useIdleWatcher';
+import { ratioColor } from '@utils/colors';
 
 interface Props {
     date: string,
     days: number,
+    average: number,
     categories: Category[],
     trackers: TrackerFull[],
     data: Record<string, DataPoint[]>
@@ -39,9 +41,11 @@ const props = defineProps<Props>();
 
 const date = ref<number>(Date.parse(props.date));
 const days = ref<number>(props.days);
+const average = ref<number>(props.average);
 const categories = ref(props.categories);
 const trackers = ref(props.trackers);
 const loading = ref(false);
+const tableData = ref<Record<string, unknown>[]>(computeData(props.data));
 
 const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.map(tracker => {
     return {
@@ -50,6 +54,9 @@ const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.ma
     };
 }));
 
+const color = (tracker: Tracker, value: number, variable: string) => ratioColor(value / tracker.target_value, tracker.target_score >= 0, variable);
+const colorDay = (value: number, variable: string) => ratioColor(Math.abs(value / average.value), value >= 0, variable);
+
 const columns = computed<TableColumn[]>(() => {
     return [
         {
@@ -57,7 +64,13 @@ const columns = computed<TableColumn[]>(() => {
             label: 'Date',
             icon: '',
             title: '',
-            cssStyle: 'position: sticky;left: 0;z-index:50',
+            cssStyle: row => {
+                const base = 'position: sticky;left: 0;z-index:50;';
+                if (row) {
+                    return base + `background-color: ${colorDay(row.score, 'bg-subtle')}; color: ${colorDay(row.score, 'text-emphasis')}`;
+                }
+                return base;
+            },
             cssClass: 'align-middle w-fit text-center'
         },
         {
@@ -65,6 +78,11 @@ const columns = computed<TableColumn[]>(() => {
             label: 'Score',
             icon: '',
             title: '',
+            cssStyle: row => {
+                if (row) {
+                    return `background-color: ${colorDay(row.score, 'bg-subtle')}; color: ${colorDay(row.score, 'text-emphasis')}`;
+                }
+            },
             cssClass: 'align-middle w-fit text-center'
         },
         ...sortTrackers(trackers.value).map(tracker => {
@@ -73,14 +91,18 @@ const columns = computed<TableColumn[]>(() => {
                 label: '',
                 icon: tracker.icon,
                 title: tracker.name,
-                cssStyle: 'min-width:3em;line-height:2.5em;font-size:.9em',
+                cssStyle: row => {
+                    const base = 'min-width:3em;line-height: 3em;font-size:.9em;';
+                    if (row) {
+                        return base + `background-color: ${color(tracker, row[`tracker-${tracker.id}`].value, 'bg-subtle')}; color: ${color(tracker, row[`tracker-${tracker.id}`].value, 'text-emphasis')}`;
+                    }
+                    return base;
+                },
                 cssClass: 'align-middle text-center align-middle p-0'
             };
         })
     ];
 });
-
-const tableData = ref<Record<string, unknown>[]>(computeData(props.data));
 
 function sortTrackers (data: Tracker[]) {
     return data
@@ -160,7 +182,8 @@ function selectAll (event: FocusEvent) {
 
 function getData () {
     getTableData(new Date(date.value), days.value)
-        .then(([newCategories, newTrackers, newData]) => {
+        .then(([newAverage, newCategories, newTrackers, newData]) => {
+            average.value = newAverage;
             categories.value = newCategories;
             trackers.value = newTrackers;
             tableData.value = computeData(newData);

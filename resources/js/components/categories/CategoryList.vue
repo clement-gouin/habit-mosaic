@@ -1,5 +1,5 @@
 <template>
-    <datatable :total="categories.length" :data="categories" :columns="columns" :with-pagination="false" :loading="loading">
+    <datatable :total="categories.length" :data="categories" :columns="columns" :with-pagination="false" :loading="loading" stripped>
         <template #col-name="{row}">
             <category-label :category="row" />
         </template>
