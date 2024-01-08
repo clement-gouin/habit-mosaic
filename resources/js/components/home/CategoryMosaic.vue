@@ -23,9 +23,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const data = ref<(number|null)[]>([]);
-const validData = computed<number[]>(() => data.value.filter(d => d !== null && d !== 0));
-const max = computed<number>(() => Math.max(0, Math.max(...validData.value)));
-const color = variable => referenceColor(props.category.average, max.value, variable);
+const max = computed<number>(() => Math.max(...data.value.map(d => Math.abs(d ?? 0))));
+const color = (variable: string) => referenceColor(props.category.average, max.value, variable);
 
 function fetchData (days: number) {
     getCategoryMosaicData(props.category, days)
