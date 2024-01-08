@@ -54,7 +54,7 @@ const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.ma
     };
 }));
 
-const color = (tracker: Tracker, value: number, variable: string) => referenceColor(value, tracker.target_value, variable);
+const color = (tracker: Tracker, value: number, variable: string) => referenceColor(value, Math.sign(tracker.target_score) * tracker.target_value, variable);
 const colorDay = (value: number, variable: string) => referenceColor(value, average.value, variable);
 
 const columns = computed<TableColumn[]>(() => {
