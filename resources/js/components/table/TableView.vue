@@ -181,12 +181,16 @@ function selectAll (event: FocusEvent) {
 }
 
 function getData () {
+    loading.value = true;
     getTableData(new Date(date.value), days.value)
         .then(([newAverage, newCategories, newTrackers, newData]) => {
             average.value = newAverage;
             categories.value = newCategories;
             trackers.value = newTrackers;
             tableData.value = computeData(newData);
+        })
+        .finally(() => {
+            loading.value = false;
         });
 }
 
