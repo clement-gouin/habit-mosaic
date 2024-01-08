@@ -1,5 +1,5 @@
 <template>
-    <div class="table-responsive" :class="{overflow: overflow}">
+    <div class="table-responsive position-relative" :class="{overflow: overflow}">
         <div v-if="$slots.toolbar || withSearch">
             <div class="d-flex flex-row mb-3 justify-content-between">
                 <div>
@@ -15,7 +15,7 @@
                 </template>
             </div>
         </div>
-        <table class="table table-bordered table-hover rounded-5" style="table-layout: fixed" :class="{'table-striped': !withSubRows}">
+        <table class="table table-bordered table-hover rounded-5" style="table-layout: fixed" cellspacing="0" cellpadding="0" border="0" :class="{'table-striped': !withSubRows}" >
             <thead>
             <tr>
                 <th v-for="col in filteredColumns" :key="col.id"
@@ -220,10 +220,16 @@ defineExpose({ updateParams });
 }
 
 .overflow {
-    overflow-x: scroll;
+    overflow: auto;
 }
 
 .overflow .table {
     width: max-content;
+}
+
+.overflow thead{
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 </style>

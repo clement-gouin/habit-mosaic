@@ -1,5 +1,5 @@
 <template>
-    <datatable overflow :total="tableData.length" :data="tableData" :columns="columns" :with-pagination="false" :loading="loading">
+    <datatable style="height: 100vh" overflow :total="tableData.length" :data="tableData" :columns="columns" :with-pagination="false" :loading="loading">
         <template #col-date="{value}">
             <small class="font-monospace">{{ (value as Date).toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' }) }}</small>
         </template>
@@ -57,6 +57,7 @@ const columns = computed<TableColumn[]>(() => {
             label: 'Date',
             icon: '',
             title: '',
+            cssStyle: 'position: sticky;left: 0;z-index:50',
             cssClass: 'align-middle w-fit text-center'
         },
         {
