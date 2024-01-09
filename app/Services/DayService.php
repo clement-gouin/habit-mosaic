@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\User;
+use App\Models\Tracker;
 use Illuminate\Support\Carbon;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\TrackerFullResource;
@@ -10,18 +11,8 @@ use Carbon\Exceptions\InvalidFormatException;
 
 class DayService
 {
-    public function getDayData(User $user, string $rawDate): array
+    public function getAverage(User $user): float
     {
-        try {
-            $date = Carbon::parse($rawDate);
-        } catch (InvalidFormatException) {
-            $date = Carbon::today();
-        }
-
-        return [
-            'date' => $date->format('Y-m-d'),
-            'categories' => CategoryResource::collection($user->categories),
-            'trackers' => TrackerFullResource::collection($user->trackers),
-        ];
+        return $user->trackers->sum(fn (Tracker $tracker) => $tracker->getAverageScore());
     }
 }

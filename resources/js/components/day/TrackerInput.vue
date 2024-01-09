@@ -45,8 +45,8 @@ const tracker = ref<TrackerFull>(props.modelValue);
 const value = useDebouncedRef(tracker.value.data_point.value, 500);
 const rawValue = ref<number>(tracker.value.data_point.value);
 
-const color = variable => ratioColor(rawValue.value / tracker.value.target_value, tracker.value.target_score >= 0, variable);
-const colorDark = variable => darker(0.03, color(variable));
+const color = (variable: string) => ratioColor(rawValue.value / tracker.value.target_value, tracker.value.target_score >= 0, variable);
+const colorDark = (variable: string) => darker(0.03, color(variable));
 
 function remove () {
     if (rawValue.value > 0) {

@@ -18,19 +18,22 @@ class TableViewControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $category = Category::factory()->create([
+        $categories = Category::factory(3)->create([
             'user_id' => $user->id,
         ]);
 
-        $tracker = Tracker::factory()->create([
+        Tracker::factory(20)->create([
             'user_id' => $user->id,
-            'category_id' => $category->id,
+            'category_id' => fake()->randomElement($categories)->id,
         ]);
 
         $this->actingAs($user)
             ->getJson(route('table'))
             ->assertSuccessful()
             ->assertViewIs('table_view')
+            ->assertViewHas('date', Carbon::today()->format('Y-m-d'))
+            ->assertViewHas('days', 31)
+            ->assertViewHas('average')
             ->assertViewHas('categories')
             ->assertViewHas('trackers')
             ->assertViewHas('data');

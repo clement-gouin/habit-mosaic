@@ -18,18 +18,21 @@ class DashboardControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $category = Category::factory()->create([
+        $categories = Category::factory(3)->create([
             'user_id' => $user->id,
         ]);
 
-        $tracker = Tracker::factory()->create([
-            'category_id' => $category->id,
+        Tracker::factory(20)->create([
             'user_id' => $user->id,
+            'category_id' => fake()->randomElement($categories)->id,
         ]);
 
-        $this->actingAs($tracker->user)
+        $this->actingAs($user)
             ->getJson(route('dashboard'))
             ->assertSuccessful()
-            ->assertViewIs('dashboard');
+            ->assertViewIs('dashboard')
+            ->assertViewHas('average')
+            ->assertViewHas('categories')
+            ->assertViewHas('trackers');
     }
 }

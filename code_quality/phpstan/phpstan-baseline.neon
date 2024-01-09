@@ -1,29 +1,9 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\DayService\\:\\:getDayData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
-			count: 1
-			path: ../../app/Http/Controllers/Api/DayDataController.php
-
-		-
 			message: "#^Parameter \\#1 \\$value of method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\<App\\\\Models\\\\User\\>\\:\\:getMosaicData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
 			count: 1
 			path: ../../app/Http/Controllers/Api/MosaicDataController.php
-
-		-
-			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\TableService\\:\\:getTableData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
-			count: 1
-			path: ../../app/Http/Controllers/Api/TableDataController.php
-
-		-
-			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\DayService\\:\\:getDayData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
-			count: 1
-			path: ../../app/Http/Controllers/Web/DayViewController.php
-
-		-
-			message: "#^Parameter \\#1 \\$user of method App\\\\Services\\\\TableService\\:\\:getTableData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
-			count: 1
-			path: ../../app/Http/Controllers/Web/TableViewController.php
 
 		-
 			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
@@ -34,6 +14,16 @@ parameters:
 			message: "#^Parameter \\#1 \\$string of function ucfirst expects string, mixed given\\.$#"
 			count: 1
 			path: ../../app/Mail/ErrorNotification.php
+
+		-
+			message: "#^Method App\\\\Services\\\\DayService\\:\\:getAverage\\(\\) should return float but returns mixed\\.$#"
+			count: 1
+			path: ../../app/Services/DayService.php
+
+		-
+			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
+			count: 1
+			path: ../../app/Services/DayService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\:\\:getCollectionWeekData\\(\\) should return array\\<int, float\\|null\\> but returns array\\<int, mixed\\>\\.$#"
@@ -47,10 +37,5 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:map\\(\\) expects callable\\(mixed, int\\|string\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource, Closure\\(App\\\\Models\\\\Tracker\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource given\\.$#"
-			count: 1
-			path: ../../app/Services/TableService.php
-
-		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
 			count: 1
 			path: ../../app/Services/TableService.php

@@ -36,7 +36,7 @@ const trackers = ref<TrackerFull[]>(props.trackers);
 const score = computed<number>(() => trackers.value.map(tracker => tracker.data_point.score).reduce((a, b) => a + b, 0));
 
 const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.target_score * tracker.average / tracker.target_value).reduce((a, b) => a + b, 0)));
-const color = variable => referenceColor(score.value, averageScore.value, variable);
+const color = (variable: string) => referenceColor(score.value, averageScore.value, variable);
 
 watch(() => props.modelValue, () => {
     category.value = props.modelValue ?? DEFAULT_CATEGORY;

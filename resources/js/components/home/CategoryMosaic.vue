@@ -2,7 +2,7 @@
     <div>
         <h3>
             <category-label :category="category"/>
-            <small class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">{{ category.average.toFixed(1) }}</small>
+            <small title="average score" class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">{{ category.average.toFixed(1) }}</small>
         </h3>
         <mosaic class="w-100" style="height: 10em" :data="data" @change-resolution="fetchData" />
     </div>

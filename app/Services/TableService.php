@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Utils\Date;
 use App\Models\User;
 use App\Models\Tracker;
 use Illuminate\Support\Carbon;
@@ -13,14 +14,12 @@ use Carbon\Exceptions\InvalidFormatException;
 
 class TableService
 {
-    public function getTableData(User $user, string $rawDate, int $days): array
+    public function __construct(protected DayService $dayService)
     {
-        try {
-            $endDate = Carbon::parse($rawDate);
-        } catch (InvalidFormatException) {
-            $endDate = Carbon::today();
-        }
+    }
 
+    public function getTableData(User $user, Carbon $endDate, int $days): array
+    {
         $data = [];
 
         for ($i = 0; $i < $days; $i++) {
@@ -30,13 +29,6 @@ class TableService
             );
         }
 
-        return [
-            'date' => $endDate->format('Y-m-d'),
-            'days' => $days,
-            'average' => $user->trackers->sum(fn (Tracker $tracker) => $tracker->getAverageScore()),
-            'categories' => CategoryResource::collection($user->categories),
-            'trackers' => TrackerResource::collection($user->trackers),
-            'data' => $data,
-        ];
+        return $data;
     }
 }

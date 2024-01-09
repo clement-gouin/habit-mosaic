@@ -34,12 +34,14 @@ import { useDebouncedRef } from '@composables/useDebouncedRef';
 
 interface Props {
     date: string,
+    average: number,
     categories: Category[],
     trackers: TrackerFull[]
 }
 
 const props = defineProps<Props>();
 
+const average = ref<number>(props.average);
 const categories = ref<Category[]>(props.categories);
 const trackers = ref<TrackerFull[]>(props.trackers);
 const date = useDebouncedRef(Date.parse(props.date), 500);
@@ -50,13 +52,14 @@ const score = computed<number>(() => trackers.value.map(tracker => tracker.data_
 const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.target_score * tracker.average / tracker.target_value).reduce((a, b) => a + b, 0)));
 const canShowNext = computed<boolean>(() => (new Date(rawDate.value)).setHours(0, 0, 0, 0) < (new Date()).setHours(0, 0, 0, 0));
 
-const color = variable => referenceColor(score.value, averageScore.value, variable);
+const color = (variable: string) => referenceColor(score.value, averageScore.value, variable);
 
 function getData () {
     loading.value = true;
     getDayData(new Date(date.value))
-        .then(([newDate, newCategories, newTrackers]) => {
+        .then(([newDate, newAverage, newCategories, newTrackers]) => {
             date.value = Date.parse(newDate);
+            average.value = newAverage;
             categories.value = newCategories;
             trackers.value = newTrackers;
         })

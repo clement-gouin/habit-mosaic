@@ -2,12 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Utils\Date;
 use App\Models\Tracker;
 use App\Models\DataPoint;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Carbon\Exceptions\InvalidFormatException;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @property Tracker $resource */
 class TrackerFullResource extends TrackerResource
@@ -19,11 +17,7 @@ class TrackerFullResource extends TrackerResource
      */
     public function toArray(Request $request): array
     {
-        try {
-            $date = Carbon::parse($request->string('date', 'today'));
-        } catch (InvalidFormatException) {
-            $date = Carbon::today();
-        }
+        $date = Date::parse($request->string('date', 'today'));
 
         /** @var DataPoint $average */
         $average = $this->resource->getAverageDataPoint();
