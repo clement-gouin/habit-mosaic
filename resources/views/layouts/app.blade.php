@@ -44,5 +44,6 @@
         <main style="background-color: #f5f5f5;" class="col-10 col-md-11 col-lg-9 col-xxl-10 h-100 overflow-auto p-0 m-0">
             @yield('content')
         </main>
+        <footer class="position-fixed bottom-0 start-0 ps-2" style="color: #AAA">{{ config('app.version') }}</footer>
     </body>
 </html>

@@ -30,7 +30,7 @@ import { referenceColor } from '@utils/colors';
 import CategoryPanel from './CategoryPanel.vue';
 import useIdleWatcher from '@composables/useIdleWatcher';
 import LoadingMask from '@tools/LoadingMask.vue';
-import { useDebouncedRef } from '@composables/useDebouncedRef';
+import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
 
 interface Props {
     date: string,
@@ -44,8 +44,7 @@ const props = defineProps<Props>();
 const average = ref<number>(props.average);
 const categories = ref<CategoryFull[]>(props.categories);
 const trackers = ref<TrackerFull[]>(props.trackers);
-const date = useDebouncedRef(Date.parse(props.date), 500);
-const rawDate = ref<number>(Date.parse(props.date));
+const { value: date, rawValue: rawDate } = useFullDebouncedRef<number>(Date.parse(props.date), 500);
 const loading = ref(false);
 
 const score = computed<number>(() => trackers.value.map(tracker => tracker.data_point.score).reduce((a, b) => a + b, 0));
@@ -71,15 +70,13 @@ function getData () {
 function previous () {
     const before = new Date(rawDate.value);
     loading.value = true;
-    rawDate.value = before.setDate(before.getDate() - 1);
-    date.value = rawDate.value;
+    date.value = before.setDate(before.getDate() - 1);
 }
 
 function next () {
     const before = new Date(rawDate.value);
     loading.value = true;
-    rawDate.value = before.setDate(before.getDate() + 1);
-    date.value = rawDate.value;
+    date.value = before.setDate(before.getDate() + 1);
 }
 
 watch(date, getData);

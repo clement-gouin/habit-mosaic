@@ -32,7 +32,7 @@ import { mapToClassName } from '@utils/icons';
 import { darker, ratioColor } from '@utils/colors';
 import { precision } from '@utils/numbers';
 import { updateDataPoint } from '@requests/dataPoints';
-import { useDebouncedRef } from '@composables/useDebouncedRef';
+import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
 
 interface Props {
     modelValue: TrackerFull
@@ -42,8 +42,7 @@ const props = defineProps<Props>();
 
 const tracker = ref<TrackerFull>(props.modelValue);
 
-const value = useDebouncedRef(tracker.value.data_point.value, 500);
-const rawValue = ref<number>(tracker.value.data_point.value);
+const { value, rawValue } = useFullDebouncedRef<number>(tracker.value.data_point.value, 500);
 
 const color = (variable: string) => ratioColor(rawValue.value / tracker.value.target_value, tracker.value.target_score >= 0, variable);
 const colorDark = (variable: string) => darker(0.03, color(variable));
@@ -61,7 +60,6 @@ function add () {
 }
 
 function updateValue (v: number) {
-    rawValue.value = v;
     value.value = v;
     tracker.value.data_point.score = tracker.value.target_score * v / tracker.value.target_value;
 }
@@ -79,7 +77,6 @@ watch(value, () => {
 
 watch(() => props.modelValue, () => {
     tracker.value = props.modelValue;
-    rawValue.value = tracker.value.data_point.value;
     value.value = tracker.value.data_point.value;
 });
 </script>

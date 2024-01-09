@@ -1,5 +1,13 @@
-import { AsyncState } from '@interfaces';
+import { Base } from '@interfaces';
 import { Ref, ref } from 'vue';
+
+export interface AsyncState<T> extends Base {
+    state: Ref<T>
+    isReady: Ref<boolean>
+    isLoading: Ref<boolean>
+    error: Ref<unknown>
+    updateState: () => Promise<void>
+}
 
 export function useAsyncState<T> (promise: () => Promise<T>, initialState: T | undefined = undefined, immediate = true): AsyncState<T> {
     const state = ref<T | undefined>(initialState) as Ref<T>;

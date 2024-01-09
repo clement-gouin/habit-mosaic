@@ -23,5 +23,4 @@
             <li><a class="dropdown-item" href="/logout"><i class="bi-door-open"></i> Sign out</a></li>
         </ul>
     </div>
-    <footer class="position-fixed bottom-0 start-0 ps-2 d-none d-xl-block" style="color: #AAA">{{ config('app.version') }}</footer>
 </div>
