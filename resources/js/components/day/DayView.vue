@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { Category, TrackerFull } from '@interfaces';
+import { CategoryFull, TrackerFull } from '@interfaces';
 import { computed, ref, watch } from 'vue';
 import { getDayData } from '@requests/day';
 import { referenceColor } from '@utils/colors';
@@ -35,14 +35,14 @@ import { useDebouncedRef } from '@composables/useDebouncedRef';
 interface Props {
     date: string,
     average: number,
-    categories: Category[],
+    categories: CategoryFull[],
     trackers: TrackerFull[]
 }
 
 const props = defineProps<Props>();
 
 const average = ref<number>(props.average);
-const categories = ref<Category[]>(props.categories);
+const categories = ref<CategoryFull[]>(props.categories);
 const trackers = ref<TrackerFull[]>(props.trackers);
 const date = useDebouncedRef(Date.parse(props.date), 500);
 const rawDate = ref<number>(Date.parse(props.date));
