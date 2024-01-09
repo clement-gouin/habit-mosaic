@@ -43,6 +43,7 @@ class ErrorNotification extends Mailable
                 'date' => date('d/m/Y H:i:s'),
                 'exception' => get_class($this->exception),
                 'inputs' => Request::all(),
+                'version' => config('app.version'),
                 'file' => $this->exception->getFile(),
                 'line' => $this->exception->getLine(),
                 'exception_message' => $this->exception->getMessage(),

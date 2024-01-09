@@ -6,6 +6,7 @@
 <body>
 <h3 style="margin: 0">Informations:</h3>
 <ul style="list-style: none; margin: .5em 0">
+    <li style="line-height: 1.5em">Version : {{ $version }}</li>
     <li style="line-height: 1.5em">Date : {{ $date }}</li>
     <li style="line-height: 1.5em">Exception : {{ $exception }}</li>
     <li style="line-height: 1.5em">File : {{ $file }} : {{ $line}}</li>

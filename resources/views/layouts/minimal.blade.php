@@ -23,5 +23,6 @@
 </head>
     <body class="text-center">
         @yield('content')
+        <footer class="position-fixed bottom-0 start-0 ps-2" style="color: #AAA">{{ config('app.version') }}</footer>
     </body>
 </html>
