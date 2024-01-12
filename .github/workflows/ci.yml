@@ -130,6 +130,7 @@ jobs:
           log_junit: "reports/phpunit.xml"
           php_extensions: "xdebug"
           coverage_cobertura: "reports/coverage.xml"
+          args: "--testdox --no-progress"
         env:
           XDEBUG_MODE: coverage
       - uses: EnricoMi/publish-unit-test-result-action@v2
