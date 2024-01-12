@@ -124,7 +124,6 @@ jobs:
           php-version: '8.2'
           coverage: xdebug
       - uses: php-actions/composer@v6
-      - run: cp .env.example .env
       - uses: php-actions/phpunit@v3
         with:
           configuration: phpunit.xml
