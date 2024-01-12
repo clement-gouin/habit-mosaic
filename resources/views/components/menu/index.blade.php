@@ -1,6 +1,6 @@
 @props(['class'])
 
-<div class="{{ $class }} d-flex flex-column flex-shrink-0 p-0 p-lg-4 bg-light h-100 border-end border-dark-subtle position-relative">
+<div class="{{ $class }} d-flex flex-column flex-shrink-0 p-0 p-lg-4 bg-light h-100 border-end border-dark-subtle position-relative overflow-hidden">
     <div>
         <div class="d-none d-lg-block align-items-center me-md-auto text-decoration-none text-center w-100 text-primary">
             <x-full-logo />

@@ -27,7 +27,7 @@
         @yield('head')
     </head>
     <body class="h-100 row" style="margin: auto">
-        <x-menu class="col-2 col-md-1 col-lg-3 col-xxl-2">
+        <x-menu class="col-1 col-lg-3 col-xxl-2">
             <x-menu.item route="dashboard" pattern="dashboard" icon="fa-solid fa-house-chimney">
                 Dashboard
             </x-menu.item>
@@ -41,7 +41,7 @@
                 Configuration
             </x-menu.item>
         </x-menu>
-        <main style="background-color: #f5f5f5;" class="col-10 col-md-11 col-lg-9 col-xxl-10 h-100 overflow-auto p-0 m-0">
+        <main style="background-color: #f5f5f5;" class="col-11 col-lg-9 col-xxl-10 h-100 overflow-auto p-0 m-0">
             @yield('content')
         </main>
         <footer class="position-fixed bottom-0 start-0 ps-2" style="color: #AAA">{{ config('app.version') }}</footer>

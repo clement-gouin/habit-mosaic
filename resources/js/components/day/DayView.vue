@@ -1,14 +1,17 @@
 <template>
-    <h2 class="w-100 border-bottom border-1 py-2 user-select-none m-0 row" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">
-        <span class="d-none d-xl-block col-3"></span>
-        <i class="fa-solid fa-caret-left col-1 col text-end" role="button" @click="previous"></i>
-        <span class="col-10 col-xl-4 text-center">
-            {{ (new Date(rawDate)).toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' }) }}
-            <span class="text-dark-emphasis superscript rounded" v-if="!loading">{{ score.toFixed(1) }}</span>
-        </span>
-        <i v-if="canShowNext" class="fa-solid fa-caret-right col-1 text-start" role="button" @click="next"></i>
-    </h2>
-    <div class="position-relative" style="min-height: 100%">
+    <div class="w-100 position-sticky top-0 z-3">
+        <h2 class="w-100 border-bottom border-1 py-2 user-select-none m-0 row" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">
+            <span class="d-none d-xl-block col-3"></span>
+            <i class="fa-solid fa-caret-left col-1 col text-end" role="button" @click="previous"></i>
+            <span class="col-10 col-xl-4 text-center">
+                {{ (new Date(rawDate)).toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' }) }}
+                <span class="text-dark-emphasis superscript rounded" v-if="!loading">{{ score.toFixed(1) }}</span>
+            </span>
+            <i v-if="!isToday" class="fa-solid fa-caret-right col-1 text-start" role="button" @click="next"></i>
+        </h2>
+        <motivation-banner v-if="isToday" :score="score" :average="average" />
+    </div>
+    <div class="position-relative mt-2" style="min-height: 100%">
         <category-panel
             v-for="(category,i) in categories"
             v-bind:key="category.id"
@@ -31,6 +34,7 @@ import CategoryPanel from './CategoryPanel.vue';
 import useIdleWatcher from '@composables/useIdleWatcher';
 import LoadingMask from '@tools/LoadingMask.vue';
 import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
+import MotivationBanner from './MotivationBanner.vue';
 
 interface Props {
     date: string,
@@ -49,7 +53,7 @@ const loading = ref(false);
 
 const score = computed<number>(() => trackers.value.map(tracker => tracker.data_point.score).reduce((a, b) => a + b, 0));
 const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.target_score * tracker.average / tracker.target_value).reduce((a, b) => a + b, 0)));
-const canShowNext = computed<boolean>(() => (new Date(rawDate.value)).setHours(0, 0, 0, 0) < (new Date()).setHours(0, 0, 0, 0));
+const isToday = computed<boolean>(() => (new Date(rawDate.value)).setHours(0, 0, 0, 0) === (new Date()).setHours(0, 0, 0, 0));
 
 const color = (variable: string) => referenceColor(score.value, averageScore.value, variable);
 

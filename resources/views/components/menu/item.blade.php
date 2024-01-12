@@ -6,7 +6,7 @@
     </a>
 </li>
 <li class="nav-item d-block d-lg-none">
-    <a href="{{ isset($route) ? route($route) : '#' }}" class="nav-link fs-4 rounded-0 py-3 px-0 w-100 d-flex justify-content-center {{ (isset($pattern) && request()->is($pattern)) ? 'active' : 'link-dark' }}">
+    <a href="{{ isset($route) ? route($route) : '#' }}" class="nav-link fs-5 rounded-0 py-3 px-0 w-100 d-flex justify-content-center {{ (isset($pattern) && request()->is($pattern)) ? 'active' : 'link-dark' }}">
         <i class="{{ $icon }}" title="{{ $slot }}"></i>
     </a>
 </li>
