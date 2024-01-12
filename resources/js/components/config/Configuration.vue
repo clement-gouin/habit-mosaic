@@ -31,6 +31,6 @@ const categories = ref<Category[]>(props.categories);
 const trackers = ref<Tracker[]>(props.trackers);
 </script>
 
-<style scoped>
-
-</style>
+<script lang="ts">
+export default { inheritAttrs: false };
+</script>

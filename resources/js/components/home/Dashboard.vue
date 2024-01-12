@@ -1,5 +1,5 @@
 <template>
-    <div class="p-1 p-sm-2 p-md-4">
+    <div class="p-1 p-sm-2 p-md-4 user-select-none">
         <h1 class="border-bottom border-1 pb-2">
             Dashboard
             <small title="average score" :class="`text-${color}-emphasis bg-${color}-subtle border-${color}-subtle`" class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1">{{ average.toFixed(1) }}</small>

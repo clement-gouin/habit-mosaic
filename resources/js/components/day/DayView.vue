@@ -1,6 +1,6 @@
 <template>
-    <div class="w-100 position-sticky top-0 z-3">
-        <h2 class="w-100 border-bottom border-1 py-2 user-select-none m-0 row" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">
+    <div class="w-100 position-sticky top-0 z-1 user-select-none">
+        <h2 class="w-100 border-bottom border-1 py-2 m-0 row" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">
             <span class="d-none d-xl-block col-3"></span>
             <i class="fa-solid fa-caret-left col-1 col text-end" role="button" @click="previous"></i>
             <span class="col-10 col-xl-4 text-center">
@@ -11,7 +11,7 @@
         </h2>
         <motivation-banner v-if="isToday && !loading" :score="score" :average="average" />
     </div>
-    <div class="position-relative mt-2" style="min-height: 100%">
+    <div class="position-relative mt-2 user-select-none" style="min-height: 100%">
         <category-panel
             v-for="(category,i) in categories"
             v-bind:key="category.id"

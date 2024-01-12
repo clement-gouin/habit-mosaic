@@ -1,5 +1,5 @@
 <template>
-    <div class="alerts-container">
+    <div class="alerts-container user-select-none">
         <alert
             v-for="alert in alerts"
             v-bind:key="alert.id"
