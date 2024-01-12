@@ -9,9 +9,9 @@
             </span>
             <i v-if="!isToday" class="fa-solid fa-caret-right col-1 text-start" role="button" @click="next"></i>
         </h2>
-        <motivation-banner v-if="isToday && !loading" :score="score" :average="average" />
     </div>
-    <div class="position-relative mt-2 user-select-none" style="min-height: 100%">
+    <div class="position-relative user-select-none" style="min-height: calc(100% - 3.1em)">
+        <motivation-banner v-if="isToday && !loading" :score="score" :average="average" />
         <category-panel
             v-for="(category,i) in categories"
             v-bind:key="category.id"
