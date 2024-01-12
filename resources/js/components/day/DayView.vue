@@ -9,7 +9,7 @@
             </span>
             <i v-if="!isToday" class="fa-solid fa-caret-right col-1 text-start" role="button" @click="next"></i>
         </h2>
-        <motivation-banner v-if="isToday" :score="score" :average="average" />
+        <motivation-banner v-if="isToday && !loading" :score="score" :average="average" />
     </div>
     <div class="position-relative mt-2" style="min-height: 100%">
         <category-panel
