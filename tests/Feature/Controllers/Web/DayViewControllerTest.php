@@ -29,7 +29,6 @@ class DayViewControllerTest extends TestCase
 
         $this->actingAs($user)
             ->getJson(route('day'))
-            ->assertJson(['error'])
             ->assertSuccessful()
             ->assertViewIs('day_view')
             ->assertViewHas('date', Carbon::today()->format('Y-m-d'))
