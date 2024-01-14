@@ -72,7 +72,7 @@ class DayMosaicServiceTest extends TestCase
         );
 
         $this->assertEquals(
-            Carbon::today()->subWeeks(2),
+            Carbon::today()->startOfWeek()->subWeeks(2),
             Cache::get('mosaic.day.' . $user->id . '.max')
         );
     }

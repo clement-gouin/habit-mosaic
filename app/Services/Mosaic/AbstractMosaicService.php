@@ -18,7 +18,7 @@ abstract class AbstractMosaicService
     public function getMosaicData($value, int $days): array
     {
         $result = collect();
-        $date = Carbon::today();
+        $date = Carbon::today()->startOfWeek();
         for ($i = 0; $i < $days / 7; $i++) {
             $result->push(...$this->getWeekData($value, $date));
             $date = $date->subWeek();

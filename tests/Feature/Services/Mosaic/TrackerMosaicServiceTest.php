@@ -68,7 +68,7 @@ class TrackerMosaicServiceTest extends TestCase
         );
 
         $this->assertEquals(
-            Carbon::today()->subWeeks(2),
+            Carbon::today()->startOfWeek()->subWeeks(2),
             Cache::get('mosaic.tracker.' . $tracker->id . '.max')
         );
     }
