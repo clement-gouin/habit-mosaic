@@ -20,13 +20,13 @@
                 </template>
             </TrackerInput>
         </div>
-        <h2 v-else-if="selectedTracker">
+        <h3 v-else-if="selectedTracker">
             <tracker-label :tracker="selectedTracker" />
             <small title="average value / score" :class="`text-${colorTracker}-emphasis bg-${colorTracker}-subtle border-${colorTracker}-subtle`" class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1">
                 {{ selectedTracker.average.toFixed(1) }} | {{ selectedTrackerAverage.toFixed(1) }}
             </small>
             <span class="fs-6 ms-2 text-dark-emphasis btn" title="edit" @click="editSelectedTracker = true"><i class="fa-solid fa-pencil"></i></span>
-        </h2>
+        </h3>
         <mosaic class="w-100" style="height: 10em" :tracker="selectedTracker" :data="selectedTrackerData" @change-resolution="fetchSelectedTrackerData" />
     </div>
 </template>
