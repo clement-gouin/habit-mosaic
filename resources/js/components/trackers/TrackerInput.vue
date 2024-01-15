@@ -27,6 +27,9 @@
                 <div class="input-group-addon btn btn-primary" @click="onCreate" title="New tracker"><i class="fa-solid fa-circle-plus"/></div>
                 <slot name="addon"/>
             </template>
+            <template v-if="$slots.label" #label>
+                <slot name="label"></slot>
+            </template>
             <template v-if="$slots.notice" #notice>
                 <slot name="notice"></slot>
             </template>

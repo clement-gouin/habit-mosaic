@@ -2,6 +2,7 @@ import './bootstrap';
 
 import { createApp, h } from 'vue';
 import Components from './components/index.ts';
+import VueCookies from 'vue-cookies';
 import { createPinia } from 'pinia';
 import AlertsContainer from './components/alerts/AlertsContainer.vue';
 
@@ -19,5 +20,7 @@ if (element) {
     element.removeAttribute('data-props');
 
     app.use(createPinia());
+    app.use(VueCookies, { expires: '365d' });
+
     app.mount('#app');
 }
