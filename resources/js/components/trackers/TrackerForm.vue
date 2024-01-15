@@ -7,6 +7,7 @@
                 label="Category"
                 v-model="tracker.category"
                 v-model:error="errors['category_id']"
+                with-create-button
             />
             <text-input
                 class="mb-2"

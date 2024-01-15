@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { CategoryFull, TrackerFull } from '@interfaces';
 import { computed, ref, watch } from 'vue';
-import TrackerInput from './TrackerInput.vue';
+import TrackerInput from './DataPointInput.vue';
 import { referenceColor } from '@utils/colors';
 import CategoryLabel from '../categories/CategoryLabel.vue';
 
