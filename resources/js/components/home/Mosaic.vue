@@ -152,7 +152,3 @@ watch(selected, () => {
     }
 });
 </script>
-
-<style scoped>
-
-</style>

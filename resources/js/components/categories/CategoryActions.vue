@@ -79,7 +79,3 @@ watch(() => props.modelValue, newValue => {
     category.value = newValue;
 });
 </script>
-
-<style scoped>
-
-</style>

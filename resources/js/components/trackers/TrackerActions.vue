@@ -79,7 +79,3 @@ watch(() => props.modelValue, newValue => {
     tracker.value = newValue;
 });
 </script>
-
-<style scoped>
-
-</style>

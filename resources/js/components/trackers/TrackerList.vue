@@ -145,7 +145,3 @@ function createModalSubmit () {
 
 useIdleWatcher(fetchData);
 </script>
-
-<style scoped>
-
-</style>

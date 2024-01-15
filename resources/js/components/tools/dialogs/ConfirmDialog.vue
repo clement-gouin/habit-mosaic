@@ -62,7 +62,3 @@ function cancel () {
 
 defineExpose({ show, hide });
 </script>
-
-<style scoped>
-
-</style>

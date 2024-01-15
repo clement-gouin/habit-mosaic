@@ -2,9 +2,7 @@
     <div class="p-1 py-2 p-sm-2 p-md-4 user-select-none">
         <h1 class="border-bottom border-1 pb-2">
             Dashboard
-            <small title="average score" :class="`text-${color}-emphasis bg-${color}-subtle border-${color}-subtle`" class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1">
-                {{ average.toFixed(1) }}
-            </small>
+            <score-badge :reference="1" :value="average" />
         </h1>
         <mosaic class="w-100" style="height: 10em" :data="daysData" @change-resolution="fetchDayData" />
         <hr>
@@ -22,9 +20,7 @@
         </div>
         <h3 v-else-if="selectedTracker">
             <tracker-label :tracker="selectedTracker" />
-            <small title="average value / score" :class="`text-${colorTracker}-emphasis bg-${colorTracker}-subtle border-${colorTracker}-subtle`" class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1">
-                {{ selectedTracker.average.toFixed(1) }} | {{ selectedTrackerAverage.toFixed(1) }}
-            </small>
+            <score-badge title="average value | score" :value="selectedTracker.average" :reference="selectedTracker.target_value" :precision="precision(selectedTracker.value_step)" :additional-value="selectedTrackerAverage" />
             <span class="fs-6 ms-2 text-dark-emphasis btn" title="edit" @click="editSelectedTracker = true"><i class="fa-solid fa-pencil"></i></span>
         </h3>
         <mosaic class="w-100" style="height: 10em" :tracker="selectedTracker" :data="selectedTrackerData" @change-resolution="fetchSelectedTrackerData" />
@@ -40,6 +36,8 @@ import CategoryMosaic from './CategoryMosaic.vue';
 import TrackerInput from '../trackers/TrackerInput.vue';
 import { VueCookies } from 'vue-cookies';
 import TrackerLabel from '../trackers/TrackerLabel.vue';
+import ScoreBadge from '@tools/ScoreBadge.vue';
+import { precision } from '@utils/numbers';
 
 interface Props {
     average: number
@@ -57,9 +55,7 @@ const daysData = ref<(number|null)[]>([]);
 const selectedTrackerData = ref<(number|null)[]>([]);
 const selectedTrackerDays = ref<number>(0);
 
-const color = computed(() => props.average > 0 ? 'success' : (props.average === 0 ? 'light' : 'danger'));
 const selectedTrackerAverage = computed<number>(() => (selectedTracker.value ? selectedTracker.value.average * selectedTracker.value.target_score / selectedTracker.value.target_value : 0));
-const colorTracker = computed(() => selectedTrackerAverage.value > 0 ? 'success' : (selectedTrackerAverage.value === 0 ? 'light' : 'danger'));
 
 function fetchDayData (days: number) {
     getDayMosaicData(days)
@@ -101,7 +97,3 @@ onMounted(() => {
 <script lang="ts">
 export default { inheritAttrs: false };
 </script>
-
-<style scoped>
-
-</style>

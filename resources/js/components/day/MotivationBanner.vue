@@ -35,7 +35,3 @@ const LEVELS: Level[] = [
 
 const level = computed<Level>(() => LEVELS.filter(l => props.score >= l.minScore * props.average)[0]);
 </script>
-
-<style scoped>
-
-</style>

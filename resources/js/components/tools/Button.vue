@@ -26,7 +26,3 @@ function click (event: Event) {
     }
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -2,7 +2,7 @@
     <div v-if="trackers.length" class="px-1 px-sm-2 p py-3 p-md-4">
         <h3 class="w-100 text-center">
             <category-label :category="category"/>
-            <small :title="`average: ${category.average.toFixed(1)}`" class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">{{ score.toFixed(1) }}</small>
+            <score-badge :title="`average: ${category.average.toFixed(1)}`" :value="score" :reference="category.average" />
         </h3>
         <div class="d-flex flex-row flex-wrap justify-content-center">
             <tracker-input
@@ -19,8 +19,8 @@
 import { CategoryFull, TrackerFull } from '@interfaces';
 import { computed, ref, watch } from 'vue';
 import TrackerInput from './DataPointInput.vue';
-import { referenceColor } from '@utils/colors';
 import CategoryLabel from '../categories/CategoryLabel.vue';
+import ScoreBadge from '@tools/ScoreBadge.vue';
 
 interface Props {
     modelValue?: CategoryFull,
@@ -35,14 +35,8 @@ const category = ref<CategoryFull>(props.modelValue ?? DEFAULT_CATEGORY);
 const trackers = ref<TrackerFull[]>(props.trackers);
 const score = computed<number>(() => trackers.value.map(tracker => tracker.data_point.score).reduce((a, b) => a + b, 0));
 
-const color = (variable: string) => referenceColor(score.value, category.value.average, variable);
-
 watch(() => props.modelValue, () => {
     category.value = props.modelValue ?? DEFAULT_CATEGORY;
     trackers.value = props.trackers;
 });
 </script>
-
-<style scoped>
-
-</style>

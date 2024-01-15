@@ -167,7 +167,3 @@ defineExpose({ submit, reset });
 
 watch(() => props.modelValue, loadDataFromProps);
 </script>
-
-<style scoped>
-
-</style>
