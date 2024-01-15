@@ -142,7 +142,8 @@ onMounted(() => {
 
 watch(() => props.data, () => draw());
 watch(selected, () => {
-    const dateString = selectedDate.value.toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' });
+    const isCurrentYear = selectedDate.value.getFullYear() === (new Date()).getFullYear();
+    const dateString = selectedDate.value.toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short', year: isCurrentYear ? undefined : 'numeric' });
     const score = props.data.filter(d => d !== null)[selected.value] ?? 0;
     if (props.tracker) {
         title.value = `${dateString} | value: ${(score * props.tracker.target_value / props.tracker.target_score).toFixed(precision(props.tracker.value_step))} | score: ${score.toFixed(1)}`;
