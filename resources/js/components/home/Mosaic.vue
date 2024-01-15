@@ -74,7 +74,7 @@ function draw (consumePointerDown = false) {
         selected.value = selectedX * 7 + selectedY - (6 - today);
 
         if (consumePointerDown) {
-            setTimeout(openSelectedDate);
+            setTimeout(openSelectedDate, 100);
         }
 
         context.strokeStyle = 'rgba(0, 0, 0, 0.125)';
