@@ -101,10 +101,16 @@ const tracker = computed<Option|null>({
     }
 });
 
+function sortTrackers (data: Tracker[]) {
+    return data
+        .sort((a, b) => (a.category?.order ?? 0) === (b.category?.order ?? 0) ? b.order - a.order : (b.category?.order ?? 0) - (a.category?.order ?? 0))
+        .reverse();
+}
+
 async function loadOptions (): Promise<Option[]> {
     return await listTrackers()
         .then(data => {
-            return data
+            return sortTrackers(data)
                 .filter(tracker => search.value.length === 0 || tracker.name.includes(search.value))
                 .map(trackerToOption);
         });
