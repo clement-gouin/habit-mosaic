@@ -16,7 +16,7 @@
             <TrackerInput class="col-md-8 col-xxl-4" name="tracker" v-model="selectedTracker">
                 <template #label><span></span></template>
                 <template #addon>
-                    <div class="input-group-addon text-dark-emphasis btn btn-light border" @click="editSelectedTracker = false" title="Close"><i class="fa-solid fa-close"/></div>
+                    <div v-if="selectedTracker" class="input-group-addon text-dark-emphasis btn btn-light border" @click="editSelectedTracker = false" title="Close"><i class="fa-solid fa-close"/></div>
                 </template>
             </TrackerInput>
         </div>
@@ -27,7 +27,7 @@
             </small>
             <span class="fs-6 ms-2 text-dark-emphasis btn" title="edit" @click="editSelectedTracker = true"><i class="fa-solid fa-pencil"></i></span>
         </h2>
-        <mosaic class="w-100" style="height: 10em" :data="selectedTrackerData" @change-resolution="fetchSelectedTrackerData" />
+        <mosaic class="w-100" style="height: 10em" :tracker="selectedTracker" :data="selectedTrackerData" @change-resolution="fetchSelectedTrackerData" />
     </div>
 </template>
 

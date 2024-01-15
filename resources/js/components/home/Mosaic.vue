@@ -1,12 +1,16 @@
 <template>
-    <canvas ref="canvas" />
+    <canvas ref="canvas" :title="title" />
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
+import { addDays } from '@utils/dates';
+import { Tracker } from '@interfaces';
+import { precision } from '@utils/numbers';
 
 interface Props {
     data: (number|null)[]
+    tracker?: Tracker
 }
 
 const props = defineProps<Props>();
@@ -19,8 +23,17 @@ const emit = defineEmits<Emits>();
 
 const canvas = ref<(InstanceType<typeof HTMLCanvasElement>|null)>(null);
 const days = ref(0);
+const title = ref<string|null>(null);
+const mouseIn = ref<boolean>(false);
+const mousePos = ref<{x:number, y:number}|null>(null);
+const selected = ref(0);
+const selectedDate = computed(() => addDays(Date.now(), -selected.value));
 
-function draw () {
+function openSelectedDate () {
+    window.location.href = '/day?date=' + selectedDate.value.toISOString().split('T')[0];
+}
+
+function draw (consumePointerDown = false) {
     const context = canvas.value?.getContext('2d');
     if (canvas.value === null || !context) {
         return;
@@ -28,6 +41,8 @@ function draw () {
 
     const notNullData: number[] = props.data.filter(d => d !== null);
     const maxValue = Math.max(Math.max(...notNullData), -Math.min(...notNullData));
+
+    const rect = canvas.value.getBoundingClientRect();
 
     const width = canvas.value.getBoundingClientRect().width;
     const height = canvas.value.getBoundingClientRect().height;
@@ -44,10 +59,27 @@ function draw () {
 
     if (props.data.length) {
         const today = ((new Date()).getDay() + 6) % 7;
+        let selectedX = 0;
+        let selectedY = 6 - today;
+
+        if (mousePos.value) {
+            selectedX = Math.floor((mousePos.value.x - rect.left) / (square + spacing));
+            selectedY = Math.floor((height - mousePos.value.y + rect.top) / (square + spacing));
+        }
+
+        if (selectedX === 0 && selectedY < (6 - today)) {
+            selectedY = 6 - today;
+        }
+
+        selected.value = selectedX * 7 + selectedY - (6 - today);
+
+        if (consumePointerDown) {
+            setTimeout(openSelectedDate);
+        }
 
         context.strokeStyle = 'rgba(0, 0, 0, 0.125)';
         context.lineWidth = spacing * 1;
-        context.strokeRect(xValue(0), yValue(6 - today), square, square);
+        context.strokeRect(xValue(selectedX), yValue(selectedY), square, square);
 
         props.data.forEach((value, i) => {
             const x = Math.floor(i / 7);
@@ -79,10 +111,45 @@ function draw () {
 
 onMounted(() => {
     draw();
-    addEventListener('resize', draw);
+    addEventListener('resize', () => draw());
+    canvas.value?.addEventListener('pointermove', (evt: PointerEvent) => {
+        if (mouseIn.value) {
+            mousePos.value = {
+                x: evt.clientX,
+                y: evt.clientY
+            };
+            draw();
+        }
+    });
+    canvas.value?.addEventListener('pointerout', () => {
+        mouseIn.value = false;
+        mousePos.value = null;
+        draw();
+    });
+    canvas.value?.addEventListener('pointerover', () => {
+        mouseIn.value = true;
+        mousePos.value = null;
+        draw();
+    });
+    canvas.value?.addEventListener('pointerdown', (evt: PointerEvent) => {
+        mousePos.value = {
+            x: evt.clientX,
+            y: evt.clientY
+        };
+        draw(true);
+    });
 });
 
-watch(() => props.data, draw);
+watch(() => props.data, () => draw());
+watch(selected, () => {
+    const dateString = selectedDate.value.toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' });
+    const score = props.data.filter(d => d !== null)[selected.value] ?? 0;
+    if (props.tracker) {
+        title.value = `${dateString} | value: ${(score * props.tracker.target_value / props.tracker.target_score).toFixed(precision(props.tracker.value_step))} | score: ${score.toFixed(1)}`;
+    } else {
+        title.value = `${dateString} | score: ${score.toFixed(1)}`;
+    }
+});
 </script>
 
 <style scoped>
