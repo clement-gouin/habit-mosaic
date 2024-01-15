@@ -7,9 +7,8 @@ use App\Models\Tracker;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Services\DayService;
-use App\Services\MosaicService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TrackerResource;
+use App\Http\Resources\TrackerFullResource;
 use App\Http\Resources\CategoryFullResource;
 
 class DashboardController extends Controller
@@ -26,7 +25,7 @@ class DashboardController extends Controller
         return view('dashboard', [
             'average' => $this->dayService->getAverage($user),
             'categories' => CategoryFullResource::collection($user->categories),
-            'trackers' => TrackerResource::collection($user->trackers),
+            'trackers' => TrackerFullResource::collection($user->trackers),
         ]);
     }
 }

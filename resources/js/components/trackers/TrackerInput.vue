@@ -24,7 +24,7 @@
                 <tracker-label :tracker="value" />
             </template>
             <template v-if="withCreateButton || $slots.addon" #addon>
-                <div class="input-group-addon btn btn-primary" @click="onCreate" title="New tracker"><i class="fa-solid fa-circle-plus"/></div>
+                <div v-if="withCreateButton" class="input-group-addon btn btn-primary" @click="onCreate" title="New tracker"><i class="fa-solid fa-circle-plus"/></div>
                 <slot name="addon"/>
             </template>
             <template v-if="$slots.label" #label>
