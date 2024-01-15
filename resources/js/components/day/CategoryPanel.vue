@@ -2,7 +2,7 @@
     <div v-if="trackers.length" class="px-1 px-sm-2 p py-3 p-md-4">
         <h3 class="w-100 text-center">
             <category-label :category="category"/>
-            <small :title="`average: ${category.average}`" class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">{{ score.toFixed(1) }}</small>
+            <small :title="`average: ${category.average.toFixed(1)}`" class="superscript fs-6 text-dark-emphasis rounded border p-1 ms-1" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">{{ score.toFixed(1) }}</small>
         </h3>
         <div class="d-flex flex-row flex-wrap justify-content-center">
             <tracker-input

@@ -19,5 +19,5 @@ export function referenceColor (value: number, reference: number, variable = '',
         reference = 1;
     }
     const ratio = value / reference;
-    return ratioColor(Math.abs(ratio), ratio >= 0, variable, root);
+    return ratioColor(Math.abs(ratio), value >= 0, variable, root);
 }
