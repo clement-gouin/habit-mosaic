@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
     <ruleset name="ESSL">
-        <rule ref="./code_quality/phpcs/quality-ruleset.xml"/>
+        <rule ref="./phpcs/quality-ruleset.xml"/>
 
         <arg name="basepath" value="."/>
         <arg name="colors"/>
