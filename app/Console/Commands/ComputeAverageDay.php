@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Tracker;
-use Illuminate\Console\Command;
 use App\Services\TrackerService;
+use Illuminate\Console\Command;
 
 class ComputeAverageDay extends Command
 {

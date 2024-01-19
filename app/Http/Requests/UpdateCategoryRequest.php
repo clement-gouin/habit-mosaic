@@ -13,6 +13,7 @@ class UpdateCategoryRequest extends StoreCategoryRequest
     {
         /** @var User $user */
         $user = $this->user();
+
         return $user->can('update', $this->route('category'));
     }
 }

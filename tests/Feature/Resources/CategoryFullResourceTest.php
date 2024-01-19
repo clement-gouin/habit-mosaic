@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Resources;
 
-use Tests\TestCase;
-use App\Models\Tracker;
+use App\Http\Resources\CategoryFullResource;
 use App\Models\Category;
 use App\Models\DataPoint;
+use App\Models\Tracker;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
-use App\Http\Resources\CategoryFullResource;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class CategoryFullResourceTest extends TestCase
 {

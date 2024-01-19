@@ -29,7 +29,7 @@ class CleanEmptyDays extends Command
     {
         User::all()->each(function (User $user) use ($dayService) {
             $count = $dayService->cleanEmptyDays($user);
-            $this->info('User ' . $user->id . ': cleaned ' . $count . ' days');
+            $this->info('User '.$user->id.': cleaned '.$count.' days');
         });
     }
 }

@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Services\Mosaic;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
 use App\Models\DataPoint;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Tracker;
+use App\Models\User;
 use App\Services\Mosaic\DayMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Tests\TestCase;
 
 class DayMosaicServiceTest extends TestCase
 {
@@ -73,7 +73,7 @@ class DayMosaicServiceTest extends TestCase
 
         $this->assertEquals(
             Carbon::today()->startOfWeek()->subWeeks(2),
-            Cache::get('mosaic.day.' . $user->id . '.max')
+            Cache::get('mosaic.day.'.$user->id.'.max')
         );
     }
 
@@ -82,15 +82,15 @@ class DayMosaicServiceTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Cache::put('mosaic.day.' . $user->id . '.max', Carbon::today()->subWeeks(2));
+        Cache::put('mosaic.day.'.$user->id.'.max', Carbon::today()->subWeeks(2));
         $today = Carbon::today();
         Cache::put(
-            'mosaic.day.' . $user->id . '.' . $today->year . '.' . $today->week,
+            'mosaic.day.'.$user->id.'.'.$today->year.'.'.$today->week,
             [null, null, null, null, null, 1, 2]
         );
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.day.' . $user->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.day.'.$user->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
@@ -109,14 +109,14 @@ class DayMosaicServiceTest extends TestCase
 
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.day.' . $user->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.day.'.$user->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
         $this->service->clearData($user, $lastWeek);
 
         $this->assertFalse(
-            Cache::has('mosaic.day.' . $user->id . '.' . $lastWeek->year . '.' . $lastWeek->week)
+            Cache::has('mosaic.day.'.$user->id.'.'.$lastWeek->year.'.'.$lastWeek->week)
         );
     }
 
@@ -125,28 +125,28 @@ class DayMosaicServiceTest extends TestCase
     {
         $user = User::factory()->create();
 
-        Cache::put('mosaic.day.' . $user->id . '.max', Carbon::today()->subWeeks(2));
+        Cache::put('mosaic.day.'.$user->id.'.max', Carbon::today()->subWeeks(2));
         $today = Carbon::today();
         Cache::put(
-            'mosaic.day.' . $user->id . '.' . $today->year . '.' . $today->week,
+            'mosaic.day.'.$user->id.'.'.$today->year.'.'.$today->week,
             [null, null, null, null, null, 1, 2]
         );
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.day.' . $user->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.day.'.$user->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
         $this->service->wipeData($user);
 
         $this->assertFalse(
-            Cache::has('mosaic.day.' . $user->id . '.max')
+            Cache::has('mosaic.day.'.$user->id.'.max')
         );
         $this->assertFalse(
-            Cache::has('mosaic.day.' . $user->id . '.' . $today->year . '.' . $today->week)
+            Cache::has('mosaic.day.'.$user->id.'.'.$today->year.'.'.$today->week)
         );
         $this->assertFalse(
-            Cache::has('mosaic.day.' . $user->id . '.' . $lastWeek->year . '.' . $lastWeek->week)
+            Cache::has('mosaic.day.'.$user->id.'.'.$lastWeek->year.'.'.$lastWeek->week)
         );
     }
 }

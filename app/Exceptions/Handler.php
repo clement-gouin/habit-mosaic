@@ -2,12 +2,12 @@
 
 namespace App\Exceptions;
 
-use Throwable;
-use RuntimeException;
 use App\Mail\ErrorNotification;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use RuntimeException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -40,7 +40,7 @@ class Handler extends ExceptionHandler
         try {
             Mail::send(new ErrorNotification($throwable));
         } catch (Throwable $mailException) {
-            Log::emergency("Cannot send error notification mail", [
+            Log::emergency('Cannot send error notification mail', [
                 'exception' => $throwable,
                 'mailException' => $mailException,
             ]);
@@ -52,10 +52,10 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-//        $this->reportable(
-//            function (Throwable $e) {
-//                //
-//            }
-//        );
+        //        $this->reportable(
+        //            function (Throwable $e) {
+        //                //
+        //            }
+        //        );
     }
 }

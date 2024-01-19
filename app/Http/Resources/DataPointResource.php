@@ -13,6 +13,7 @@ class DataPointResource extends JsonResource
      * Transform the resource into an array.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameters)
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -30,6 +31,7 @@ class DataPointResource extends JsonResource
      * Top Level Meta Data
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameters)
+     *
      * @return array<string, mixed>
      */
     public function with(Request $request): array

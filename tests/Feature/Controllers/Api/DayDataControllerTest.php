@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
 use App\Models\Category;
+use App\Models\Tracker;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class DayDataControllerTest extends TestCase
 {

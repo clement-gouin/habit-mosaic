@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Models\Tracker;
-use App\Models\DataPoint;
-use App\Events\TrackerUpdated;
 use App\Events\CategoryUpdated;
+use App\Events\TrackerUpdated;
+use App\Models\DataPoint;
+use App\Models\Tracker;
 
 class TrackerService
 {

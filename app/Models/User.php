@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
+use Database\Factories\UserFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Database\Factories\UserFactory;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Notifications\DatabaseNotificationCollection;
 
 /**
  * App\Models\User
@@ -30,6 +30,7 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
  * @property-read Collection|UserToken[] $tokens
  * @property-read Collection|Tracker[] $trackers
  * @property-read Collection|Tracker[] $categories
+ *
  * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
@@ -41,6 +42,7 @@ use Illuminate\Notifications\DatabaseNotificationCollection;
  * @method static Builder|User whereName($value)
  * @method static Builder|User whereRememberToken($value)
  * @method static Builder|User whereUpdatedAt($value)
+ *
  * @mixin Eloquent
  */
 class User extends Authenticatable

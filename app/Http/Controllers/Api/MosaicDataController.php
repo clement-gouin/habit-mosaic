@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Tracker;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use App\Services\MosaicService;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Tracker;
+use App\Services\Mosaic\CategoryMosaicService;
 use App\Services\Mosaic\DayMosaicService;
 use App\Services\Mosaic\TrackerMosaicService;
-use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class MosaicDataController extends Controller
 {

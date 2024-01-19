@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Models\User;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TrackerResource;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\TrackerResource;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ConfigurationController extends Controller
 {

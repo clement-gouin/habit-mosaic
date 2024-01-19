@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Utils\Date;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\TrackerResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Services\DayService;
 use App\Services\TableService;
+use App\Utils\Date;
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\TrackerResource;
-use App\Http\Resources\CategoryResource;
+use Illuminate\Http\Request;
 
 class TableDataController extends Controller
 {
@@ -24,7 +24,7 @@ class TableDataController extends Controller
         $user = $request->user();
 
         $endDate = Date::parse($request->string('date', 'today'));
-        $days =  $request->integer('days', 31);
+        $days = $request->integer('days', 31);
 
         return response()->json([
             'average' => $this->dayService->getAverage($user),

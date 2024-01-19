@@ -2,16 +2,16 @@
 
 namespace Tests\Feature\Services;
 
-use Tests\TestCase;
-use App\Models\Tracker;
+use App\Events\CategoryUpdated;
+use App\Events\TrackerUpdated;
 use App\Models\Category;
 use App\Models\DataPoint;
-use Illuminate\Support\Carbon;
-use App\Events\TrackerUpdated;
-use App\Events\CategoryUpdated;
+use App\Models\Tracker;
 use App\Services\TrackerService;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
 class TrackerServiceTest extends TestCase
 {

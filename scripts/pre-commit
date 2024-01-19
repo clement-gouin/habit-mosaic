@@ -26,9 +26,8 @@ function __run() #(step, name, cmd, filters)
     fi
 }
 
-__run "1/6" "php lint" "xargs -I {} -r php -l {}"
-__run "2/6" "php cbf" "xargs -r vendor/bin/phpcbf --no-colors"
-__run "3/6" "code sniffer" "xargs -r vendor/bin/phpcs --no-colors"
-__run "4/6" "phpstan" "xargs -r vendor/bin/phpstan analyse -c phpstan.neon" '^app/.*\.php$'
-__run "5/6" "phpmd" "xargs -rI {} vendor/bin/phpmd {} text phpmd.xml" '^app/.*\.php$'
-__run "6/6" "eslint" "xargs -rI {} npx eslint --cache --no-color {}" '^resources/js/.*\.(ts|js|vue)$'
+__run "1/5" "pint" "xargs -rI {} vendor/bin/pint --config code_quality/pint.json {}" '^.*\.php$'
+__run "2/5" "eslint" "xargs -rI {} npx eslint --no-color --fix {}" '^resources/js/.*\.(ts|js|vue)$'
+__run "3/5" "git-add" "xargs -rI {} git add {}"
+__run "4/5" "phpstan" "xargs -rI {} vendor/bin/phpstan analyse -c code_quality/phpstan.neon {}" '^app/.*\.php$'
+__run "5/5" "phpmd" "xargs -rI {} vendor/bin/phpmd {} text code_quality/phpmd.xml" '^app/.*\.php$'

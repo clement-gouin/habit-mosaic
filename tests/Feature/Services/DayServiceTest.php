@@ -2,17 +2,13 @@
 
 namespace Tests\Feature\Services;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
-use App\Models\Category;
 use App\Models\DataPoint;
+use App\Models\Tracker;
+use App\Models\User;
 use App\Services\DayService;
-use Illuminate\Support\Carbon;
-use App\Http\Resources\TrackerResource;
-use App\Http\Resources\CategoryResource;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Carbon;
+use Tests\TestCase;
 
 class DayServiceTest extends TestCase
 {

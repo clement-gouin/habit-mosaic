@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Mail\NewTokenLink;
 use App\Models\User;
 use App\Models\UserToken;
-use App\Mail\NewTokenLink;
-use Illuminate\Support\Carbon;
 use Database\Seeders\NewUserSeeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class UserTokenService

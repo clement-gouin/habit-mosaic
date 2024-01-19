@@ -23,6 +23,6 @@ class CategoryMosaicService extends AbstractMosaicService
     /** @param Category $value */
     protected function getRootCacheKey($value): string
     {
-        return 'mosaic.category.' . $value->id;
+        return 'mosaic.category.'.$value->id;
     }
 }

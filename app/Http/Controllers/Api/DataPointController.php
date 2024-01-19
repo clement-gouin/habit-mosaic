@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateDataPointRequest;
+use App\Http\Resources\DataPointResource;
 use App\Models\DataPoint;
 use App\Services\DataPointService;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\DataPointResource;
-use App\Http\Requests\UpdateDataPointRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Auth\Access\AuthorizationException;
 
 class DataPointController extends Controller
 {

@@ -27,7 +27,7 @@ jobs:
           wait-for-processing: true
   phpstan:
     runs-on: ubuntu-latest
-    needs: [phpcs]
+    needs: [pint]
     permissions:
       contents: read
       checks: write
@@ -50,7 +50,7 @@ jobs:
         with:
           path: 'reports/phpstan.xml'
           name: phpstan report
-  phpcs:
+  pint:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -66,20 +66,15 @@ jobs:
         with:
           php-version: '8.2'
       - uses: php-actions/composer@v6
-      - uses: php-actions/phpcs@v1
-        with:
-          path: ./
-          standard: code_quality/phpcs.xml
-          report: checkstyle
-          report_file: reports/phpcs.xml
+      - run: php vendor/bin/pint --config code_quality/pint.json --test --format=xml > pint.xml
       - uses: jwgmeligmeyling/checkstyle-github-action@master
         if: always()
         with:
-          path: 'reports/phpcs.xml'
-          name: phpcs report
+          path: 'pint.xml'
+          name: pint report
   phpmd:
     runs-on: ubuntu-latest
-    needs: [phpcs]
+    needs: [pint]
     permissions:
       contents: read
       security-events: write
@@ -108,7 +103,7 @@ jobs:
           wait-for-processing: true
   phpunit:
     runs-on: ubuntu-latest
-    needs: [phpcs]
+    needs: [pint]
     permissions:
       contents: read
       checks: write
@@ -147,7 +142,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
-    needs: [eslint,phpcs,phpunit]
+    needs: [eslint,pint,phpunit,phpmd]
     steps:
       - uses: appleboy/ssh-action@v1.0.1
         with:

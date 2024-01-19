@@ -2,16 +2,16 @@
 
 namespace Tests\Feature\Listeners;
 
-use Tests\TestCase;
-use App\Models\Tracker;
-use App\Models\Category;
-use Mockery\MockInterface;
-use App\Listeners\WipeDay;
-use App\Events\TrackerUpdated;
 use App\Events\CategoryUpdated;
-use Illuminate\Support\Facades\Event;
+use App\Events\TrackerUpdated;
+use App\Listeners\WipeDay;
+use App\Models\Category;
+use App\Models\Tracker;
 use App\Services\Mosaic\DayMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
+use Mockery\MockInterface;
+use Tests\TestCase;
 
 class WipeDayTest extends TestCase
 {

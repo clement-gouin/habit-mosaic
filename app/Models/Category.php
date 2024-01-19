@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Database\Factories\CategoryFactory;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * App\Models\Category
@@ -24,10 +24,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read Collection|Tracker[] $trackers
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static CategoryFactory factory($count = null, $state = [])
  * @method static Builder|Category newModelQuery()
  * @method static Builder|Category newQuery()
  * @method static Builder|Category query()
+ *
  * @mixin Eloquent
  */
 class Category extends Model

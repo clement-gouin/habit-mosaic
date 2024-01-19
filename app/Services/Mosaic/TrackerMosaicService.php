@@ -20,12 +20,13 @@ class TrackerMosaicService extends AbstractMosaicService
             $date = $endDate->clone()->subDays($i);
             $data[] = $date->isAfter($today) ? null : $value->getScoreAt($date);
         }
+
         return $data;
     }
 
     /** @param Tracker $value */
     protected function getRootCacheKey($value): string
     {
-        return 'mosaic.tracker.' . $value->id;
+        return 'mosaic.tracker.'.$value->id;
     }
 }

@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
 use App\Models\Category;
-use Illuminate\Support\Facades\Event;
+use App\Models\Tracker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class TrackerControllerTest extends TestCase
 {

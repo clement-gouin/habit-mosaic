@@ -2,13 +2,11 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Tracker;
-use App\Models\Category;
-use App\Models\DataPoint;
-use Illuminate\Support\Carbon;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
+use Tests\TestCase;
 
 class TableDataControllerTest extends TestCase
 {

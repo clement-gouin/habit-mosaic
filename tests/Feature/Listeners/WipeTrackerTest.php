@@ -2,16 +2,14 @@
 
 namespace Tests\Feature\Listeners;
 
-use Tests\TestCase;
-use App\Models\Tracker;
-use App\Models\Category;
-use Mockery\MockInterface;
-use App\Listeners\WipeTracker;
 use App\Events\TrackerUpdated;
-use App\Events\CategoryUpdated;
-use Illuminate\Support\Facades\Event;
+use App\Listeners\WipeTracker;
+use App\Models\Tracker;
 use App\Services\Mosaic\TrackerMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
+use Mockery\MockInterface;
+use Tests\TestCase;
 
 class WipeTrackerTest extends TestCase
 {

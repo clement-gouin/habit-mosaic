@@ -3,8 +3,8 @@
 namespace App\Console;
 
 use App\Console\Commands\CleanEmptyDays;
-use Illuminate\Console\Scheduling\Schedule;
 use App\Console\Commands\ComputeAverageDay;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__ . '/Commands');
+        $this->load(__DIR__.'/Commands');
 
         include base_path('routes/console.php');
     }

@@ -13,6 +13,7 @@ class UpdateTrackerRequest extends StoreTrackerRequest
     {
         /** @var User $user */
         $user = $this->user();
+
         return $user->can('update', $this->route('tracker'));
     }
 }

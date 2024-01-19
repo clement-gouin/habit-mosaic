@@ -1,17 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\TrackerController;
-use App\Http\Controllers\Web\DayViewController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DataPointController;
-use App\Http\Controllers\Web\DashboardController;
-use App\Http\Controllers\Api\TableDataController;
-use App\Http\Controllers\Web\TableViewController;
-use App\Http\Controllers\Api\MosaicDataController;
-use App\Http\Controllers\Web\ConfigurationController;
 use App\Http\Controllers\Api\DayDataController;
+use App\Http\Controllers\Api\MosaicDataController;
+use App\Http\Controllers\Api\TableDataController;
+use App\Http\Controllers\Api\TrackerController;
 use App\Http\Controllers\Web\AuthenticatedSessionController;
+use App\Http\Controllers\Web\ConfigurationController;
+use App\Http\Controllers\Web\DashboardController;
+use App\Http\Controllers\Web\DayViewController;
+use App\Http\Controllers\Web\TableViewController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

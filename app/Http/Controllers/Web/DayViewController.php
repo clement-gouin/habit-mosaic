@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Utils\Date;
-use App\Models\User;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
-use App\Services\DayService;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TrackerFullResource;
 use App\Http\Resources\CategoryFullResource;
+use App\Http\Resources\TrackerFullResource;
+use App\Models\User;
+use App\Services\DayService;
+use App\Utils\Date;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class DayViewController extends Controller
 {

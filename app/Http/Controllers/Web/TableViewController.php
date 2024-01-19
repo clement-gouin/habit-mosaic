@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Utils\Date;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\TrackerResource;
 use App\Models\User;
-use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Services\DayService;
 use App\Services\TableService;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\TrackerResource;
-use App\Http\Resources\CategoryResource;
+use App\Utils\Date;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class TableViewController extends Controller
 {
@@ -24,7 +24,7 @@ class TableViewController extends Controller
         $user = $request->user();
 
         $endDate = Date::parse($request->string('date', 'today'));
-        $days =  $request->integer('days', 31);
+        $days = $request->integer('days', 31);
 
         return view('table_view', [
             'date' => $endDate->format('Y-m-d'),

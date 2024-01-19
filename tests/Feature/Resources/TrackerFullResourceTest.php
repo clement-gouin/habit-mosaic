@@ -2,14 +2,13 @@
 
 namespace Tests\Feature\Resources;
 
-use Tests\TestCase;
-use App\Models\Tracker;
+use App\Http\Resources\TrackerFullResource;
 use App\Models\DataPoint;
+use App\Models\Tracker;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
-use App\Http\Resources\DataPointResource;
-use App\Http\Resources\TrackerFullResource;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class TrackerFullResourceTest extends TestCase
 {

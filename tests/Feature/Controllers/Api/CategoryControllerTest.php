@@ -2,13 +2,12 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Category;
 use App\Events\CategoryUpdated;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
 class CategoryControllerTest extends TestCase
 {

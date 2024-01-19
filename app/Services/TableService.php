@@ -2,15 +2,10 @@
 
 namespace App\Services;
 
-use App\Utils\Date;
-use App\Models\User;
-use App\Models\Tracker;
-use Illuminate\Support\Carbon;
-use App\Http\Resources\TrackerResource;
-use App\Http\Resources\CategoryResource;
 use App\Http\Resources\DataPointResource;
-use App\Http\Resources\TrackerFullResource;
-use Carbon\Exceptions\InvalidFormatException;
+use App\Models\Tracker;
+use App\Models\User;
+use Illuminate\Support\Carbon;
 
 class TableService
 {

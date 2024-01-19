@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use Throwable;
-use App\Models\User;
-use RuntimeException;
-use App\Models\Tracker;
 use App\Models\Category;
+use App\Models\Tracker;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use RuntimeException;
+use Throwable;
 
 class NewUserSeeder extends Seeder
 {

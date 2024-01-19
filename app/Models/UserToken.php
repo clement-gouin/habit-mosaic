@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Support\Carbon;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\UserToken
@@ -18,10 +18,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon $expires_at
+ *
  * @method static Builder|UserToken newModelQuery()
  * @method static Builder|UserToken newQuery()
  * @method static Builder|UserToken query()
  * @method static Builder|UserToken whereToken($value)
+ *
  * @mixin Eloquent
  */
 class UserToken extends Model

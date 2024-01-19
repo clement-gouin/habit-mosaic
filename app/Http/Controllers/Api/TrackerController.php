@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
-use App\Models\Tracker;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Services\TrackerService;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TrackerResource;
 use App\Http\Requests\StoreTrackerRequest;
 use App\Http\Requests\UpdateTrackerRequest;
+use App\Http\Resources\TrackerResource;
+use App\Models\Tracker;
+use App\Models\User;
 use App\Services\Mosaic\TrackerMosaicService;
-use App\Services\Mosaic\CategoryMosaicService;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Services\TrackerService;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 
 class TrackerController extends Controller
 {
@@ -36,6 +35,7 @@ class TrackerController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
      * @throws AuthorizationException
      */
     public function store(StoreTrackerRequest $request): JsonResponse
@@ -45,7 +45,7 @@ class TrackerController extends Controller
 
         $tracker = new Tracker([
             'order' => $user->trackers->pluck('order')->max() + 1,
-            ...$request->validated()
+            ...$request->validated(),
         ]);
 
         $user->trackers()->save($tracker);
@@ -67,6 +67,7 @@ class TrackerController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
      * @throws AuthorizationException
      */
     public function destroy(Tracker $tracker): Response

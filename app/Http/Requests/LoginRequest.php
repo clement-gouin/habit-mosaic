@@ -15,13 +15,13 @@ class LoginRequest extends FormRequest
             return [
                 'new' => 'required|bool',
                 'name' => 'required',
-                'email' => 'required|email|unique:App\Models\User,email'
+                'email' => 'required|email|unique:App\Models\User,email',
             ];
         }
 
         return [
             'new' => 'required|bool',
-            'email' => 'required|email|exists:App\Models\User,email'
+            'email' => 'required|email|exists:App\Models\User,email',
         ];
     }
 

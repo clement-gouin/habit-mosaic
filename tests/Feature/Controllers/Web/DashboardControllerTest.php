@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Controllers\Web;
 
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
 use App\Models\Category;
+use App\Models\Tracker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase;
 
 class DashboardControllerTest extends TestCase
 {

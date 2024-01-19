@@ -3,9 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\DataPointUpdated;
+use App\Services\Mosaic\CategoryMosaicService;
 use App\Services\Mosaic\DayMosaicService;
 use App\Services\Mosaic\TrackerMosaicService;
-use App\Services\Mosaic\CategoryMosaicService;
 
 class ClearTrackerWeek
 {

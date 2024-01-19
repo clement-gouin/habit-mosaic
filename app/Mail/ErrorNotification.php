@@ -2,14 +2,14 @@
 
 namespace App\Mail;
 
-use Throwable;
-use Illuminate\Mail\Mailable;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\App;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
+use Throwable;
 
 class ErrorNotification extends Mailable
 {
@@ -27,7 +27,7 @@ class ErrorNotification extends Mailable
         return new Envelope(
             to: [config('mail.error.to')],
             subject: sprintf(
-                "%s [%s] : %s",
+                '%s [%s] : %s',
                 ucfirst(config('app.name')),
                 App::environment(),
                 $this->exception->getMessage()

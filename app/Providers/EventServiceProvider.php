@@ -2,13 +2,13 @@
 
 namespace App\Providers;
 
-use App\Listeners\WipeDay;
-use App\Listeners\WipeTracker;
-use App\Events\TrackerUpdated;
-use App\Listeners\WipeCategory;
 use App\Events\CategoryUpdated;
 use App\Events\DataPointUpdated;
+use App\Events\TrackerUpdated;
 use App\Listeners\ClearTrackerWeek;
+use App\Listeners\WipeCategory;
+use App\Listeners\WipeDay;
+use App\Listeners\WipeTracker;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -20,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         DataPointUpdated::class => [
-            ClearTrackerWeek::class
+            ClearTrackerWeek::class,
         ],
         TrackerUpdated::class => [
             WipeTracker::class,

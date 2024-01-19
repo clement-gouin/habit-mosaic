@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use Closure;
-use App\Models\User;
 use App\Models\Category;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Models\User;
+use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @method array<string,mixed> validated()
@@ -42,7 +42,7 @@ class StoreTrackerRequest extends FormRequest
             'target_value' => 'required|numeric|min:0.001',
             'target_score' => 'required|numeric',
             'single' => 'required|boolean',
-            'overflow' => 'required|boolean'
+            'overflow' => 'required|boolean',
         ];
     }
 }

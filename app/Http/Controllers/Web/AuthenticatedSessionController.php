@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
+use App\Providers\RouteServiceProvider;
 use App\Services\UserTokenService;
 use Illuminate\Contracts\View\View;
-use App\Http\Requests\LoginRequest;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -30,7 +30,7 @@ class AuthenticatedSessionController extends Controller
         $this->userTokenService->sendNewToken($user);
 
         return response()->json([
-            'message' => 'An email was sent to ' . $user->email,
+            'message' => 'An email was sent to '.$user->email,
         ]);
     }
 

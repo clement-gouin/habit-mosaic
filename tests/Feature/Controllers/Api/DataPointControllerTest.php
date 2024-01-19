@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
-use App\Models\DataPoint;
 use App\Events\DataPointUpdated;
-use Illuminate\Support\Facades\Event;
+use App\Models\DataPoint;
+use App\Models\Tracker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
 class DataPointControllerTest extends TestCase
 {

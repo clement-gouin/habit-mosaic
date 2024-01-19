@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Utils\Date;
-use App\Models\User;
-use Illuminate\Http\Request;
-use App\Services\DayService;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TrackerFullResource;
 use App\Http\Resources\CategoryFullResource;
+use App\Http\Resources\TrackerFullResource;
+use App\Models\User;
+use App\Services\DayService;
+use App\Utils\Date;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class DayDataController extends Controller
 {

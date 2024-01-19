@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\User;
 use App\Models\Tracker;
+use App\Models\User;
 use Illuminate\Support\Carbon;
-use App\Http\Resources\CategoryResource;
-use App\Http\Resources\TrackerFullResource;
-use Carbon\Exceptions\InvalidFormatException;
 
 class DayService
 {

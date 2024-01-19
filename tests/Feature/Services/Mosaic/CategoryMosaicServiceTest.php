@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Services\Mosaic;
 
-use Tests\TestCase;
-use App\Models\Tracker;
 use App\Models\Category;
 use App\Models\DataPoint;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Tracker;
 use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Tests\TestCase;
 
 class CategoryMosaicServiceTest extends TestCase
 {
@@ -73,7 +73,7 @@ class CategoryMosaicServiceTest extends TestCase
 
         $this->assertEquals(
             Carbon::today()->startOfWeek()->subWeeks(2),
-            Cache::get('mosaic.category.' . $category->id . '.max')
+            Cache::get('mosaic.category.'.$category->id.'.max')
         );
     }
 
@@ -82,15 +82,15 @@ class CategoryMosaicServiceTest extends TestCase
     {
         $category = Category::factory()->create();
 
-        Cache::put('mosaic.category.' . $category->id . '.max', Carbon::today()->subWeeks(2));
+        Cache::put('mosaic.category.'.$category->id.'.max', Carbon::today()->subWeeks(2));
         $today = Carbon::today();
         Cache::put(
-            'mosaic.category.' . $category->id . '.' . $today->year . '.' . $today->week,
+            'mosaic.category.'.$category->id.'.'.$today->year.'.'.$today->week,
             [null, null, null, null, null, 1, 2]
         );
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.category.' . $category->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
@@ -109,14 +109,14 @@ class CategoryMosaicServiceTest extends TestCase
 
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.category.' . $category->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
         $this->service->clearData($category, $lastWeek);
 
         $this->assertFalse(
-            Cache::has('mosaic.category.' . $category->id . '.' . $lastWeek->year . '.' . $lastWeek->week)
+            Cache::has('mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week)
         );
     }
 
@@ -125,28 +125,28 @@ class CategoryMosaicServiceTest extends TestCase
     {
         $category = Category::factory()->create();
 
-        Cache::put('mosaic.category.' . $category->id . '.max', Carbon::today()->subWeeks(2));
+        Cache::put('mosaic.category.'.$category->id.'.max', Carbon::today()->subWeeks(2));
         $today = Carbon::today();
         Cache::put(
-            'mosaic.category.' . $category->id . '.' . $today->year . '.' . $today->week,
+            'mosaic.category.'.$category->id.'.'.$today->year.'.'.$today->week,
             [null, null, null, null, null, 1, 2]
         );
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.category.' . $category->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
         $this->service->wipeData($category);
 
         $this->assertFalse(
-            Cache::has('mosaic.category.' . $category->id . '.max')
+            Cache::has('mosaic.category.'.$category->id.'.max')
         );
         $this->assertFalse(
-            Cache::has('mosaic.category.' . $category->id . '.' . $today->year . '.' . $today->week)
+            Cache::has('mosaic.category.'.$category->id.'.'.$today->year.'.'.$today->week)
         );
         $this->assertFalse(
-            Cache::has('mosaic.category.' . $category->id . '.' . $lastWeek->year . '.' . $lastWeek->week)
+            Cache::has('mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week)
         );
     }
 }

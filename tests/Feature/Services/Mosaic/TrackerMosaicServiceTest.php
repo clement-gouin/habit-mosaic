@@ -2,13 +2,13 @@
 
 namespace Tests\Feature\Services\Mosaic;
 
-use Tests\TestCase;
-use App\Models\Tracker;
 use App\Models\DataPoint;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
+use App\Models\Tracker;
 use App\Services\Mosaic\TrackerMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Tests\TestCase;
 
 class TrackerMosaicServiceTest extends TestCase
 {
@@ -69,7 +69,7 @@ class TrackerMosaicServiceTest extends TestCase
 
         $this->assertEquals(
             Carbon::today()->startOfWeek()->subWeeks(2),
-            Cache::get('mosaic.tracker.' . $tracker->id . '.max')
+            Cache::get('mosaic.tracker.'.$tracker->id.'.max')
         );
     }
 
@@ -78,15 +78,15 @@ class TrackerMosaicServiceTest extends TestCase
     {
         $tracker = Tracker::factory()->create();
 
-        Cache::put('mosaic.tracker.' . $tracker->id . '.max', Carbon::today()->subWeeks(2));
+        Cache::put('mosaic.tracker.'.$tracker->id.'.max', Carbon::today()->subWeeks(2));
         $today = Carbon::today();
         Cache::put(
-            'mosaic.tracker.' . $tracker->id . '.' . $today->year . '.' . $today->week,
+            'mosaic.tracker.'.$tracker->id.'.'.$today->year.'.'.$today->week,
             [null, null, null, null, null, 1, 2]
         );
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.tracker.' . $tracker->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.tracker.'.$tracker->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
@@ -105,14 +105,14 @@ class TrackerMosaicServiceTest extends TestCase
 
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.tracker.' . $tracker->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.tracker.'.$tracker->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
         $this->service->clearData($tracker, $lastWeek);
 
         $this->assertFalse(
-            Cache::has('mosaic.tracker.' . $tracker->id . '.' . $lastWeek->year . '.' . $lastWeek->week)
+            Cache::has('mosaic.tracker.'.$tracker->id.'.'.$lastWeek->year.'.'.$lastWeek->week)
         );
     }
 
@@ -121,28 +121,28 @@ class TrackerMosaicServiceTest extends TestCase
     {
         $tracker = Tracker::factory()->create();
 
-        Cache::put('mosaic.tracker.' . $tracker->id . '.max', Carbon::today()->subWeeks(2));
+        Cache::put('mosaic.tracker.'.$tracker->id.'.max', Carbon::today()->subWeeks(2));
         $today = Carbon::today();
         Cache::put(
-            'mosaic.tracker.' . $tracker->id . '.' . $today->year . '.' . $today->week,
+            'mosaic.tracker.'.$tracker->id.'.'.$today->year.'.'.$today->week,
             [null, null, null, null, null, 1, 2]
         );
         $lastWeek = Carbon::today()->subWeek();
         Cache::put(
-            'mosaic.tracker.' . $tracker->id . '.' . $lastWeek->year . '.' . $lastWeek->week,
+            'mosaic.tracker.'.$tracker->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
 
         $this->service->wipeData($tracker);
 
         $this->assertFalse(
-            Cache::has('mosaic.tracker.' . $tracker->id . '.max')
+            Cache::has('mosaic.tracker.'.$tracker->id.'.max')
         );
         $this->assertFalse(
-            Cache::has('mosaic.tracker.' . $tracker->id . '.' . $today->year . '.' . $today->week)
+            Cache::has('mosaic.tracker.'.$tracker->id.'.'.$today->year.'.'.$today->week)
         );
         $this->assertFalse(
-            Cache::has('mosaic.tracker.' . $tracker->id . '.' . $lastWeek->year . '.' . $lastWeek->week)
+            Cache::has('mosaic.tracker.'.$tracker->id.'.'.$lastWeek->year.'.'.$lastWeek->week)
         );
     }
 }

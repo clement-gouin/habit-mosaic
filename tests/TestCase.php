@@ -23,6 +23,7 @@ abstract class TestCase extends BaseTestCase
         $class = new ReflectionClass(get_class($object));
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method->invokeArgs($object, $args);
     }
 
@@ -31,6 +32,7 @@ abstract class TestCase extends BaseTestCase
         $class = new ReflectionClass($className);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method->invokeArgs(null, $args);
     }
 }

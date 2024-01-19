@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Utils\Date;
-use App\Models\Tracker;
 use App\Models\DataPoint;
+use App\Models\Tracker;
+use App\Utils\Date;
 use Illuminate\Http\Request;
 
 /** @property Tracker $resource */

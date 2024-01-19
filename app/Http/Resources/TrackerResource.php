@@ -4,8 +4,6 @@ namespace App\Http\Resources;
 
 use App\Models\Tracker;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
-use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /** @property Tracker $resource */
@@ -15,6 +13,7 @@ class TrackerResource extends JsonResource
      * Transform the resource into an array.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameters)
+     *
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array

@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\TrackerFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
-use Database\Factories\TrackerFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * App\Models\Tracker
@@ -32,10 +32,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  * @property-read Collection|DataPoint[] $dataPoints
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ *
  * @method static TrackerFactory factory($count = null, $state = [])
  * @method static Builder|Tracker newModelQuery()
  * @method static Builder|Tracker newQuery()
  * @method static Builder|Tracker query()
+ *
  * @mixin Eloquent
  */
 class Tracker extends Model

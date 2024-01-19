@@ -23,6 +23,6 @@ class DayMosaicService extends AbstractMosaicService
     /** @param User $value */
     protected function getRootCacheKey($value): string
     {
-        return 'mosaic.day.' . $value->id;
+        return 'mosaic.day.'.$value->id;
     }
 }

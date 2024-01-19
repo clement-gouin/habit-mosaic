@@ -2,8 +2,8 @@
 
 namespace App\Utils;
 
-use Illuminate\Support\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
+use Illuminate\Support\Carbon;
 
 abstract class Date
 {

@@ -2,18 +2,14 @@
 
 namespace Tests\Feature\Listeners;
 
-use Tests\TestCase;
-use App\Models\Tracker;
-use App\Models\Category;
-use Mockery\MockInterface;
-use App\Listeners\WipeTracker;
-use App\Events\TrackerUpdated;
 use App\Events\CategoryUpdated;
 use App\Listeners\WipeCategory;
-use Illuminate\Support\Facades\Event;
-use App\Services\Mosaic\TrackerMosaicService;
+use App\Models\Category;
 use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
+use Mockery\MockInterface;
+use Tests\TestCase;
 
 class WipeCategoryTest extends TestCase
 {

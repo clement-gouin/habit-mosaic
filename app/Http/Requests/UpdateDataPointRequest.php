@@ -3,8 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
 
 /**
  * @method array<string,mixed> validated()
@@ -18,6 +18,7 @@ class UpdateDataPointRequest extends FormRequest
     {
         /** @var User $user */
         $user = $this->user();
+
         return $user->can('update', $this->route('data_point'));
     }
 

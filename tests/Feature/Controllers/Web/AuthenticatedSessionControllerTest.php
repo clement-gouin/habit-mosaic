@@ -2,15 +2,15 @@
 
 namespace Tests\Feature\Controllers\Web;
 
-use Tests\TestCase;
+use App\Mail\NewTokenLink;
 use App\Models\User;
 use App\Models\UserToken;
-use App\Mail\NewTokenLink;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Tests\TestCase;
 
 class AuthenticatedSessionControllerTest extends TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\DataPoint;
 use App\Events\DataPointUpdated;
+use App\Models\DataPoint;
 
 class DataPointService
 {

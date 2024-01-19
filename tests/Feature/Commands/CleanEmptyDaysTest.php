@@ -2,19 +2,13 @@
 
 namespace Tests\Feature\Commands;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
-use App\Models\Category;
-use App\Models\DataPoint;
-use Illuminate\Support\Carbon;
-use App\Events\TrackerUpdated;
-use App\Events\CategoryUpdated;
-use App\Services\TrackerService;
-use Illuminate\Support\Facades\Event;
 use App\Console\Commands\CleanEmptyDays;
-use App\Console\Commands\ComputeAverageDay;
+use App\Models\DataPoint;
+use App\Models\Tracker;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
+use Tests\TestCase;
 
 class CleanEmptyDaysTest extends TestCase
 {

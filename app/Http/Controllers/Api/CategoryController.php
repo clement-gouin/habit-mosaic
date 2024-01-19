@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Events\CategoryUpdated;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\CategoryResource;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
-use App\Services\Mosaic\CategoryMosaicService;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\CategoryResource;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
@@ -29,6 +28,7 @@ class CategoryController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     *
      * @throws AuthorizationException
      */
     public function store(StoreCategoryRequest $request): JsonResponse
@@ -38,7 +38,7 @@ class CategoryController extends Controller
 
         $category = new Category([
             'order' => $user->categories->pluck('order')->max() + 1,
-            ...$request->validated()
+            ...$request->validated(),
         ]);
 
         $user->categories()->save($category);
@@ -50,6 +50,7 @@ class CategoryController extends Controller
 
     /**
      * Update the specified resource in storage.
+     *
      * @throws AuthorizationException
      */
     public function update(UpdateCategoryRequest $request, Category $category): JsonResource
@@ -61,6 +62,7 @@ class CategoryController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     *
      * @throws AuthorizationException
      */
     public function destroy(Category $category): Response

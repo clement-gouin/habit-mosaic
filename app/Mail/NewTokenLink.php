@@ -21,7 +21,7 @@ class NewTokenLink extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Welcome ' . ($this->newUser ? 'back ' : '') . 'to ' . config('app.name'),
+            subject: 'Welcome '.($this->newUser ? 'back ' : '').'to '.config('app.name'),
         );
     }
 
@@ -32,7 +32,7 @@ class NewTokenLink extends Mailable
             with: [
                 'newUser' => $this->newUser,
                 'user' => $this->token->user->name,
-                'url' => config('app.url') . '/login/' . $this->token->token
+                'url' => config('app.url').'/login/'.$this->token->token,
             ]
         );
     }
