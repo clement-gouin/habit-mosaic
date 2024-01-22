@@ -6,6 +6,11 @@ parameters:
 			path: ../app/Http/Controllers/Api/MosaicDataController.php
 
 		-
+			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string\\|null, mixed given\\.$#"
+			count: 1
+			path: ../app/Http/Middleware/VersionMiddleware.php
+
+		-
 			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
 			count: 1
 			path: ../app/Http/Resources/CategoryFullResource.php
