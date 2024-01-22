@@ -29,7 +29,7 @@ if (element) {
         onResponse (response) {
             const receivedVersion = response?.headers?.get('X-App-Version');
             if (receivedVersion && version && receivedVersion !== version) {
-                window.location.reload();
+                setTimeout(() => window.location.reload(), 500);
             }
             return response;
         }
