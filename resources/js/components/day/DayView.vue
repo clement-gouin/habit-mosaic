@@ -55,6 +55,8 @@ const score = computed<number>(() => trackers.value.map(tracker => tracker.data_
 const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.target_score * tracker.average / tracker.target_value).reduce((a, b) => a + b, 0)));
 const isToday = computed<boolean>(() => (new Date(rawDate.value)).setHours(0, 0, 0, 0) === (new Date()).setHours(0, 0, 0, 0));
 
+const wasToday = ref<boolean>(isToday.value);
+
 const color = (variable: string) => referenceColor(score.value, averageScore.value, variable);
 
 function getData () {
@@ -62,6 +64,7 @@ function getData () {
     getDayData(new Date(date.value))
         .then(([newDate, newAverage, newCategories, newTrackers]) => {
             date.value = Date.parse(newDate);
+            wasToday.value = isToday.value;
             average.value = newAverage;
             categories.value = newCategories;
             trackers.value = newTrackers;
@@ -85,7 +88,13 @@ function next () {
 
 watch(date, getData);
 
-useIdleWatcher(getData);
+useIdleWatcher(() => {
+    if (wasToday.value && !isToday.value) {
+        date.value = (new Date()).setHours(((new Date(date.value)).getHours()), 0, 0, 0);
+    } else {
+        getData();
+    }
+});
 </script>
 
 <script lang="ts">
