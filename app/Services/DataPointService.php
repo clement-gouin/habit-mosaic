@@ -18,7 +18,9 @@ class DataPointService
         $value = round($value / $dataPoint->tracker->value_step) * $dataPoint->tracker->value_step;
 
         if ($dataPoint->value !== $value) {
-            $dataPoint->update(['value' => $value]);
+            $dataPoint->value = $value;
+
+            $dataPoint->save();
 
             DataPointUpdated::dispatch($dataPoint);
         }

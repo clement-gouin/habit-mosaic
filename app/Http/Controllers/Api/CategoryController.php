@@ -55,7 +55,7 @@ class CategoryController extends Controller
      */
     public function update(UpdateCategoryRequest $request, Category $category): JsonResource
     {
-        $category->update($request->validated());
+        $category->fill($request->validated())->save();
 
         return CategoryResource::make($category->refresh());
     }

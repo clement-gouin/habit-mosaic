@@ -19,7 +19,7 @@ class TrackerService
             CategoryUpdated::dispatch($tracker->category);
         }
 
-        $tracker->update($attributes);
+        $tracker->fill($attributes)->save();
 
         $tracker = $tracker->refresh();
 
@@ -37,8 +37,12 @@ class TrackerService
         /** @var DataPoint $average */
         $average = $tracker->getAverageDataPoint();
 
-        $average->update([
-            'value' => $tracker->dataPoints()->where('date', '!=', $average->date)->pluck('value')->average() ?? 0,
-        ]);
+        $average->value = $tracker
+            ->dataPoints()
+            ->where('date', '!=', $average->date)
+            ->pluck('value')
+            ->average() ?? 0;
+
+        $average->save();
     }
 }
