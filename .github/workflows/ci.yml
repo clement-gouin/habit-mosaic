@@ -44,7 +44,7 @@ jobs:
       - uses: php-actions/composer@v6
         with:
           php_version: 8.2
-      - run: vendor/bin/phpstan analyse -c code_quality/phpstan.neon --no-progress --error-format=checkstyle > reports/phpstan.xml
+      - run: vendor/bin/phpstan analyse -c phpstan.neon --no-progress --error-format=checkstyle > reports/phpstan.xml
       - uses: jwgmeligmeyling/checkstyle-github-action@master
         if: always()
         with:
@@ -66,7 +66,7 @@ jobs:
         with:
           php-version: '8.2'
       - uses: php-actions/composer@v6
-      - run: php vendor/bin/pint --config code_quality/pint.json --test --format=xml > pint.xml
+      - run: php vendor/bin/pint --config pint.json --test --format=xml > pint.xml
       - uses: jwgmeligmeyling/checkstyle-github-action@master
         if: always()
         with:
@@ -93,7 +93,7 @@ jobs:
         with:
           path: app
           output: sarif
-          ruleset: code_quality/phpmd.xml
+          ruleset: phpmd.xml
           reportfile: reports/phpmd.sarif
           args: -vvv --ignore-errors-on-exit
       - uses: github/codeql-action/upload-sarif@v2
