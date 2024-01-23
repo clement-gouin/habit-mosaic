@@ -1,7 +1,4 @@
-ENV_FILE=.env
-
-include ${ENV_FILE}
-export
+include .env
 
 .env:
 	cp .env.example .env
@@ -40,29 +37,26 @@ migrate: vendor
 
 .PHONY: test
 test: vendor
-	php artisan db:wipe --env=testing
-	php artisan migrate --seed --env=testing
-	vendor/bin/phpunit --log-junit "reports/phpunit.xml" --testdox
+	php vendor/bin/phpunit --log-junit "reports/phpunit.xml" --testdox-html "reports/phpunit.html" --no-coverage
+	open reports/phpunit.html &> /dev/null &
 
 .PHONY: coverage
 coverage: vendor
-	php artisan db:wipe --env=testing
-	php artisan migrate --seed --env=testing
-	XDEBUG_MODE=coverage php vendor/bin/phpunit --log-junit "reports/phpunit.xml" --coverage-clover "reports/coverage.xml" --coverage-html "reports/coverage" --testdox
-
+	XDEBUG_MODE=coverage php vendor/bin/phpunit --coverage-clover "reports/coverage.xml" --coverage-html "reports/coverage"
+	open reports/coverage/index.html &> /dev/null &
 
 .PHONY: lint
 lint: vendor node_modules
 	npm run lint
-	vendor/bin/pint --test --config=pint.json
-	vendor/bin/phpstan --configuration=phpstan.neon
-	vendor/bin/phpmd app ansi phpmd.xml
+	php vendor/bin/pint --test --config=pint.json
+	php vendor/bin/phpstan --configuration=phpstan.neon
+	php vendor/bin/phpmd app ansi phpmd.xml
 
 .PHONY: fix
 fix: vendor node_modules
 	npm run fix
-	vendor/bin/pint --config=pint.json
+	php vendor/bin/pint --config=pint.json
 
 .PHONY: baseline
 baseline: vendor
-	vendor/bin/phpstan --configuration=phpstan.neon --generate-baseline=phpstan-baseline.neon
+	php vendor/bin/phpstan --configuration=phpstan.neon --generate-baseline=phpstan-baseline.neon
