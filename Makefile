@@ -57,6 +57,12 @@ fix: vendor node_modules
 	npm run fix
 	php vendor/bin/pint --config=pint.json
 
+.PHONY: metrics
+metrics: vendor
+	php vendor/bin/phpunit --log-junit "reports/phpunit.xml" --no-coverage
+	php vendor/bin/phpmetrics --config=phpmetrics.json --junit=reports/phpunit.xml
+	open reports/phpmetrics/index.html &> /dev/null &
+
 .PHONY: baseline
 baseline: vendor
 	php vendor/bin/phpstan --configuration=phpstan.neon --generate-baseline=phpstan-baseline.neon

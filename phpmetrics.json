@@ -1,0 +1,32 @@
+{
+    "includes": [
+        "app"
+    ],
+    "exclude": [],
+    "report": {
+        "html": "reports/phpmetrics",
+        "csv": "reports/phpmetrics.csv",
+        "json": "reports/phpmetrics.json",
+        "summary-json": "reports/summary-phpmetrics.json",
+        "violations": "reports/violations.xml"
+    },
+    "groups": [
+        {
+            "name": "Controller",
+            "match": "!Controller!"
+        },
+        {
+            "name": "Provider",
+            "match": "!Provider!"
+        }
+    ],
+    "plugins": {
+        "git": {
+            "binary": "git"
+        },
+        "junit": {
+            "file": "reports/phpunit.xml"
+        }
+    },
+    "extensions": [ "php", "php8" ]
+}

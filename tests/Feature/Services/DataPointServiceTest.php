@@ -52,7 +52,7 @@ class DataPointServiceTest extends TestCase
                 'overflow' => true,
                 'value_step' => 1,
             ]),
-            'value' => fake()->randomNumber(nbDigits: 2),
+            'value' => fake()->randomNumber(nbDigits: 2) + 1,
         ]);
 
         $this->service->updateValue($dataPoint, -(1 + fake()->randomNumber()));
