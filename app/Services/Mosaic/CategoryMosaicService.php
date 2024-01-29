@@ -21,8 +21,14 @@ class CategoryMosaicService extends AbstractMosaicService
     }
 
     /** @param Category $value */
-    protected function getRootCacheKey($value): string
+    protected static function getRootCacheKey($value): string
     {
         return 'mosaic.category.'.$value->id;
+    }
+
+    /** @param Category $value */
+    protected function getMaxDate($value): ?Carbon
+    {
+        return $value->dataPoints()->min('date');
     }
 }

@@ -2,7 +2,7 @@
     <div>
         <h3>
             <category-label :category="category"/>
-            <score-badge :value="category.average" />
+            <score-badge :value="category.statistics.average" />
         </h3>
         <mosaic class="w-100" style="height: 10em" :data="data" @change-resolution="fetchData" />
     </div>

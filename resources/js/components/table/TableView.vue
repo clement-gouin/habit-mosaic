@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { Category, DataPoint, TableColumn, Tracker, TrackerFull } from '@interfaces';
+import { Category, DataPoint, Statistics, TableColumn, Tracker, TrackerFull } from '@interfaces';
 import { computed, onMounted, ref } from 'vue';
 import Datatable from '@tools/tables/Datatable.vue';
 import { updateDataPoint } from '@requests/dataPoints';
@@ -31,7 +31,7 @@ import { referenceColor } from '@utils/colors';
 interface Props {
     date: string,
     days: number,
-    average: number,
+    statistics: Statistics
     categories: Category[],
     trackers: TrackerFull[],
     data: Record<string, DataPoint[]>
@@ -41,7 +41,7 @@ const props = defineProps<Props>();
 
 const date = ref<number>(Date.parse(props.date));
 const days = ref<number>(props.days);
-const average = ref<number>(props.average);
+const statistics = ref<Statistics>(props.statistics);
 const categories = ref(props.categories);
 const trackers = ref(props.trackers);
 const loading = ref(false);
@@ -55,7 +55,7 @@ const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.ma
 }));
 
 const color = (tracker: Tracker, value: number, variable: string) => referenceColor(Math.sign(tracker.target_score) * value, tracker.target_value, variable);
-const colorDay = (value: number, variable: string) => referenceColor(value, average.value, variable);
+const colorDay = (value: number, variable: string) => referenceColor(value, statistics.value.average, variable);
 
 const columns = computed<TableColumn[]>(() => {
     return [
@@ -183,8 +183,8 @@ function selectAll (event: FocusEvent) {
 function getData () {
     loading.value = true;
     getTableData(new Date(date.value), days.value)
-        .then(([newAverage, newCategories, newTrackers, newData]) => {
-            average.value = newAverage;
+        .then(([newStatistics, newCategories, newTrackers, newData]) => {
+            statistics.value = newStatistics;
             categories.value = newCategories;
             trackers.value = newTrackers;
             tableData.value = computeData(newData);

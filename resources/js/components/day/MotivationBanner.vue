@@ -1,17 +1,18 @@
 <template>
     <div class="w-100 border-bottom border-1 py-2 user-select-none m-0 text-center bg-white">
         {{ level.text }}
-        <small v-if="level.showDiff && average > score" class="text-dark-emphasis">{{ (average - score).toFixed(1) }} more to beat average</small>
-        <small v-else-if="level.showDiff" class="text-dark-emphasis">{{ (score - average).toFixed(1) }} over average</small>
+        <small v-if="level.showDiff && statistics.average > score" class="text-dark-emphasis">{{ (statistics.average - score).toFixed(1) }} more to beat average</small>
+        <small v-else-if="level.showDiff" class="text-dark-emphasis">{{ (score - statistics.average).toFixed(1) }} over average</small>
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
+import { Statistics } from '@interfaces';
 
 interface Props {
     score: number
-    average: number
+    statistics: Statistics
 }
 
 const props = defineProps<Props>();
@@ -33,5 +34,5 @@ const LEVELS: Level[] = [
     { minScore: -Infinity, text: '🧎 You\'ll do better' }
 ];
 
-const level = computed<Level>(() => LEVELS.filter(l => props.score >= l.minScore * props.average)[0]);
+const level = computed<Level>(() => LEVELS.filter(l => props.score >= l.minScore * props.statistics.average)[0]);
 </script>

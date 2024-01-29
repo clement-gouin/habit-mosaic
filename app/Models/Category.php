@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -22,6 +23,7 @@ use Illuminate\Support\Collection;
  * @property int $order
  * @property-read User $user
  * @property-read Collection|Tracker[] $trackers
+ * @property-read Collection|DataPoint[] $dataPoints
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *
@@ -55,5 +57,10 @@ class Category extends Model
     public function trackers(): HasMany
     {
         return $this->hasMany(Tracker::class)->orderByDesc('order');
+    }
+
+    public function dataPoints(): HasManyThrough
+    {
+        return $this->hasManyThrough(DataPoint::class, Tracker::class);
     }
 }

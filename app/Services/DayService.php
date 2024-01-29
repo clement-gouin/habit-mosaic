@@ -2,17 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\Tracker;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 
 class DayService
 {
-    public function getAverage(User $user): float
-    {
-        return $user->trackers->sum(fn (Tracker $tracker) => $tracker->getAverageScore());
-    }
-
     public function cleanEmptyDays(User $user): int
     {
         $date = $this->getStartDate($user);

@@ -91,6 +91,11 @@ class Tracker extends Model
         return $this->target_score * $value / $this->target_value;
     }
 
+    public function valueFromScore(float $score): float
+    {
+        return $this->target_value * $score / $this->target_score;
+    }
+
     public function getDataPointAt(Carbon $date): DataPoint|Model
     {
         return $this->dataPoints()
@@ -102,21 +107,6 @@ class Tracker extends Model
     public function getScoreAt(Carbon $date): float
     {
         $value = $this->dataPoints()->firstWhere('date', $date->startOfDay())?->value ?? 0;
-
-        return $this->scoreFromValue($value);
-    }
-
-    public function getAverageDataPoint(): DataPoint|Model
-    {
-        return $this->dataPoints()
-            ->firstOrCreate([
-                'date' => Carbon::createFromTimestamp(0),
-            ])->refresh();
-    }
-
-    public function getAverageScore(): float
-    {
-        $value = $this->getAverageDataPoint()?->value ?? 0;
 
         return $this->scoreFromValue($value);
     }

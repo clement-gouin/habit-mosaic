@@ -21,8 +21,14 @@ class DayMosaicService extends AbstractMosaicService
     }
 
     /** @param User $value */
-    protected function getRootCacheKey($value): string
+    protected static function getRootCacheKey($value): string
     {
         return 'mosaic.day.'.$value->id;
+    }
+
+    /** @param User $value */
+    protected function getMaxDate($value): ?Carbon
+    {
+        return $value->dataPoints()->min('date');
     }
 }

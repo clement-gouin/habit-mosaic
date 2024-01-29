@@ -3,8 +3,9 @@
 namespace App\Http\Resources;
 
 use App\Models\Category;
-use App\Models\Tracker;
+use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 /** @property Category $resource */
 class CategoryFullResource extends CategoryResource
@@ -18,8 +19,11 @@ class CategoryFullResource extends CategoryResource
      */
     public function toArray(Request $request): array
     {
+        /** @var CategoryMosaicService $mosaicService */
+        $mosaicService = App::make(CategoryMosaicService::class);
+
         return array_merge(parent::toArray($request), [
-            'average' => $this->resource->trackers->sum(fn (Tracker $tracker) => $tracker->getAverageScore()),
+            'statistics' => StatisticsResource::make($mosaicService->getStatistics($this->resource)),
         ]);
     }
 }

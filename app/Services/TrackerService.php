@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Events\CategoryUpdated;
 use App\Events\TrackerScoreUpdated;
-use App\Models\DataPoint;
 use App\Models\Tracker;
 
 class TrackerService
@@ -30,19 +29,5 @@ class TrackerService
         if (($targetChange || $categoryChange) && $tracker->category) {
             CategoryUpdated::dispatch($tracker->category);
         }
-    }
-
-    public function updateAverage(Tracker $tracker): void
-    {
-        /** @var DataPoint $average */
-        $average = $tracker->getAverageDataPoint();
-
-        $average->value = $tracker
-            ->dataPoints()
-            ->where('date', '!=', $average->date)
-            ->pluck('value')
-            ->average() ?? 0;
-
-        $average->save();
     }
 }

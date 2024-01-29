@@ -41,6 +41,14 @@ export interface ErrorResponse extends Base {
     errors: Record<string, string[]>
 }
 
+export interface Statistics extends Base {
+    total: number
+    minimum: number
+    average: number
+    median: number
+    maximum: number
+}
+
 export interface CategoryData extends Base {
     id?: number
     name: string
@@ -53,7 +61,7 @@ export interface Category extends CategoryData {
 }
 
 export interface CategoryFull extends Category {
-    average: number
+    statistics: Statistics
 }
 
 export interface TrackerData extends Base {
@@ -76,7 +84,7 @@ export interface Tracker extends TrackerData {
 
 export interface TrackerFull extends Tracker {
     data_point: DataPoint
-    average: number
+    statistics: Statistics
 }
 
 export interface DataPoint extends Base {

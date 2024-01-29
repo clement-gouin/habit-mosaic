@@ -2,6 +2,7 @@
 
 namespace App\Services\Mosaic;
 
+use App\Objects\Statistics;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -11,6 +12,23 @@ use Illuminate\Support\Facades\Cache;
  */
 abstract class AbstractMosaicService
 {
+    /**
+     * @param  T  $value
+     * @return array<int, float|null>
+     */
+    public function getAllMosaicData($value): array
+    {
+        $maxDate = $this->getMaxDate($value);
+        $result = collect();
+        $date = Carbon::today()->startOfWeek();
+        while ($date->isAfter($maxDate)) {
+            $result->push(...$this->getWeekData($value, $date));
+            $date = $date->subWeek();
+        }
+
+        return $result->toArray();
+    }
+
     /**
      * @param  T  $value
      * @return array<int, float|null>
@@ -89,6 +107,23 @@ abstract class AbstractMosaicService
 
     /**
      * @param  T  $value
+     */
+    public function getStatistics($value): Statistics
+    {
+        return Statistics::deserialize(Cache::remember(
+            $this->getRootCacheKey($value).'.statistics',
+            Carbon::today()->addDay(),
+            function () use ($value) {
+                /** @var Collection|float[] $data */
+                $data = collect($this->getAllMosaicData($value))->filter(fn (?float $v) => $v !== null);
+
+                return Statistics::fromDataCollection($data)->serialize();
+            }
+        ));
+    }
+
+    /**
+     * @param  T  $value
      * @return array<int, float|null>
      */
     abstract protected function computeWeekData($value, Carbon $startDate): array;
@@ -96,15 +131,19 @@ abstract class AbstractMosaicService
     /**
      * @param  T  $value
      */
-    abstract protected function getRootCacheKey($value): string;
+    abstract protected static function getRootCacheKey($value): string;
+
+    abstract protected function getMaxDate($value): ?Carbon;
 
     /**
      * @param  T  $value
      */
     public function wipeData($value): void
     {
+        $rootCacheKey = $this->getRootCacheKey($value);
+
         /** @var ?Carbon $date */
-        $date = Cache::get($this->getRootCacheKey($value).'.max');
+        $date = Cache::get($rootCacheKey.'.max');
 
         if ($date) {
             $max = Carbon::today()->addDay();
@@ -115,7 +154,9 @@ abstract class AbstractMosaicService
                 $date = $date->addWeek();
             }
 
-            Cache::forget($this->getRootCacheKey($value).'.max');
+            Cache::forget($rootCacheKey.'.max');
         }
+
+        Cache::forget($rootCacheKey.'.statistics');
     }
 }

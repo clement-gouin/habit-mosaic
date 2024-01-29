@@ -25,8 +25,14 @@ class TrackerMosaicService extends AbstractMosaicService
     }
 
     /** @param Tracker $value */
-    protected function getRootCacheKey($value): string
+    protected static function getRootCacheKey($value): string
     {
         return 'mosaic.tracker.'.$value->id;
+    }
+
+    /** @param Tracker $value */
+    protected function getMaxDate($value): ?Carbon
+    {
+        return $value->dataPoints()->min('date');
     }
 }

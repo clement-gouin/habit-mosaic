@@ -11,24 +11,24 @@ parameters:
 			path: app/Http/Middleware/VersionMiddleware.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
-			count: 1
-			path: app/Http/Resources/CategoryFullResource.php
-
-		-
 			message: "#^Parameter \\#1 \\$string of function ucfirst expects string, mixed given\\.$#"
 			count: 1
 			path: app/Mail/ErrorNotification.php
 
 		-
-			message: "#^Method App\\\\Services\\\\DayService\\:\\:getAverage\\(\\) should return float but returns mixed\\.$#"
+			message: "#^Parameter \\$max of class App\\\\Objects\\\\Statistics constructor expects float, mixed given\\.$#"
 			count: 1
-			path: app/Services/DayService.php
+			path: app/Objects/Statistics.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
+			message: "#^Parameter \\$min of class App\\\\Objects\\\\Statistics constructor expects float, mixed given\\.$#"
 			count: 1
-			path: app/Services/DayService.php
+			path: app/Objects/Statistics.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\:\\:getAllMosaicData\\(\\) should return array\\<int, float\\|null\\> but returns array\\.$#"
+			count: 1
+			path: app/Services/Mosaic/AbstractMosaicService.php
 
 		-
 			message: "#^Method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\:\\:getCollectionWeekData\\(\\) should return array\\<int, float\\|null\\> but returns array\\<int, mixed\\>\\.$#"
@@ -36,9 +36,29 @@ parameters:
 			path: app/Services/Mosaic/AbstractMosaicService.php
 
 		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\:\\:getMaxDate\\(\\) has parameter \\$value with no type specified\\.$#"
+			count: 1
+			path: app/Services/Mosaic/AbstractMosaicService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\:\\:getMosaicData\\(\\) should return array\\<int, float\\|null\\> but returns array\\.$#"
 			count: 1
 			path: app/Services/Mosaic/AbstractMosaicService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\CategoryMosaicService\\:\\:getMaxDate\\(\\) should return Illuminate\\\\Support\\\\Carbon\\|null but returns mixed\\.$#"
+			count: 1
+			path: app/Services/Mosaic/CategoryMosaicService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\DayMosaicService\\:\\:getMaxDate\\(\\) should return Illuminate\\\\Support\\\\Carbon\\|null but returns mixed\\.$#"
+			count: 1
+			path: app/Services/Mosaic/DayMosaicService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\TrackerMosaicService\\:\\:getMaxDate\\(\\) should return Illuminate\\\\Support\\\\Carbon\\|null but returns mixed\\.$#"
+			count: 1
+			path: app/Services/Mosaic/TrackerMosaicService.php
 
 		-
 			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:map\\(\\) expects callable\\(mixed, int\\|string\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource, Closure\\(App\\\\Models\\\\Tracker\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource given\\.$#"

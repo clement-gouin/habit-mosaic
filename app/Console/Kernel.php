@@ -3,7 +3,6 @@
 namespace App\Console;
 
 use App\Console\Commands\CleanEmptyDays;
-use App\Console\Commands\ComputeAverageDay;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,8 +14,6 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command(CleanEmptyDays::class)->dailyAt('00:00');
-
-        $schedule->command(ComputeAverageDay::class)->dailyAt('00:10');
     }
 
     /**
