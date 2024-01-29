@@ -112,7 +112,7 @@ function draw (consumePointerDown = false) {
 onMounted(() => {
     draw();
     addEventListener('resize', () => draw());
-    canvas.value?.addEventListener('pointermove', (evt: PointerEvent) => {
+    canvas.value?.addEventListener('mousemove', (evt: MouseEvent) => {
         if (mouseIn.value) {
             mousePos.value = {
                 x: evt.clientX,
@@ -121,17 +121,17 @@ onMounted(() => {
             draw();
         }
     });
-    canvas.value?.addEventListener('pointerout', () => {
+    canvas.value?.addEventListener('mouseout', () => {
         mouseIn.value = false;
         mousePos.value = null;
         draw();
     });
-    canvas.value?.addEventListener('pointerover', () => {
+    canvas.value?.addEventListener('mouseover', () => {
         mouseIn.value = true;
         mousePos.value = null;
         draw();
     });
-    canvas.value?.addEventListener('pointerdown', (evt: PointerEvent) => {
+    canvas.value?.addEventListener('mousedown', (evt: MouseEvent) => {
         mousePos.value = {
             x: evt.clientX,
             y: evt.clientY
