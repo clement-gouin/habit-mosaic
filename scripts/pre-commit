@@ -14,7 +14,7 @@ function __run() #(step, name, cmd, filters)
 
     printf "${C_YELLOW}[%s]${C_RESET} %-20s" "$1" "$2"
 
-    output=$(eval "git diff --diff-filter=M --name-only --cached | grep -E \"$filters\" | $3"  2>&1)
+    output=$(eval "git diff --diff-filter=AM --name-only --cached | grep -E \"$filters\" | $3"  2>&1)
 
     exitcode=$?
 
@@ -26,8 +26,8 @@ function __run() #(step, name, cmd, filters)
     fi
 }
 
-__run "1/5" "pint" "xargs -rI {} vendor/bin/pint --config pint.json {}" '^.*\.php$'
-__run "2/5" "eslint" "xargs -rI {} npx eslint --no-color --fix {}" '^resources/js/.*\.(ts|js|vue)$'
-__run "3/5" "git-add" "xargs -rI {} git add {}"
-__run "4/5" "phpstan" "xargs -rI {} vendor/bin/phpstan analyse -c phpstan.neon {}" '^app/.*\.php$'
+__run "1/5" "pint" "xargs -r vendor/bin/pint --config pint.json" '^.*\.php$'
+__run "2/5" "eslint" "xargs -r npx eslint --no-color --fix" '^resources/js/.*\.(ts|js|vue)$'
+__run "3/5" "git-add" "xargs -r git add"
+__run "4/5" "phpstan" "xargs -r vendor/bin/phpstan analyse -c phpstan.neon" '^app/.*\.php$'
 __run "5/5" "phpmd" "xargs -rI {} vendor/bin/phpmd {} text phpmd.xml" '^app/.*\.php$'
