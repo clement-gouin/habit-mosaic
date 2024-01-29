@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\CategoryUpdated;
 use App\Services\Mosaic\CategoryMosaicService;
 
-class WipeCategory
+class WipeCategoryMosaic
 {
     public function __construct(protected CategoryMosaicService $mosaicService)
     {

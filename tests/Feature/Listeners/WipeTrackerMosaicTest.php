@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Listeners;
 
-use App\Events\TrackerUpdated;
-use App\Listeners\WipeTracker;
+use App\Events\TrackerScoreUpdated;
+use App\Listeners\WipeTrackerMosaic;
 use App\Models\Tracker;
 use App\Services\Mosaic\TrackerMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Event;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
-class WipeTrackerTest extends TestCase
+class WipeTrackerMosaicTest extends TestCase
 {
     use DatabaseMigrations;
 
     /** @test */
     public function it_listens_to_events(): void
     {
-        Event::assertListening(TrackerUpdated::class, WipeTracker::class);
+        Event::assertListening(TrackerScoreUpdated::class, WipeTrackerMosaic::class);
     }
 
     /** @test */
@@ -32,8 +32,8 @@ class WipeTrackerTest extends TestCase
             ->expects('wipeData')
             ->with($tracker);
 
-        $listener = new WipeTracker($mosaicService);
+        $listener = new WipeTrackerMosaic($mosaicService);
 
-        $listener->handle(new TrackerUpdated($tracker));
+        $listener->handle(new TrackerScoreUpdated($tracker));
     }
 }

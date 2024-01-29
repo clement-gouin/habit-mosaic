@@ -3,7 +3,7 @@
 namespace Tests\Feature\Services;
 
 use App\Events\CategoryUpdated;
-use App\Events\TrackerUpdated;
+use App\Events\TrackerScoreUpdated;
 use App\Models\Category;
 use App\Models\DataPoint;
 use App\Models\Tracker;
@@ -109,7 +109,7 @@ class TrackerServiceTest extends TestCase
 
         $this->service->update($tracker, $tracker->attributesToArray());
 
-        Event::assertNotDispatched(TrackerUpdated::class);
+        Event::assertNotDispatched(TrackerScoreUpdated::class);
     }
 
     /** @test */
@@ -123,8 +123,8 @@ class TrackerServiceTest extends TestCase
         ]);
 
         Event::assertDispatched(
-            TrackerUpdated::class,
-            fn (TrackerUpdated $event) => $event->tracker->id === $tracker->id
+            TrackerScoreUpdated::class,
+            fn (TrackerScoreUpdated $event) => $event->tracker->id === $tracker->id
         );
     }
 
@@ -143,8 +143,8 @@ class TrackerServiceTest extends TestCase
         ]);
 
         Event::assertDispatched(
-            TrackerUpdated::class,
-            fn (TrackerUpdated $event) => $event->tracker->id === $tracker->id
+            TrackerScoreUpdated::class,
+            fn (TrackerScoreUpdated $event) => $event->tracker->id === $tracker->id
         );
 
         Event::assertDispatched(

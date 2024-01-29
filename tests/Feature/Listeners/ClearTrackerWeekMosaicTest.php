@@ -3,7 +3,7 @@
 namespace Tests\Feature\Listeners;
 
 use App\Events\DataPointUpdated;
-use App\Listeners\ClearTrackerWeek;
+use App\Listeners\ClearTrackerWeekMosaic;
 use App\Models\Category;
 use App\Models\DataPoint;
 use App\Models\Tracker;
@@ -18,14 +18,14 @@ use Mockery;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
-class ClearTrackerWeekTest extends TestCase
+class ClearTrackerWeekMosaicTest extends TestCase
 {
     use DatabaseMigrations;
 
     /** @test */
     public function it_listens_to_events(): void
     {
-        Event::assertListening(DataPointUpdated::class, ClearTrackerWeek::class);
+        Event::assertListening(DataPointUpdated::class, ClearTrackerWeekMosaic::class);
     }
 
     /** @test */
@@ -59,7 +59,7 @@ class ClearTrackerWeekTest extends TestCase
                 Mockery::on(fn (Carbon $arg) => $arg->is($dataPoint->date)),
             );
 
-        $listener = new ClearTrackerWeek(
+        $listener = new ClearTrackerWeekMosaic(
             $trackerMosaicService,
             $catMosaicService,
             $dayMosaicService,
@@ -109,7 +109,7 @@ class ClearTrackerWeekTest extends TestCase
                 Mockery::on(fn (Carbon $arg) => $arg->is($dataPoint->date)),
             );
 
-        $listener = new ClearTrackerWeek(
+        $listener = new ClearTrackerWeekMosaic(
             $trackerMosaicService,
             $catMosaicService,
             $dayMosaicService,

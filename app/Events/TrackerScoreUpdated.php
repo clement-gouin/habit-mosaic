@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class TrackerUpdated implements WithUser
+class TrackerScoreUpdated implements WithUser
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Events\CategoryUpdated;
-use App\Events\TrackerUpdated;
+use App\Events\TrackerScoreUpdated;
 use App\Models\DataPoint;
 use App\Models\Tracker;
 
@@ -24,7 +24,7 @@ class TrackerService
         $tracker = $tracker->refresh();
 
         if ($targetChange) {
-            TrackerUpdated::dispatch($tracker);
+            TrackerScoreUpdated::dispatch($tracker);
         }
 
         if (($targetChange || $categoryChange) && $tracker->category) {

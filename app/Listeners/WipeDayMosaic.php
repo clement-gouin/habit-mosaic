@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Interfaces\WithUser;
 use App\Services\Mosaic\DayMosaicService;
 
-class WipeDay
+class WipeDayMosaic
 {
     public function __construct(
         protected DayMosaicService $mosaicService,

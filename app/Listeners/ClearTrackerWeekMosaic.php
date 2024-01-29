@@ -7,7 +7,7 @@ use App\Services\Mosaic\CategoryMosaicService;
 use App\Services\Mosaic\DayMosaicService;
 use App\Services\Mosaic\TrackerMosaicService;
 
-class ClearTrackerWeek
+class ClearTrackerWeekMosaic
 {
     public function __construct(
         protected TrackerMosaicService $mosaicService,

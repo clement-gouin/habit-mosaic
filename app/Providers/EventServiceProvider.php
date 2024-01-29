@@ -4,11 +4,11 @@ namespace App\Providers;
 
 use App\Events\CategoryUpdated;
 use App\Events\DataPointUpdated;
-use App\Events\TrackerUpdated;
-use App\Listeners\ClearTrackerWeek;
-use App\Listeners\WipeCategory;
-use App\Listeners\WipeDay;
-use App\Listeners\WipeTracker;
+use App\Events\TrackerScoreUpdated;
+use App\Listeners\ClearTrackerWeekMosaic;
+use App\Listeners\WipeCategoryMosaic;
+use App\Listeners\WipeDayMosaic;
+use App\Listeners\WipeTrackerMosaic;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -20,15 +20,15 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         DataPointUpdated::class => [
-            ClearTrackerWeek::class,
+            ClearTrackerWeekMosaic::class,
         ],
-        TrackerUpdated::class => [
-            WipeTracker::class,
-            WipeDay::class,
+        TrackerScoreUpdated::class => [
+            WipeTrackerMosaic::class,
+            WipeDayMosaic::class,
         ],
         CategoryUpdated::class => [
-            WipeCategory::class,
-            WipeDay::class,
+            WipeCategoryMosaic::class,
+            WipeDayMosaic::class,
         ],
     ];
 
