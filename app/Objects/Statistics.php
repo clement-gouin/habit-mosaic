@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 readonly class Statistics
 {
     private function __construct(
-        public float $total = 0,
+        public int $total = 0,
         public float $min = 0,
         public float $average = 0,
         public float $lowerQuartile = 0,
@@ -30,6 +30,9 @@ readonly class Statistics
         );
     }
 
+    /**
+     * @param  Collection<float>  $data
+     */
     public static function fromDataCollection(Collection $data): Statistics
     {
         if ($data->isEmpty()) {

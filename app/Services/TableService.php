@@ -6,9 +6,13 @@ use App\Http\Resources\DataPointResource;
 use App\Models\Tracker;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 
 class TableService extends Service
 {
+    /**
+     * @return array<string, Collection<DataPointResource>>
+     */
     public function getTableData(User $user, Carbon $endDate, int $days): array
     {
         $data = [];

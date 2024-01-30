@@ -29,6 +29,6 @@ class DayMosaicService extends MosaicService
     /** @param User $value */
     protected function getMaxDate($value): ?Carbon
     {
-        return new Carbon($value->dataPoints()->min('date'));
+        return new Carbon(strval($value->dataPoints()->min('date')));
     }
 }

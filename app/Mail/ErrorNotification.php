@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
 use Throwable;
 
@@ -28,7 +29,7 @@ class ErrorNotification extends Mailable
             to: [config('mail.error.to')],
             subject: sprintf(
                 '%s [%s] : %s',
-                ucfirst(config('app.name')),
+                ucfirst(strval(Config::get('app.name'))),
                 App::environment(),
                 $this->exception->getMessage()
             ),

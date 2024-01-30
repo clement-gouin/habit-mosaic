@@ -22,8 +22,8 @@ use Illuminate\Support\Collection;
  * @property string|null $icon
  * @property int $order
  * @property-read User $user
- * @property-read Collection|Tracker[] $trackers
- * @property-read Collection|DataPoint[] $dataPoints
+ * @property-read Collection<Tracker> $trackers
+ * @property-read Collection<DataPoint> $dataPoints
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  *

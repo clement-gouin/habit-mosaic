@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Tracker;
+use App\Models\User;
 use App\Services\Mosaic\CategoryMosaicService;
 use App\Services\Mosaic\DayMosaicService;
 use App\Services\Mosaic\TrackerMosaicService;
@@ -23,7 +24,10 @@ class MosaicDataController extends Controller
 
     public function day(Request $request): JsonResponse
     {
-        return response()->json($this->dayMosaicService->getMosaicData($request->user(), $request->integer('days', 70)));
+        /** @var User $user */
+        $user = $request->user();
+
+        return response()->json($this->dayMosaicService->getMosaicData($user, $request->integer('days', 70)));
     }
 
     /**

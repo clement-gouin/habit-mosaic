@@ -20,6 +20,7 @@ abstract class MosaicService extends Service
     public function getAllMosaicData($value): array
     {
         $maxDate = $this->getMaxDate($value);
+        /** @var Collection<float|null> $result */
         $result = collect();
         $date = Carbon::today()->startOfWeek();
         while ($date->isAfter($maxDate)) {
@@ -36,6 +37,7 @@ abstract class MosaicService extends Service
      */
     public function getMosaicData($value, int $days): array
     {
+        /** @var Collection<float|null> $result */
         $result = collect();
         $date = Carbon::today()->startOfWeek();
         for ($i = 0; $i < $days / 7; $i++) {
@@ -115,7 +117,7 @@ abstract class MosaicService extends Service
             $this->getRootCacheKey($value).'.statistics',
             Carbon::today()->addDay(),
             function () use ($value) {
-                /** @var Collection|float[] $data */
+                /** @var Collection<float> $data */
                 $data = collect($this->getAllMosaicData($value))->filter(fn (?float $v) => $v !== null);
 
                 return Statistics::fromDataCollection($data)->serialize();
@@ -134,6 +136,7 @@ abstract class MosaicService extends Service
      */
     abstract protected static function getRootCacheKey($value): string;
 
+    /** @param T $value */
     abstract protected function getMaxDate($value): ?Carbon;
 
     /**
