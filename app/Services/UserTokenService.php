@@ -9,7 +9,7 @@ use Database\Seeders\NewUserSeeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
-class UserTokenService
+class UserTokenService extends Service
 {
     protected const TOKEN_EXPIRES = '1 hour';
 

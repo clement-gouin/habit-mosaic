@@ -11,7 +11,7 @@
         </h2>
     </div>
     <div class="position-relative user-select-none" style="min-height: calc(100% - 3.1em)">
-        <motivation-banner v-if="isToday && !loading" :score="score" :average="average" />
+        <motivation-banner v-if="isToday && !loading" :score="score" :statistics="statistics" />
         <category-panel
             v-for="(category,i) in categories"
             v-bind:key="category.id"
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { CategoryFull, TrackerFull } from '@interfaces';
+import { CategoryFull, Statistics, TrackerFull } from '@interfaces';
 import { computed, ref, watch } from 'vue';
 import { getDayData } from '@requests/day';
 import { referenceColor } from '@utils/colors';
@@ -38,21 +38,21 @@ import MotivationBanner from './MotivationBanner.vue';
 
 interface Props {
     date: string,
-    average: number,
+    statistics: Statistics
     categories: CategoryFull[],
     trackers: TrackerFull[]
 }
 
 const props = defineProps<Props>();
 
-const average = ref<number>(props.average);
+const statistics = ref<Statistics>(props.statistics);
 const categories = ref<CategoryFull[]>(props.categories);
 const trackers = ref<TrackerFull[]>(props.trackers);
 const { value: date, rawValue: rawDate } = useFullDebouncedRef<number>(Date.parse(props.date), 500);
 const loading = ref(false);
 
 const score = computed<number>(() => trackers.value.map(tracker => tracker.data_point.score).reduce((a, b) => a + b, 0));
-const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.target_score * tracker.average / tracker.target_value).reduce((a, b) => a + b, 0)));
+const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.statistics.average).reduce((a, b) => a + b, 0)));
 const isToday = computed<boolean>(() => (new Date(rawDate.value)).setHours(0, 0, 0, 0) === (new Date()).setHours(0, 0, 0, 0));
 
 const wasToday = ref<boolean>(isToday.value);
@@ -62,10 +62,10 @@ const color = (variable: string) => referenceColor(score.value, averageScore.val
 function getData () {
     loading.value = true;
     getDayData(new Date(date.value))
-        .then(([newDate, newAverage, newCategories, newTrackers]) => {
+        .then(([newDate, newStatistics, newCategories, newTrackers]) => {
             date.value = Date.parse(newDate);
             wasToday.value = isToday.value;
-            average.value = newAverage;
+            statistics.value = newStatistics;
             categories.value = newCategories;
             trackers.value = newTrackers;
         })

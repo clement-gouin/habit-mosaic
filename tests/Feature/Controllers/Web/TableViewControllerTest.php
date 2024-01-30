@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Controllers\Web;
 
-use App\Models\Category;
-use App\Models\Tracker;
 use App\Models\User;
+use App\Services\Mosaic\DayMosaicService;
+use App\Services\TableService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -18,14 +18,11 @@ class TableViewControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $categories = Category::factory(3)->create([
-            'user_id' => $user->id,
-        ]);
+        $this->getMock(TableService::class)
+            ->expects('getTableData')
+            ->with(self::modelArg($user), self::dateArg(Carbon::today()), 31);
 
-        Tracker::factory(20)->create([
-            'user_id' => $user->id,
-            'category_id' => fake()->randomElement($categories)->id,
-        ]);
+        $this->mockMosaicServiceStatistics(DayMosaicService::class, $user);
 
         $this->actingAs($user)
             ->getJson(route('table'))
@@ -33,7 +30,7 @@ class TableViewControllerTest extends TestCase
             ->assertViewIs('table_view')
             ->assertViewHas('date', Carbon::today()->format('Y-m-d'))
             ->assertViewHas('days', 31)
-            ->assertViewHas('average')
+            ->assertViewHas('statistics')
             ->assertViewHas('categories')
             ->assertViewHas('trackers')
             ->assertViewHas('data');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Listeners;
+namespace Tests\Unit\Listeners;
 
 use App\Events\TrackerScoreUpdated;
 use App\Listeners\WipeTrackerMosaic;

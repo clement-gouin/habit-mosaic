@@ -2,7 +2,7 @@
     <div v-if="trackers.length" class="px-1 px-sm-2 p py-3 p-md-4">
         <h3 class="w-100 text-center">
             <category-label :category="category"/>
-            <score-badge :title="`average: ${category.average.toFixed(1)}`" :value="score" :reference="category.average" />
+            <score-badge :title="`average: ${category.statistics.average.toFixed(1)}`" :value="score" :reference="category.statistics.average" />
         </h3>
         <div class="d-flex flex-row flex-wrap justify-content-center">
             <tracker-input
@@ -29,7 +29,8 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const DEFAULT_CATEGORY = { id: 0, name: 'Other', order: 0, average: 0 };
+// TODO compute real data or require category
+const DEFAULT_CATEGORY = { id: 0, name: 'Other', order: 0, statistics: { total: 0, minimum: 0, average: 0, median: 0, maximum: 0 } };
 
 const category = ref<CategoryFull>(props.modelValue ?? DEFAULT_CATEGORY);
 const trackers = ref<TrackerFull[]>(props.trackers);

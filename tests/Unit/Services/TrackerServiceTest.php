@@ -1,15 +1,13 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
 use App\Events\CategoryUpdated;
 use App\Events\TrackerScoreUpdated;
 use App\Models\Category;
-use App\Models\DataPoint;
 use App\Models\Tracker;
 use App\Services\TrackerService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
@@ -23,83 +21,7 @@ class TrackerServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[TrackerService::class];
-    }
-
-    /** @test */
-    public function it_updates_average_for_tracker_without_data(): void
-    {
-        $tracker = Tracker::factory()->create();
-
-        $this->service->updateAverage($tracker);
-
-        $this->assertDatabaseHas('data_points', [
-            'tracker_id' => $tracker->id,
-            'date' => Carbon::createFromTimestamp(0),
-            'value' => 0,
-        ]);
-    }
-
-    /** @test */
-    public function it_updates_average_for_tracker_with_data(): void
-    {
-        $tracker = Tracker::factory()->create();
-
-        $tracker->dataPoints()->saveMany([
-            DataPoint::factory()->make([
-                'date' => Carbon::today(),
-                'value' => 1,
-            ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::today()->subDay(),
-                'value' => 1.5,
-            ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::today()->subDays(2),
-                'value' => 2,
-            ]),
-        ]);
-
-        $this->service->updateAverage($tracker);
-
-        $this->assertDatabaseHas('data_points', [
-            'tracker_id' => $tracker->id,
-            'date' => Carbon::createFromTimestamp(0),
-            'value' => 1.5,
-        ]);
-    }
-
-    /** @test */
-    public function it_updates_average_for_tracker_with_data_and_average(): void
-    {
-        $tracker = Tracker::factory()->create();
-
-        $tracker->dataPoints()->saveMany([
-            DataPoint::factory()->make([
-                'date' => Carbon::today(),
-                'value' => 1,
-            ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::today()->subDay(),
-                'value' => 1.5,
-            ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::today()->subDays(2),
-                'value' => 2,
-            ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 1.5,
-            ]),
-        ]);
-
-        $this->service->updateAverage($tracker);
-
-        $this->assertDatabaseHas('data_points', [
-            'tracker_id' => $tracker->id,
-            'date' => Carbon::createFromTimestamp(0),
-            'value' => 1.5,
-        ]);
+        $this->service = new TrackerService();
     }
 
     /** @test */

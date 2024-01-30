@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Listeners;
+namespace Tests\Unit\Listeners;
 
 use App\Events\DataPointUpdated;
 use App\Listeners\ClearTrackerWeekMosaic;

@@ -2,14 +2,12 @@
 
 namespace Tests\Feature\Controllers\Web;
 
-use App\Mail\NewTokenLink;
 use App\Models\User;
-use App\Models\UserToken;
+use App\Services\UserTokenService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
+use Mockery;
 use Tests\TestCase;
 
 class AuthenticatedSessionControllerTest extends TestCase
@@ -21,11 +19,7 @@ class AuthenticatedSessionControllerTest extends TestCase
     {
         parent::setUp();
 
-        Mail::fake();
-
         Auth::logout();
-
-        $this->freezeTime();
     }
 
     /** @test */
@@ -48,21 +42,16 @@ class AuthenticatedSessionControllerTest extends TestCase
             'name' => fake()->name(),
         ];
 
+        $this->getMock(UserTokenService::class)
+            ->expects('sendNewToken')
+            ->with(Mockery::on(fn (User $arg) => $arg->email === $data['email']));
+
         $this->postJson(route('login.store'), [
             'new' => true,
             ...$data,
         ])->assertSuccessful();
 
         $this->assertDatabaseHas('users', $data);
-
-        $user = User::whereEmail($data['email'])->first();
-
-        $this->assertDatabaseHas('user_tokens', [
-            'user_id' => $user->id,
-            'expires_at' => Carbon::now()->addHour(),
-        ]);
-
-        Mail::assertSent(NewTokenLink::class);
     }
 
     /** @test */
@@ -79,61 +68,27 @@ class AuthenticatedSessionControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $this->postJson(route('login.store'), [
-            'new' => false,
-            'email' => $user->email,
-        ])->assertSuccessful();
-
-        $this->assertDatabaseHas('user_tokens', [
-            'user_id' => $user->id,
-            'expires_at' => Carbon::now()->addHour(),
-        ]);
-
-        Mail::assertSent(NewTokenLink::class);
-    }
-
-    /** @test */
-    public function it_invalidates_old_tokens(): void
-    {
-        $user = User::factory()->create();
-
-        $token = UserToken::query()->make([
-            'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
-            'token' => fake()->md5(),
-        ]);
-
-        $user->tokens()->save($token);
+        $this->getMock(UserTokenService::class)
+            ->expects('sendNewToken')
+            ->with(self::modelArg($user));
 
         $this->postJson(route('login.store'), [
             'new' => false,
             'email' => $user->email,
         ])->assertSuccessful();
-
-        $this->assertDatabaseHas('user_tokens', [
-            'id' => $token->id,
-            'expires_at' => Carbon::now(),
-        ]);
     }
 
     /** @test */
     public function it_cannot_login_user_with_invalid_token(): void
     {
-        $this->get(route('login.token', fake()->md5()))->assertForbidden();
-    }
+        $token = fake()->md5();
 
-    /** @test */
-    public function it_cannot_login_user_with_expired_token(): void
-    {
-        $user = User::factory()->create();
+        $this->getMock(UserTokenService::class)
+            ->expects('consumeToken')
+            ->with($token)
+            ->andReturn(null);
 
-        $token = UserToken::query()->make([
-            'expires_at' => fake()->dateTimeBetween('-1 hour', 'now'),
-            'token' => fake()->md5(),
-        ]);
-
-        $user->tokens()->save($token);
-
-        $this->get(route('login.token', $token->token))->assertForbidden();
+        $this->get(route('login.token', $token))->assertForbidden();
     }
 
     /** @test */
@@ -141,57 +96,16 @@ class AuthenticatedSessionControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $token = UserToken::query()->make([
-            'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
-            'token' => fake()->md5(),
-        ]);
+        $token = fake()->md5();
 
-        $user->tokens()->save($token);
+        $this->getMock(UserTokenService::class)
+            ->expects('consumeToken')
+            ->with($token)
+            ->andReturn($user);
 
-        $this->get(route('login.token', $token->token))->assertRedirect();
-
-        $this->assertDatabaseHas('user_tokens', [
-            'id' => $token->id,
-            'expires_at' => Carbon::now(),
-        ]);
+        $this->get(route('login.token', $token))->assertRedirect();
 
         $this->assertAuthenticatedAs($user);
-
-        $user = $user->refresh();
-
-        $this->assertEmpty($user->trackers);
-        $this->assertEmpty($user->categories);
-    }
-
-    /** @test */
-    public function it_logins_new_user(): void
-    {
-        $user = User::factory()->create([
-            'email_verified_at' => null,
-        ]);
-
-        $token = UserToken::query()->make([
-            'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
-            'token' => fake()->md5(),
-        ]);
-
-        $user->tokens()->save($token);
-
-        $this->get(route('login.token', $token->token))->assertRedirect();
-
-        $this->assertDatabaseHas('user_tokens', [
-            'id' => $token->id,
-            'expires_at' => Carbon::now(),
-        ]);
-
-        $this->assertAuthenticatedAs($user);
-
-        $user = $user->refresh();
-
-        $this->assertNotNull($user->email_verified_at);
-
-        $this->assertNotEmpty($user->trackers);
-        $this->assertNotEmpty($user->categories);
     }
 
     /** @test */

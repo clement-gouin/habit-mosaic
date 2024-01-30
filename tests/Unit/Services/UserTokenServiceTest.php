@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
 use App\Mail\NewTokenLink;
 use App\Models\User;
@@ -21,11 +21,7 @@ class UserTokenServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[UserTokenService::class];
-
-        Mail::fake();
-
-        $this->freezeTime();
+        $this->service = new UserTokenService();
     }
 
     /** @test */

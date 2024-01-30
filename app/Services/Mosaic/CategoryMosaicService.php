@@ -6,9 +6,9 @@ use App\Models\Category;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends AbstractMosaicService<Category>
+ * @extends MosaicService<Category>
  */
-class CategoryMosaicService extends AbstractMosaicService
+class CategoryMosaicService extends MosaicService
 {
     public function __construct(protected TrackerMosaicService $trackerMosaicService)
     {
@@ -21,8 +21,14 @@ class CategoryMosaicService extends AbstractMosaicService
     }
 
     /** @param Category $value */
-    protected function getRootCacheKey($value): string
+    protected static function getRootCacheKey($value): string
     {
         return 'mosaic.category.'.$value->id;
+    }
+
+    /** @param Category $value */
+    protected function getMaxDate($value): ?Carbon
+    {
+        return new Carbon(strval($value->dataPoints()->min('date')));
     }
 }

@@ -2,17 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\Tracker;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 
-class DayService
+class DayService extends Service
 {
-    public function getAverage(User $user): float
-    {
-        return $user->trackers->sum(fn (Tracker $tracker) => $tracker->getAverageScore());
-    }
-
     public function cleanEmptyDays(User $user): int
     {
         $date = $this->getStartDate($user);
@@ -49,7 +43,6 @@ class DayService
     {
         /** @var string $raw */
         $raw = $user->dataPoints()
-            ->where('date', '!=', Carbon::createFromTimestamp(0))
             ->min('date');
 
         return $raw ? Carbon::parse($raw) : Carbon::today();

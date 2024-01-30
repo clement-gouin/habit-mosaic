@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
 use App\Events\DataPointUpdated;
 use App\Models\DataPoint;
@@ -20,7 +20,7 @@ class DataPointServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[DataPointService::class];
+        $this->service = new DataPointService();
     }
 
     /** @test */

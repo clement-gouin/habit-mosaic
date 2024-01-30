@@ -1,46 +1,57 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$value of method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\<App\\\\Models\\\\User\\>\\:\\:getMosaicData\\(\\) expects App\\\\Models\\\\User, App\\\\Models\\\\User\\|null given\\.$#"
-			count: 1
-			path: app/Http/Controllers/Api/MosaicDataController.php
-
-		-
-			message: "#^Parameter \\#2 \\$values of method Symfony\\\\Component\\\\HttpFoundation\\\\ResponseHeaderBag\\:\\:set\\(\\) expects array\\<string\\>\\|string\\|null, mixed given\\.$#"
+			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
 			count: 1
 			path: app/Http/Middleware/VersionMiddleware.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
-			count: 1
-			path: app/Http/Resources/CategoryFullResource.php
-
-		-
-			message: "#^Parameter \\#1 \\$string of function ucfirst expects string, mixed given\\.$#"
+			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
 			count: 1
 			path: app/Mail/ErrorNotification.php
 
 		-
-			message: "#^Method App\\\\Services\\\\DayService\\:\\:getAverage\\(\\) should return float but returns mixed\\.$#"
+			message: "#^Parameter \\$max of class App\\\\Objects\\\\Statistics constructor expects float, mixed given\\.$#"
 			count: 1
-			path: app/Services/DayService.php
+			path: app/Objects/Statistics.php
 
 		-
-			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:sum\\(\\) expects \\(callable\\(mixed\\)\\: mixed\\)\\|string\\|null, Closure\\(App\\\\Models\\\\Tracker\\)\\: float given\\.$#"
+			message: "#^Parameter \\$min of class App\\\\Objects\\\\Statistics constructor expects float, mixed given\\.$#"
 			count: 1
-			path: app/Services/DayService.php
+			path: app/Objects/Statistics.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\:\\:getCollectionWeekData\\(\\) should return array\\<int, float\\|null\\> but returns array\\<int, mixed\\>\\.$#"
+			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
 			count: 1
-			path: app/Services/Mosaic/AbstractMosaicService.php
+			path: app/Services/Mosaic/CategoryMosaicService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Mosaic\\\\AbstractMosaicService\\:\\:getMosaicData\\(\\) should return array\\<int, float\\|null\\> but returns array\\.$#"
+			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
 			count: 1
-			path: app/Services/Mosaic/AbstractMosaicService.php
+			path: app/Services/Mosaic/DayMosaicService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\MosaicService\\:\\:getAllMosaicData\\(\\) should return array\\<int, float\\|null\\> but returns array\\.$#"
+			count: 1
+			path: app/Services/Mosaic/MosaicService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\MosaicService\\:\\:getCollectionWeekData\\(\\) should return array\\<int, float\\|null\\> but returns array\\<int, mixed\\>\\.$#"
+			count: 1
+			path: app/Services/Mosaic/MosaicService.php
+
+		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\MosaicService\\:\\:getMosaicData\\(\\) should return array\\<int, float\\|null\\> but returns array\\.$#"
+			count: 1
+			path: app/Services/Mosaic/MosaicService.php
+
+		-
+			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			count: 1
+			path: app/Services/Mosaic/TrackerMosaicService.php
 
 		-
 			message: "#^Parameter \\#1 \\$callback of method Illuminate\\\\Support\\\\Collection\\<\\(int\\|string\\),mixed\\>\\:\\:map\\(\\) expects callable\\(mixed, int\\|string\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource, Closure\\(App\\\\Models\\\\Tracker\\)\\: App\\\\Http\\\\Resources\\\\DataPointResource given\\.$#"
 			count: 1
 			path: app/Services/TableService.php
+

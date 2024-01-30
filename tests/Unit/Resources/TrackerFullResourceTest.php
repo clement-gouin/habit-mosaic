@@ -1,10 +1,12 @@
 <?php
 
-namespace Tests\Feature\Resources;
+namespace Tests\Unit\Resources;
 
+use App\Http\Resources\StatisticsResource;
 use App\Http\Resources\TrackerFullResource;
 use App\Models\DataPoint;
 use App\Models\Tracker;
+use App\Services\Mosaic\TrackerMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
@@ -15,42 +17,18 @@ class TrackerFullResourceTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function it_makes_empty_average(): void
+    public function it_makes_statistics(): void
     {
         $tracker = Tracker::factory()->create();
+
+        $this->mockMosaicServiceStatistics(TrackerMosaicService::class, $tracker);
 
         $resource = TrackerFullResource::make($tracker);
 
         $data = $resource->toArray(Request::create(''));
 
         $this->assertEquals($tracker->id, $data['id']);
-        $this->assertEquals(0, $data['average']);
-
-        $this->assertDatabaseHas('data_points', [
-            'tracker_id' => $tracker->id,
-            'date' => Carbon::createFromTimestamp(0),
-            'value' => 0,
-        ]);
-    }
-
-    /** @test */
-    public function it_returns_average(): void
-    {
-        $tracker = Tracker::factory()->create();
-
-        $tracker->dataPoints()->save(
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 1.5,
-            ])
-        );
-
-        $resource = TrackerFullResource::make($tracker);
-
-        $data = $resource->toArray(Request::create(''));
-
-        $this->assertEquals($tracker->id, $data['id']);
-        $this->assertEquals(1.5, $data['average']);
+        $this->assertInstanceOf(StatisticsResource::class, $data['statistics']);
     }
 
     /** @test */
@@ -59,6 +37,8 @@ class TrackerFullResourceTest extends TestCase
         $date = (new Carbon(fake()->dateTimeBetween('-10 days')))->startOfDay();
 
         $tracker = Tracker::factory()->create();
+
+        $this->mockMosaicServiceStatistics(TrackerMosaicService::class, $tracker);
 
         $dataPoint = DataPoint::factory()->create([
             'tracker_id' => $tracker->id,
@@ -82,6 +62,8 @@ class TrackerFullResourceTest extends TestCase
 
         $tracker = Tracker::factory()->create();
 
+        $this->mockMosaicServiceStatistics(TrackerMosaicService::class, $tracker);
+
         $resource = TrackerFullResource::make($tracker->refresh());
 
         $request = Request::create('', parameters: ['date' => $date->format('Y-m-d')]);
@@ -103,6 +85,8 @@ class TrackerFullResourceTest extends TestCase
     {
         $tracker = Tracker::factory()->create();
 
+        $this->mockMosaicServiceStatistics(TrackerMosaicService::class, $tracker);
+
         $dataPoint = DataPoint::factory()->create([
             'tracker_id' => $tracker->id,
             'date' => Carbon::today(),
@@ -123,6 +107,8 @@ class TrackerFullResourceTest extends TestCase
     public function it_falls_back_to_todays_data_point_when_invalid_date(): void
     {
         $tracker = Tracker::factory()->create();
+
+        $this->mockMosaicServiceStatistics(TrackerMosaicService::class, $tracker);
 
         $dataPoint = DataPoint::factory()->create([
             'tracker_id' => $tracker->id,

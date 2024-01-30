@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Events\DataPointUpdated;
 use App\Models\DataPoint;
 
-class DataPointService
+class DataPointService extends Service
 {
     public function updateValue(DataPoint $dataPoint, float $value): void
     {

@@ -6,9 +6,9 @@ use App\Models\Tracker;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends AbstractMosaicService<Tracker>
+ * @extends MosaicService<Tracker>
  */
-class TrackerMosaicService extends AbstractMosaicService
+class TrackerMosaicService extends MosaicService
 {
     /** @param Tracker $value */
     protected function computeWeekData($value, Carbon $startDate): array
@@ -25,8 +25,14 @@ class TrackerMosaicService extends AbstractMosaicService
     }
 
     /** @param Tracker $value */
-    protected function getRootCacheKey($value): string
+    protected static function getRootCacheKey($value): string
     {
         return 'mosaic.tracker.'.$value->id;
+    }
+
+    /** @param Tracker $value */
+    protected function getMaxDate($value): ?Carbon
+    {
+        return new Carbon(strval($value->dataPoints()->min('date')));
     }
 }

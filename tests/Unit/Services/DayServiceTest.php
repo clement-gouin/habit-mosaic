@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
 use App\Models\DataPoint;
 use App\Models\Tracker;
@@ -20,37 +20,7 @@ class DayServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[DayService::class];
-    }
-
-    /** @test */
-    public function it_computes_average_no_data(): void
-    {
-        $user = User::factory()->create();
-
-        $this->assertEquals(0, $this->service->getAverage($user));
-    }
-
-    /** @test */
-    public function it_computes_average(): void
-    {
-        $user = User::factory()->create();
-
-        $tracker = Tracker::factory()->create([
-            'user_id' => $user->id,
-            'single' => false,
-            'target_value' => 2,
-            'target_score' => 1.5,
-        ]);
-
-        $tracker->dataPoints()->save(
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 2,
-            ])
-        );
-
-        $this->assertEquals(1.5, $this->service->getAverage($user));
+        $this->service = new DayService();
     }
 
     /** @test */
@@ -82,10 +52,6 @@ class DayServiceTest extends TestCase
                 'date' => Carbon::yesterday(),
                 'value' => 2,
             ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 0,
-            ]),
         ]);
 
         $this->assertEquals(0, $this->service->cleanEmptyDays($user));
@@ -98,11 +64,6 @@ class DayServiceTest extends TestCase
         $this->assertDatabaseHas('data_points', [
             'tracker_id' => $tracker->id,
             'date' => Carbon::yesterday(),
-        ]);
-
-        $this->assertDatabaseHas('data_points', [
-            'tracker_id' => $tracker->id,
-            'date' => Carbon::createFromTimestamp(0),
         ]);
     }
 
@@ -127,10 +88,6 @@ class DayServiceTest extends TestCase
                 'date' => Carbon::yesterday(),
                 'value' => 0,
             ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 0,
-            ]),
         ]);
 
         $this->assertEquals(1, $this->service->cleanEmptyDays($user));
@@ -143,11 +100,6 @@ class DayServiceTest extends TestCase
         $this->assertDatabaseMissing('data_points', [
             'tracker_id' => $tracker->id,
             'date' => Carbon::yesterday(),
-        ]);
-
-        $this->assertDatabaseHas('data_points', [
-            'tracker_id' => $tracker->id,
-            'date' => Carbon::createFromTimestamp(0),
         ]);
     }
 }

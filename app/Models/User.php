@@ -27,9 +27,9 @@ use Illuminate\Support\Collection;
  * @property Carbon|null $updated_at
  * @property-read DatabaseNotificationCollection<int, DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read Collection|UserToken[] $tokens
- * @property-read Collection|Tracker[] $trackers
- * @property-read Collection|Tracker[] $categories
+ * @property-read Collection<UserToken> $tokens
+ * @property-read Collection<Tracker> $trackers
+ * @property-read Collection<Tracker> $categories
  *
  * @method static UserFactory factory($count = null, $state = [])
  * @method static Builder|User newModelQuery()

@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends AbstractMosaicService<User>
+ * @extends MosaicService<User>
  */
-class DayMosaicService extends AbstractMosaicService
+class DayMosaicService extends MosaicService
 {
     public function __construct(protected TrackerMosaicService $trackerMosaicService)
     {
@@ -21,8 +21,14 @@ class DayMosaicService extends AbstractMosaicService
     }
 
     /** @param User $value */
-    protected function getRootCacheKey($value): string
+    protected static function getRootCacheKey($value): string
     {
         return 'mosaic.day.'.$value->id;
+    }
+
+    /** @param User $value */
+    protected function getMaxDate($value): ?Carbon
+    {
+        return new Carbon(strval($value->dataPoints()->min('date')));
     }
 }

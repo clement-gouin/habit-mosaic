@@ -2,7 +2,7 @@
     <div class="p-1 py-2 p-sm-2 p-md-4 user-select-none">
         <h1 class="border-bottom border-1 pb-2">
             Dashboard
-            <score-badge :reference="1" :value="average" />
+            <score-badge :reference="1" :value="statistics.average" />
         </h1>
         <mosaic class="w-100" style="height: 10em" :data="daysData" @change-resolution="fetchDayData" />
         <hr>
@@ -20,7 +20,7 @@
         </div>
         <h3 v-else-if="selectedTracker">
             <tracker-label :tracker="selectedTracker" />
-            <score-badge title="average value | score" :value="selectedTracker.average" :reference="selectedTracker.target_value" :precision="precision(selectedTracker.value_step)" :additional-value="selectedTrackerAverage" />
+            <score-badge title="average value | score" :value="selectedTrackerAverage" :reference="selectedTracker.target_value" :precision="precision(selectedTracker.value_step)" :additional-value="selectedTracker.statistics?.average" />
             <span class="fs-6 ms-2 text-dark-emphasis btn" title="edit" @click="editSelectedTracker = true"><i class="fa-solid fa-pencil"></i></span>
         </h3>
         <mosaic class="w-100" style="height: 10em" :tracker="selectedTracker" :data="selectedTrackerData" @change-resolution="fetchSelectedTrackerData" />
@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { CategoryFull, TrackerFull } from '@interfaces';
+import { CategoryFull, Statistics, TrackerFull } from '@interfaces';
 import Mosaic from './Mosaic.vue';
 import { computed, inject, onMounted, ref, watch } from 'vue';
 import { getDayMosaicData, getTrackerMosaicData } from '@requests/mosaic';
@@ -40,7 +40,7 @@ import ScoreBadge from '@tools/ScoreBadge.vue';
 import { precision } from '@utils/numbers';
 
 interface Props {
-    average: number
+    statistics: Statistics
     categories: CategoryFull[],
     trackers: TrackerFull[],
 }
@@ -55,7 +55,7 @@ const daysData = ref<(number|null)[]>([]);
 const selectedTrackerData = ref<(number|null)[]>([]);
 const selectedTrackerDays = ref<number>(0);
 
-const selectedTrackerAverage = computed<number>(() => (selectedTracker.value ? selectedTracker.value.average * selectedTracker.value.target_score / selectedTracker.value.target_value : 0));
+const selectedTrackerAverage = computed<number>(() => (selectedTracker.value ? selectedTracker.value.target_value * selectedTracker.value.statistics.average / selectedTracker.value.target_score : 0));
 
 function fetchDayData (days: number) {
     getDayMosaicData(days)
