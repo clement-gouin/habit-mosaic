@@ -17,7 +17,7 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected array $mockInstances = [];
+    private array $mockInstances = [];
 
     protected function setUp(): void
     {
@@ -88,8 +88,13 @@ abstract class TestCase extends BaseTestCase
     {
         $this->getMock($className)
             ->expects('getStatistics')
-            ->with($value ? Mockery::on(fn (Model $arg) => $arg->getAttribute('id') === $value->getAttribute('id')) : Mockery::any())
+            ->with($value ? self::modelArg($value) : Mockery::any())
             ->andReturn($statistics ?? Statistics::fromDataCollection(collect()))
             ->times($times);
+    }
+
+    protected static function modelArg(Model $value): Mockery\Matcher\Closure
+    {
+        return Mockery::on(fn (Model $arg) => $arg->getAttribute('id') === $value->getAttribute('id'));
     }
 }

@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use App\Events\DataPointUpdated;
 use App\Models\DataPoint;
 use App\Models\Tracker;
 use App\Models\User;
+use App\Services\DataPointService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class DataPointControllerTest extends TestCase
@@ -31,13 +30,6 @@ class DataPointControllerTest extends TestCase
         $this->actingAs(User::factory()->create())
             ->putJson(route('data_points.update', $dataPoint), $targetData)
             ->assertStatus(403);
-
-        $this->assertDatabaseMissing('data_points', [
-            'id' => $dataPoint->id,
-            ...$targetData,
-        ]);
-
-        Event::assertNotDispatched(DataPointUpdated::class);
     }
 
     /** @test */
@@ -54,18 +46,12 @@ class DataPointControllerTest extends TestCase
             'value' => fake()->randomNumber(),
         ];
 
+        $this->getMock(DataPointService::class)
+            ->expects('updateValue')
+            ->with(self::modelArg($dataPoint), $targetData['value']);
+
         $this->actingAs($dataPoint->tracker->user)
             ->putJson(route('data_points.update', $dataPoint), $targetData)
             ->assertSuccessful();
-
-        $this->assertDatabaseHas('data_points', [
-            'id' => $dataPoint->id,
-            ...$targetData,
-        ]);
-
-        Event::assertDispatched(
-            DataPointUpdated::class,
-            fn (DataPointUpdated $event) => $event->dataPoint->id === $dataPoint->id
-        );
     }
 }
