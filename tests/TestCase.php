@@ -4,6 +4,7 @@ namespace Tests;
 
 use App\Objects\Statistics;
 use App\Services\Mosaic\MosaicService;
+use Carbon\Carbon;
 use Event;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Database\Eloquent\Model;
@@ -95,6 +96,11 @@ abstract class TestCase extends BaseTestCase
 
     protected static function modelArg(Model $value): Mockery\Matcher\Closure
     {
-        return Mockery::on(fn (Model $arg) => $arg->getAttribute('id') === $value->getAttribute('id'));
+        return Mockery::on(fn (mixed $arg) => $arg instanceof Model && $arg->getAttribute('id') === $value->getAttribute('id'));
+    }
+
+    protected static function dateArg(Carbon $value): Mockery\Matcher\Closure
+    {
+        return Mockery::on(fn (mixed $arg) => $value->eq($arg));
     }
 }

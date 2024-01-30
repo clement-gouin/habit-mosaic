@@ -2,8 +2,9 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use App\Models\Tracker;
 use App\Models\User;
+use App\Services\Mosaic\DayMosaicService;
+use App\Services\TableService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
@@ -15,19 +16,17 @@ class TableDataControllerTest extends TestCase
     /** @test */
     public function it_shows_current_month_data(): void
     {
-        $tracker = Tracker::factory()->create();
+        $user = User::factory()->create();
 
-        $result = $this->actingAs($tracker->user)
+        $this->getMock(TableService::class)
+            ->expects('getTableData')
+            ->with(self::modelArg($user), self::dateArg(Carbon::today()), 31);
+
+        $this->mockMosaicServiceStatistics(DayMosaicService::class, $user);
+
+        $this->actingAs($user)
             ->getJson(route('table.data'))
-            ->assertSuccessful()
-            ->assertJsonCount(31, 'data')
-            ->json('data');
-
-        $minDate = Carbon::today()->format('Y-m-d');
-        $this->assertArrayHasKey($minDate, $result);
-
-        $maxDate = Carbon::today()->subDays(30)->format('Y-m-d');
-        $this->assertArrayHasKey($maxDate, $result);
+            ->assertSuccessful();
     }
 
     /** @test */
@@ -38,16 +37,14 @@ class TableDataControllerTest extends TestCase
         $date = new Carbon(fake()->date);
         $span = fake()->randomNumber(nbDigits: 2, strict: true) + 2;
 
-        $result = $this->actingAs($user)
+        $this->getMock(TableService::class)
+            ->expects('getTableData')
+            ->with(self::modelArg($user), self::dateArg($date), $span);
+
+        $this->mockMosaicServiceStatistics(DayMosaicService::class, $user);
+
+        $this->actingAs($user)
             ->getJson(route('table.data', ['date' => $date->format('Y-m-d'), 'days' => $span]))
-            ->assertSuccessful()
-            ->assertJsonCount($span, 'data')
-            ->json('data');
-
-        $minDate = $date->format('Y-m-d');
-        $this->assertArrayHasKey($minDate, $result);
-
-        $maxDate = $date->subDays($span - 1)->format('Y-m-d');
-        $this->assertArrayHasKey($maxDate, $result);
+            ->assertSuccessful();
     }
 }

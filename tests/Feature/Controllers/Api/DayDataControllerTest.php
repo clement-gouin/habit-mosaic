@@ -47,9 +47,11 @@ class DayDataControllerTest extends TestCase
     {
         $date = Carbon::today()->subDay();
 
-        $this->mockMosaicServiceStatistics(DayMosaicService::class);
+        $user = User::factory()->create();
 
-        $this->actingAs(User::factory()->create())
+        $this->mockMosaicServiceStatistics(DayMosaicService::class, $user);
+
+        $this->actingAs($user)
             ->getJson(route('day.data', ['date' => $date->toIso8601String()]))
             ->assertSuccessful()
             ->assertJsonFragment(['date' => $date->format('Y-m-d')]);
@@ -58,9 +60,11 @@ class DayDataControllerTest extends TestCase
     /** @test */
     public function it_shows_invalid_day_data_with_today_fallback(): void
     {
-        $this->mockMosaicServiceStatistics(DayMosaicService::class);
+        $user = User::factory()->create();
 
-        $this->actingAs(User::factory()->create())
+        $this->mockMosaicServiceStatistics(DayMosaicService::class, $user);
+
+        $this->actingAs($user)
             ->getJson(route('day.data', ['date' => 'invalid']))
             ->assertSuccessful()
             ->assertJsonFragment(['date' => Carbon::today()->format('Y-m-d')]);

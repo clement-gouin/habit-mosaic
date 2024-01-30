@@ -3,9 +3,11 @@
 namespace Tests\Feature\Controllers\Api;
 
 use App\Models\Category;
-use App\Models\DataPoint;
 use App\Models\Tracker;
-use Carbon\Carbon;
+use App\Models\User;
+use App\Services\Mosaic\CategoryMosaicService;
+use App\Services\Mosaic\DayMosaicService;
+use App\Services\Mosaic\TrackerMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -16,22 +18,12 @@ class MosaicDataControllerTest extends TestCase
     /** @test */
     public function it_shows_tracker_mosaic(): void
     {
-        $fakeToday = Carbon::today()->startOfWeek()->addDay();
+        $tracker = Tracker::factory()->create();
 
-        Carbon::setTestNow($fakeToday);
-
-        $tracker = Tracker::factory()->create([
-            'value_step' => 1,
-            'target_value' => 1,
-            'single' => true,
-            'target_score' => 1,
-        ]);
-
-        $dataPoint = DataPoint::factory()->create([
-            'tracker_id' => $tracker->id,
-            'date' => $fakeToday,
-            'value' => 1,
-        ]);
+        $this->getMock(TrackerMosaicService::class)
+            ->expects('getMosaicData')
+            ->with(self::modelArg($tracker), 7)
+            ->andReturn([null, null, null, null, null, 1.0, 0.0]);
 
         $this->actingAs($tracker->user)
             ->getJson(route('mosaic.tracker', [$tracker->id, 'days' => 7]))
@@ -42,25 +34,12 @@ class MosaicDataControllerTest extends TestCase
     /** @test */
     public function it_shows_category_mosaic(): void
     {
-        $fakeToday = Carbon::today()->startOfWeek()->addDay();
-
-        Carbon::setTestNow($fakeToday);
-
         $category = Category::factory()->create();
 
-        $tracker = Tracker::factory()->create([
-            'category_id' => $category->id,
-            'value_step' => 1,
-            'target_value' => 1,
-            'single' => true,
-            'target_score' => 1,
-        ]);
-
-        $dataPoint = DataPoint::factory()->create([
-            'tracker_id' => $tracker->id,
-            'date' => $fakeToday,
-            'value' => 1,
-        ]);
+        $this->getMock(CategoryMosaicService::class)
+            ->expects('getMosaicData')
+            ->with(self::modelArg($category), 7)
+            ->andReturn([null, null, null, null, null, 1.0, 0.0]);
 
         $this->actingAs($category->user)
             ->getJson(route('mosaic.category', [$category->id, 'days' => 7]))
@@ -71,24 +50,14 @@ class MosaicDataControllerTest extends TestCase
     /** @test */
     public function it_shows_day_mosaic(): void
     {
-        $fakeToday = Carbon::today()->startOfWeek()->addDay();
+        $user = User::factory()->create();
 
-        Carbon::setTestNow($fakeToday);
+        $this->getMock(DayMosaicService::class)
+            ->expects('getMosaicData')
+            ->with(self::modelArg($user), 7)
+            ->andReturn([null, null, null, null, null, 1.0, 0.0]);
 
-        $tracker = Tracker::factory()->create([
-            'value_step' => 1,
-            'target_value' => 1,
-            'single' => true,
-            'target_score' => 1,
-        ]);
-
-        $dataPoint = DataPoint::factory()->create([
-            'tracker_id' => $tracker->id,
-            'date' => $fakeToday,
-            'value' => 1,
-        ]);
-
-        $this->actingAs($tracker->user)
+        $this->actingAs($user)
             ->getJson(route('mosaic.day', ['days' => 7]))
             ->assertSuccessful()
             ->assertJson([null, null, null, null, null, 1.0, 0.0]);
