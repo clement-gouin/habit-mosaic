@@ -32,7 +32,7 @@ class DayViewControllerTest extends TestCase
             ->assertSuccessful()
             ->assertViewIs('day_view')
             ->assertViewHas('date', Carbon::today()->format('Y-m-d'))
-            ->assertViewHas('average')
+            ->assertViewHas('statistics')
             ->assertViewHas('categories')
             ->assertViewHas('trackers');
     }

@@ -3,20 +3,36 @@
 namespace Tests\Feature\Resources;
 
 use App\Http\Resources\CategoryFullResource;
+use App\Http\Resources\StatisticsResource;
 use App\Models\Category;
-use App\Models\DataPoint;
-use App\Models\Tracker;
+use App\Objects\Statistics;
+use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class CategoryFullResourceTest extends TestCase
 {
     use DatabaseMigrations;
 
+    protected CategoryMosaicService $mosaicServiceMock;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var CategoryMosaicService|MockInterface $mock */
+        $this->mosaicServiceMock = $this->mock(CategoryMosaicService::class);
+
+        $this->mosaicServiceMock->expects('getStatistics')
+            ->andReturn(Statistics::fromDataCollection(collect()));
+
+        $this->app->instance(CategoryMosaicService::class, $this->mosaicServiceMock);
+    }
+
     /** @test */
-    public function it_shows_average_without_data(): void
+    public function it_makes_statistics(): void
     {
         $category = Category::factory()->create();
 
@@ -25,49 +41,6 @@ class CategoryFullResourceTest extends TestCase
         $data = $resource->toArray(Request::create(''));
 
         $this->assertEquals($category->id, $data['id']);
-        $this->assertEquals(0, $data['average']);
-    }
-
-    /** @test */
-    public function it_shows_average_with_data(): void
-    {
-        $category = Category::factory()->create();
-
-        $tracker1 = Tracker::factory()->create([
-            'target_value' => 1,
-            'target_score' => 1,
-            'overflow' => true,
-            'single' => false,
-        ]);
-
-        $tracker1->dataPoints()->save(
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 1,
-            ])
-        );
-
-        $tracker2 = Tracker::factory()->create([
-            'target_value' => 1,
-            'target_score' => 2,
-            'overflow' => true,
-            'single' => false,
-        ]);
-
-        $tracker2->dataPoints()->save(
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 0.5,
-            ])
-        );
-
-        $category->trackers()->saveMany([$tracker1->refresh(), $tracker2->refresh()]);
-
-        $resource = CategoryFullResource::make($category->refresh());
-
-        $data = $resource->toArray(Request::create(''));
-
-        $this->assertEquals($category->id, $data['id']);
-        $this->assertEquals(2, $data['average']);
+        $this->assertInstanceOf(StatisticsResource::class, $data['statistics']);
     }
 }

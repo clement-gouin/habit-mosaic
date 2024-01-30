@@ -30,7 +30,7 @@ class DashboardControllerTest extends TestCase
             ->getJson(route('dashboard'))
             ->assertSuccessful()
             ->assertViewIs('dashboard')
-            ->assertViewHas('average')
+            ->assertViewHas('statistics')
             ->assertViewHas('categories')
             ->assertViewHas('trackers');
     }

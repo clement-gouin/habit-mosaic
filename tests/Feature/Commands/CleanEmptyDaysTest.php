@@ -35,10 +35,6 @@ class CleanEmptyDaysTest extends TestCase
                 'date' => Carbon::yesterday(),
                 'value' => 0,
             ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 0,
-            ]),
         ]);
 
         $this->artisan(CleanEmptyDays::class);
@@ -51,11 +47,6 @@ class CleanEmptyDaysTest extends TestCase
         $this->assertDatabaseMissing('data_points', [
             'tracker_id' => $tracker->id,
             'date' => Carbon::yesterday(),
-        ]);
-
-        $this->assertDatabaseHas('data_points', [
-            'tracker_id' => $tracker->id,
-            'date' => Carbon::createFromTimestamp(0),
         ]);
     }
 }

@@ -33,7 +33,7 @@ class TableViewControllerTest extends TestCase
             ->assertViewIs('table_view')
             ->assertViewHas('date', Carbon::today()->format('Y-m-d'))
             ->assertViewHas('days', 31)
-            ->assertViewHas('average')
+            ->assertViewHas('statistics')
             ->assertViewHas('categories')
             ->assertViewHas('trackers')
             ->assertViewHas('data');

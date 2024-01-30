@@ -4,7 +4,6 @@ namespace Tests\Feature\Services;
 
 use App\Http\Resources\DataPointResource;
 use App\Models\Category;
-use App\Models\DataPoint;
 use App\Models\Tracker;
 use App\Models\User;
 use App\Services\TableService;
@@ -43,13 +42,6 @@ class TableServiceTest extends TestCase
             'target_value' => 2,
             'target_score' => 1.5,
         ]);
-
-        $tracker->dataPoints()->save(
-            DataPoint::factory()->make([
-                'date' => Carbon::createFromTimestamp(0),
-                'value' => 2,
-            ])
-        );
 
         $result = $this->service->getTableData($user, Carbon::today(), $span);
 

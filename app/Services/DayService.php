@@ -43,7 +43,6 @@ class DayService
     {
         /** @var string $raw */
         $raw = $user->dataPoints()
-            ->where('date', '!=', Carbon::createFromTimestamp(0))
             ->min('date');
 
         return $raw ? Carbon::parse($raw) : Carbon::today();
