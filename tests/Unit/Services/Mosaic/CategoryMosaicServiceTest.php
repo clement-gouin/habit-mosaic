@@ -2,50 +2,37 @@
 
 namespace Tests\Unit\Services\Mosaic;
 
-use Tests\TestCase;
-use App\Models\Tracker;
 use App\Models\Category;
-use App\Models\DataPoint;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
-use App\Services\Mosaic\TrackerMosaicService;
+use App\Models\Tracker;
 use App\Services\Mosaic\CategoryMosaicService;
+use App\Services\Mosaic\MosaicService;
+use App\Services\Mosaic\TrackerMosaicService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
-class CategoryMosaicServiceTest extends TestCase
+class CategoryMosaicServiceTest extends MosaicServiceTestCase
 {
     use DatabaseMigrations;
 
-    protected CategoryMosaicService $service;
-
-    protected function setUp(): void
+    public function makeService(): MosaicService
     {
-        parent::setUp();
-
-        $this->service = new CategoryMosaicService($this->getMock(TrackerMosaicService::class));
-
-        $fakeToday = Carbon::today()->startOfWeek()->addDay();
-
-        Carbon::setTestNow($fakeToday);
+        return new CategoryMosaicService(new TrackerMosaicService());
     }
 
-    /** @test */
-    public function it_gets_mosaic_data_empty(): void
+    public function createTarget(): Model
     {
-        $category = Category::factory()->create();
-
-        $data = $this->service->getMosaicData($category, 7);
-
-        $this->assertEquals([null, null, null, null, null, 0.0, 0.0], $data);
+        return Category::factory()->create();
     }
 
-    /** @test */
-    public function it_gets_mosaic_data_with_data(): void
+    public function getCacheRootKey(Model|Category $target): string
     {
-        $category = Category::factory()->create();
+        return 'mosaic.category.'.$target->id;
+    }
 
+    public function attachDataPointsToTarget(Model|Category $target, array $dataPoints): void
+    {
         $tracker = Tracker::factory()->create([
-            'category_id' => $category->id,
+            'category_id' => $target->id,
             'value_step' => 1,
             'target_value' => 1,
             'single' => true,
@@ -53,100 +40,6 @@ class CategoryMosaicServiceTest extends TestCase
             'overflow' => true,
         ]);
 
-        $tracker->dataPoints()->saveMany([
-            DataPoint::factory()->make([
-                'date' => Carbon::today(),
-                'value' => 1,
-            ]),
-            DataPoint::factory()->make([
-                'date' => Carbon::today()->subWeek(),
-                'value' => 2,
-            ]),
-        ]);
-
-        $data = $this->service->getMosaicData($category, 14);
-
-        $this->assertEquals(
-            [null, null, null, null, null, 1, 0, 0, 0, 0, 0, 0, 2, 0],
-            $data
-        );
-
-        $this->assertEquals(
-            Carbon::today()->startOfWeek()->subWeeks(2),
-            Cache::get('mosaic.category.'.$category->id.'.max')
-        );
-    }
-
-    /** @test */
-    public function it_gets_mosaic_data_with_data_with_cache(): void
-    {
-        $category = Category::factory()->create();
-
-        Cache::put('mosaic.category.'.$category->id.'.max', Carbon::today()->subWeeks(2));
-        $today = Carbon::today();
-        Cache::put(
-            'mosaic.category.'.$category->id.'.'.$today->year.'.'.$today->week,
-            [null, null, null, null, null, 1, 2]
-        );
-        $lastWeek = Carbon::today()->subWeek();
-        Cache::put(
-            'mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
-            [1, 2, 3, 4, 5, 6, 7]
-        );
-
-        $data = $this->service->getMosaicData($category, 14);
-
-        $this->assertEquals(
-            [null, null, null, null, null, 1, 2, 1, 2, 3, 4, 5, 6, 7],
-            $data
-        );
-    }
-
-    /** @test */
-    public function it_can_clear_data_for_week(): void
-    {
-        $category = Category::factory()->create();
-
-        $lastWeek = Carbon::today()->subWeek();
-        Cache::put(
-            'mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
-            [1, 2, 3, 4, 5, 6, 7]
-        );
-
-        $this->service->clearData($category, $lastWeek);
-
-        $this->assertFalse(
-            Cache::has('mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week)
-        );
-    }
-
-    /** @test */
-    public function it_wipe_data(): void
-    {
-        $category = Category::factory()->create();
-
-        Cache::put('mosaic.category.'.$category->id.'.max', Carbon::today()->subWeeks(2));
-        $today = Carbon::today();
-        Cache::put(
-            'mosaic.category.'.$category->id.'.'.$today->year.'.'.$today->week,
-            [null, null, null, null, null, 1, 2]
-        );
-        $lastWeek = Carbon::today()->subWeek();
-        Cache::put(
-            'mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week,
-            [1, 2, 3, 4, 5, 6, 7]
-        );
-
-        $this->service->wipeData($category);
-
-        $this->assertFalse(
-            Cache::has('mosaic.category.'.$category->id.'.max')
-        );
-        $this->assertFalse(
-            Cache::has('mosaic.category.'.$category->id.'.'.$today->year.'.'.$today->week)
-        );
-        $this->assertFalse(
-            Cache::has('mosaic.category.'.$category->id.'.'.$lastWeek->year.'.'.$lastWeek->week)
-        );
+        $tracker->dataPoints()->saveMany($dataPoints);
     }
 }

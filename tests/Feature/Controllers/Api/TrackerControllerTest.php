@@ -122,68 +122,6 @@ class TrackerControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_updates_tracker_removes_category(): void
-    {
-        $this->markTestSkipped('move ?');
-
-        $user = User::factory()->create();
-
-        $category = Category::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
-        $tracker = Tracker::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => $category->id,
-        ]);
-
-        $targetData = [
-            'category_id' => null,
-            ...$this->getTargetData(),
-        ];
-
-        $this->actingAs($tracker->user)
-            ->putJson(route('trackers.update', $tracker), $targetData)
-            ->assertSuccessful();
-
-        $this->assertDatabaseHas('trackers', [
-            'id' => $tracker->id,
-            ...$targetData,
-        ]);
-    }
-
-    /** @test */
-    public function it_updates_tracker_adds_category(): void
-    {
-        $this->markTestSkipped('move ?');
-
-        $user = User::factory()->create();
-
-        $category = Category::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
-        $tracker = Tracker::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => null,
-        ]);
-
-        $targetData = [
-            'category_id' => $category->id,
-            ...$this->getTargetData(),
-        ];
-
-        $this->actingAs($tracker->user)
-            ->putJson(route('trackers.update', $tracker), $targetData)
-            ->assertSuccessful();
-
-        $this->assertDatabaseHas('trackers', [
-            'id' => $tracker->id,
-            ...$targetData,
-        ]);
-    }
-
-    /** @test */
     public function it_cannot_update_tracker_with_other_user_category(): void
     {
         $user = User::factory()->create();
