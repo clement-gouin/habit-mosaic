@@ -5,6 +5,7 @@ namespace Tests\Feature\Controllers\Web;
 use App\Models\Category;
 use App\Models\Tracker;
 use App\Models\User;
+use App\Services\Mosaic\DayMosaicService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
@@ -17,6 +18,8 @@ class TableViewControllerTest extends TestCase
     public function it_shows_view(): void
     {
         $user = User::factory()->create();
+
+        $this->mockMosaicServiceStatistics(DayMosaicService::class, $user);
 
         $categories = Category::factory(3)->create([
             'user_id' => $user->id,
