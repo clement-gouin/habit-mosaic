@@ -40,6 +40,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function mockAllServices(): void
     {
+        ClassFinder::disablePSR4Vendors();
         $classes = ClassFinder::getClassesInNamespace('App\Services', ClassFinder::RECURSIVE_MODE);
 
         foreach ($classes as $class) {
