@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { addDays } from '@utils/dates';
+import { addDays, formatISODate } from '@utils/dates';
 import { Tracker } from '@interfaces';
 import { precision } from '@utils/numbers';
 
@@ -30,7 +30,7 @@ const selected = ref(0);
 const selectedDate = computed(() => addDays(Date.now(), -selected.value));
 
 function openSelectedDate () {
-    window.location.href = '/day?date=' + selectedDate.value.toISOString().split('T')[0];
+    window.location.href = '/day?date=' + formatISODate(selectedDate.value);
 }
 
 function draw (consumePointerDown = false) {
