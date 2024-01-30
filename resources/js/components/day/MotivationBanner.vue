@@ -23,16 +23,17 @@ interface Level {
     showDiff?: boolean
 }
 
-const LEVELS: Level[] = [
-    { minScore: 3, text: '🏆 Unbelievable !!!!', showDiff: true },
-    { minScore: 2, text: '🎖️ What a day !!!', showDiff: true },
-    { minScore: 1.5, text: '🏅 You crushed it !!', showDiff: true },
-    { minScore: 1, text: '🎉 You did it !', showDiff: true },
-    { minScore: 0.75, text: '🏃 Almost there...', showDiff: true },
-    { minScore: 0.001, text: '🚶 Good job !' },
+const levels = computed<Level[]>(() => [
+    { minScore: props.statistics.maximum, text: '🏆 Unbelievable !!!!', showDiff: true },
+    { minScore: props.statistics.upper_quartile * 0.5 + props.statistics.maximum * 0.5, text: '🎖️ What a day !!!', showDiff: true },
+    { minScore: props.statistics.upper_quartile, text: '🏅 You crushed it !!', showDiff: true },
+    { minScore: props.statistics.average, text: '🎉 You did it !', showDiff: true },
+    { minScore: props.statistics.average * 0.5 + props.statistics.lower_quartile * 0.5, text: '🏃 Almost there...', showDiff: true },
+    { minScore: props.statistics.lower_quartile, text: '🚶 Better than 25% of days' },
+    { minScore: props.statistics.lower_quartile * 0.5, text: '🚶 Good job !' },
     { minScore: 0, text: '🧍 Let\'s go' },
     { minScore: -Infinity, text: '🧎 You\'ll do better' }
-];
+]);
 
-const level = computed<Level>(() => LEVELS.filter(l => props.score >= l.minScore * props.statistics.average)[0]);
+const level = computed<Level>(() => levels.value.filter(l => props.score >= l.minScore)[0]);
 </script>

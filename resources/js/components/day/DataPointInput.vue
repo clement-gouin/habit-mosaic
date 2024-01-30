@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { DataPoint, TrackerFull } from '@interfaces';
-import { defineProps, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { mapToClassName } from '@utils/icons';
 import { darker, ratioColor } from '@utils/colors';
 import { precision } from '@utils/numbers';
