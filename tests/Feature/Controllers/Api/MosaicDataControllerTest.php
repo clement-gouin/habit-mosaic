@@ -18,7 +18,6 @@ class MosaicDataControllerTest extends TestCase
     {
         $fakeToday = Carbon::today()->startOfWeek()->addDay();
 
-        $this->freezeTime();
         Carbon::setTestNow($fakeToday);
 
         $tracker = Tracker::factory()->create([
@@ -45,7 +44,6 @@ class MosaicDataControllerTest extends TestCase
     {
         $fakeToday = Carbon::today()->startOfWeek()->addDay();
 
-        $this->freezeTime();
         Carbon::setTestNow($fakeToday);
 
         $category = Category::factory()->create();
@@ -75,7 +73,6 @@ class MosaicDataControllerTest extends TestCase
     {
         $fakeToday = Carbon::today()->startOfWeek()->addDay();
 
-        $this->freezeTime();
         Carbon::setTestNow($fakeToday);
 
         $tracker = Tracker::factory()->create([

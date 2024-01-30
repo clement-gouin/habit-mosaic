@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
-use App\Mail\NewTokenLink;
+use Tests\TestCase;
 use App\Models\User;
 use App\Models\UserToken;
-use App\Services\UserTokenService;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\Mail\NewTokenLink;
 use Illuminate\Support\Carbon;
+use App\Services\UserTokenService;
 use Illuminate\Support\Facades\Mail;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class UserTokenServiceTest extends TestCase
 {
@@ -21,11 +21,7 @@ class UserTokenServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[UserTokenService::class];
-
-        Mail::fake();
-
-        $this->freezeTime();
+        $this->service = new UserTokenService();
     }
 
     /** @test */

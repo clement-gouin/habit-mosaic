@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Feature\Resources;
+namespace Tests\Unit\Resources;
 
-use App\Http\Resources\StatisticsResource;
-use App\Http\Resources\TrackerFullResource;
-use App\Models\DataPoint;
+use Tests\TestCase;
 use App\Models\Tracker;
-use App\Services\Mosaic\TrackerMosaicService;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use App\Models\DataPoint;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Request;
-use Tests\TestCase;
+use App\Http\Resources\StatisticsResource;
+use App\Http\Resources\TrackerFullResource;
+use App\Services\Mosaic\TrackerMosaicService;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TrackerFullResourceTest extends TestCase
 {

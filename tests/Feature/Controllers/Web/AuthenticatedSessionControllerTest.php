@@ -21,11 +21,7 @@ class AuthenticatedSessionControllerTest extends TestCase
     {
         parent::setUp();
 
-        Mail::fake();
-
         Auth::logout();
-
-        $this->freezeTime();
     }
 
     /** @test */

@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Feature\Listeners;
+namespace Tests\Unit\Listeners;
 
+use Tests\TestCase;
+use App\Models\Category;
+use Mockery\MockInterface;
 use App\Events\CategoryUpdated;
 use App\Listeners\WipeCategoryMosaic;
-use App\Models\Category;
+use Illuminate\Support\Facades\Event;
 use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Event;
-use Mockery\MockInterface;
-use Tests\TestCase;
 
 class WipeCategoryMosaicTest extends TestCase
 {

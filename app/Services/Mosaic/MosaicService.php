@@ -2,6 +2,7 @@
 
 namespace App\Services\Mosaic;
 
+use App\Services\Service;
 use App\Objects\Statistics;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 /**
  * @template T
  */
-abstract class AbstractMosaicService
+abstract class MosaicService extends Service
 {
     /**
      * @param  T  $value

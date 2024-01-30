@@ -6,9 +6,9 @@ use App\Models\Category;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends AbstractMosaicService<Category>
+ * @extends MosaicService<Category>
  */
-class CategoryMosaicService extends AbstractMosaicService
+class CategoryMosaicService extends MosaicService
 {
     public function __construct(protected TrackerMosaicService $trackerMosaicService)
     {

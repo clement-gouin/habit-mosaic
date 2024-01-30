@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
-use App\Events\DataPointUpdated;
-use App\Models\DataPoint;
-use App\Models\Tracker;
-use App\Services\DataPointService;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
+use App\Models\Tracker;
+use App\Models\DataPoint;
+use App\Events\DataPointUpdated;
+use App\Services\DataPointService;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class DataPointServiceTest extends TestCase
 {
@@ -20,7 +20,7 @@ class DataPointServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[DataPointService::class];
+        $this->service = new DataPointService();
     }
 
     /** @test */

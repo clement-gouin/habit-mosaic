@@ -6,9 +6,9 @@ use App\Models\User;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends AbstractMosaicService<User>
+ * @extends MosaicService<User>
  */
-class DayMosaicService extends AbstractMosaicService
+class DayMosaicService extends MosaicService
 {
     public function __construct(protected TrackerMosaicService $trackerMosaicService)
     {

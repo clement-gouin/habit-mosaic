@@ -1,15 +1,16 @@
 <?php
 
-namespace Tests\Feature\Services\Mosaic;
+namespace Tests\Unit\Services\Mosaic;
 
+use Tests\TestCase;
+use App\Models\Tracker;
 use App\Models\Category;
 use App\Models\DataPoint;
-use App\Models\Tracker;
-use App\Services\Mosaic\CategoryMosaicService;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Tests\TestCase;
+use App\Services\Mosaic\TrackerMosaicService;
+use App\Services\Mosaic\CategoryMosaicService;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class CategoryMosaicServiceTest extends TestCase
 {
@@ -21,11 +22,10 @@ class CategoryMosaicServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[CategoryMosaicService::class];
+        $this->service = new CategoryMosaicService($this->getMock(TrackerMosaicService::class));
 
         $fakeToday = Carbon::today()->startOfWeek()->addDay();
 
-        $this->freezeTime();
         Carbon::setTestNow($fakeToday);
     }
 

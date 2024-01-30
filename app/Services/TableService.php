@@ -7,12 +7,8 @@ use App\Models\Tracker;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 
-class TableService
+class TableService extends Service
 {
-    public function __construct(protected DayService $dayService)
-    {
-    }
-
     public function getTableData(User $user, Carbon $endDate, int $days): array
     {
         $data = [];

@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
-use App\Events\CategoryUpdated;
-use App\Events\TrackerScoreUpdated;
-use App\Models\Category;
-use App\Models\Tracker;
-use App\Services\TrackerService;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
+use App\Models\Tracker;
+use App\Models\Category;
+use App\Events\CategoryUpdated;
+use App\Services\TrackerService;
+use App\Events\TrackerScoreUpdated;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TrackerServiceTest extends TestCase
 {
@@ -21,7 +21,7 @@ class TrackerServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[TrackerService::class];
+        $this->service = new TrackerService();
     }
 
     /** @test */

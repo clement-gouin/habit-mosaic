@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 
-class DayService
+class DayService extends Service
 {
     public function cleanEmptyDays(User $user): int
     {

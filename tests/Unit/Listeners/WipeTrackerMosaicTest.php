@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Feature\Listeners;
+namespace Tests\Unit\Listeners;
 
+use Tests\TestCase;
+use App\Models\Tracker;
+use Mockery\MockInterface;
 use App\Events\TrackerScoreUpdated;
 use App\Listeners\WipeTrackerMosaic;
-use App\Models\Tracker;
+use Illuminate\Support\Facades\Event;
 use App\Services\Mosaic\TrackerMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Event;
-use Mockery\MockInterface;
-use Tests\TestCase;
 
 class WipeTrackerMosaicTest extends TestCase
 {

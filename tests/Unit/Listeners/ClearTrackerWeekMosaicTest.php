@@ -1,22 +1,22 @@
 <?php
 
-namespace Tests\Feature\Listeners;
+namespace Tests\Unit\Listeners;
 
-use App\Events\DataPointUpdated;
-use App\Listeners\ClearTrackerWeekMosaic;
+use Mockery;
+use Carbon\Carbon;
+use Tests\TestCase;
+use App\Models\User;
+use App\Models\Tracker;
 use App\Models\Category;
 use App\Models\DataPoint;
-use App\Models\Tracker;
-use App\Models\User;
-use App\Services\Mosaic\CategoryMosaicService;
+use Mockery\MockInterface;
+use App\Events\DataPointUpdated;
+use Illuminate\Support\Facades\Event;
+use App\Listeners\ClearTrackerWeekMosaic;
 use App\Services\Mosaic\DayMosaicService;
 use App\Services\Mosaic\TrackerMosaicService;
-use Carbon\Carbon;
+use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Event;
-use Mockery;
-use Mockery\MockInterface;
-use Tests\TestCase;
 
 class ClearTrackerWeekMosaicTest extends TestCase
 {

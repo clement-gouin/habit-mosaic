@@ -6,9 +6,9 @@ use App\Models\Tracker;
 use Illuminate\Support\Carbon;
 
 /**
- * @extends AbstractMosaicService<Tracker>
+ * @extends MosaicService<Tracker>
  */
-class TrackerMosaicService extends AbstractMosaicService
+class TrackerMosaicService extends MosaicService
 {
     /** @param Tracker $value */
     protected function computeWeekData($value, Carbon $startDate): array

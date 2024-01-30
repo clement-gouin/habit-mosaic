@@ -3,14 +3,21 @@
 namespace Tests;
 
 use App\Objects\Statistics;
+use App\Services\Mosaic\MosaicService;
 use Event;
+use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
 use Mockery;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    protected array $mockInstances = [];
 
     protected function setUp(): void
     {
@@ -18,7 +25,25 @@ abstract class TestCase extends BaseTestCase
 
         $this->withoutVite();
 
+        $this->freezeTime();
+
         Event::fake();
+        Mail::fake();
+        Queue::fake();
+        Storage::fake();
+
+        $this->mockInstances = [];
+
+        $this->mockAllServices();
+    }
+
+    protected function mockAllServices(): void
+    {
+        $classes = ClassFinder::getClassesInNamespace('App\Services', ClassFinder::RECURSIVE_MODE);
+
+        foreach ($classes as $class) {
+            $this->getMock($class);
+        }
     }
 
     protected static function invokeMethod(mixed $object, string $name, mixed ...$args): mixed
@@ -39,15 +64,32 @@ abstract class TestCase extends BaseTestCase
         return $method->invokeArgs(null, $args);
     }
 
+    /**
+     * @template T
+     *
+     * @param  class-string<T>  $className
+     * @return T|Mockery\MockInterface
+     */
+    protected function getMock(string $className): Mockery\MockInterface
+    {
+        if (! isset($this->mockInstances[$className])) {
+            $this->mockInstances[$className] = $this->mock($className);
+
+            $this->app->instance($className, $this->mockInstances[$className]);
+        }
+
+        return $this->mockInstances[$className];
+    }
+
+    /**
+     * @param  class-string<MosaicService>  $className
+     */
     protected function mockMosaicServiceStatistics(string $className, ?Model $value = null, ?Statistics $statistics = null, int $times = 1): void
     {
-        $mosaicServiceMock = $this->mock($className);
-
-        $mosaicServiceMock->expects('getStatistics')
+        $this->getMock($className)
+            ->expects('getStatistics')
             ->with($value ? Mockery::on(fn (Model $arg) => $arg->getAttribute('id') === $value->getAttribute('id')) : Mockery::any())
             ->andReturn($statistics ?? Statistics::fromDataCollection(collect()))
             ->times($times);
-
-        $this->app->instance($className, $mosaicServiceMock);
     }
 }

@@ -6,7 +6,7 @@ use App\Events\CategoryUpdated;
 use App\Events\TrackerScoreUpdated;
 use App\Models\Tracker;
 
-class TrackerService
+class TrackerService extends Service
 {
     public function update(Tracker $tracker, array $attributes): void
     {

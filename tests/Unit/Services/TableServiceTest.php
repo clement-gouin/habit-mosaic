@@ -1,15 +1,15 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
-use App\Http\Resources\DataPointResource;
-use App\Models\Category;
-use App\Models\Tracker;
-use App\Models\User;
-use App\Services\TableService;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Carbon;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Tracker;
+use App\Models\Category;
+use Illuminate\Support\Carbon;
+use App\Services\TableService;
+use App\Http\Resources\DataPointResource;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class TableServiceTest extends TestCase
 {
@@ -21,7 +21,7 @@ class TableServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[TableService::class];
+        $this->service = new TableService();
     }
 
     /** @test */

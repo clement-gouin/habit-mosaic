@@ -1,17 +1,17 @@
 <?php
 
-namespace Tests\Feature\Listeners;
+namespace Tests\Unit\Listeners;
 
-use App\Events\CategoryUpdated;
-use App\Events\TrackerScoreUpdated;
-use App\Listeners\WipeDayMosaic;
-use App\Models\Category;
+use Tests\TestCase;
 use App\Models\Tracker;
+use App\Models\Category;
+use Mockery\MockInterface;
+use App\Events\CategoryUpdated;
+use App\Listeners\WipeDayMosaic;
+use App\Events\TrackerScoreUpdated;
+use Illuminate\Support\Facades\Event;
 use App\Services\Mosaic\DayMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Facades\Event;
-use Mockery\MockInterface;
-use Tests\TestCase;
 
 class WipeDayMosaicTest extends TestCase
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Tests\Feature\Services;
+namespace Tests\Unit\Services;
 
-use App\Models\DataPoint;
-use App\Models\Tracker;
-use App\Models\User;
-use App\Services\DayService;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Support\Carbon;
 use Tests\TestCase;
+use App\Models\User;
+use App\Models\Tracker;
+use App\Models\DataPoint;
+use App\Services\DayService;
+use Illuminate\Support\Carbon;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class DayServiceTest extends TestCase
 {
@@ -20,7 +20,7 @@ class DayServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = $this->app[DayService::class];
+        $this->service = new DayService();
     }
 
     /** @test */
