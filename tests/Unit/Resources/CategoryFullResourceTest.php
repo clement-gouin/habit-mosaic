@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\Resources;
 
-use Tests\TestCase;
-use App\Models\Category;
-use Illuminate\Support\Facades\Request;
-use App\Http\Resources\StatisticsResource;
 use App\Http\Resources\CategoryFullResource;
+use App\Http\Resources\StatisticsResource;
+use App\Models\Category;
 use App\Services\Mosaic\CategoryMosaicService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Request;
+use Tests\TestCase;
 
 class CategoryFullResourceTest extends TestCase
 {

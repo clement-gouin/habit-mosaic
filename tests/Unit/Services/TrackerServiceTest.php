@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
-use App\Models\Tracker;
-use App\Models\Category;
 use App\Events\CategoryUpdated;
-use App\Services\TrackerService;
 use App\Events\TrackerScoreUpdated;
-use Illuminate\Support\Facades\Event;
+use App\Models\Category;
+use App\Models\Tracker;
+use App\Services\TrackerService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
+use Tests\TestCase;
 
 class TrackerServiceTest extends TestCase
 {

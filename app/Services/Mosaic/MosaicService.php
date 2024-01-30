@@ -2,8 +2,8 @@
 
 namespace App\Services\Mosaic;
 
-use App\Services\Service;
 use App\Objects\Statistics;
+use App\Services\Service;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;

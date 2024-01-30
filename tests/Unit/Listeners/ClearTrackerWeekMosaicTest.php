@@ -2,21 +2,21 @@
 
 namespace Tests\Unit\Listeners;
 
-use Mockery;
-use Carbon\Carbon;
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
+use App\Events\DataPointUpdated;
+use App\Listeners\ClearTrackerWeekMosaic;
 use App\Models\Category;
 use App\Models\DataPoint;
-use Mockery\MockInterface;
-use App\Events\DataPointUpdated;
-use Illuminate\Support\Facades\Event;
-use App\Listeners\ClearTrackerWeekMosaic;
+use App\Models\Tracker;
+use App\Models\User;
+use App\Services\Mosaic\CategoryMosaicService;
 use App\Services\Mosaic\DayMosaicService;
 use App\Services\Mosaic\TrackerMosaicService;
-use App\Services\Mosaic\CategoryMosaicService;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
+use Mockery;
+use Mockery\MockInterface;
+use Tests\TestCase;
 
 class ClearTrackerWeekMosaicTest extends TestCase
 {

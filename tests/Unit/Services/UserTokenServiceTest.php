@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
+use App\Mail\NewTokenLink;
 use App\Models\User;
 use App\Models\UserToken;
-use App\Mail\NewTokenLink;
-use Illuminate\Support\Carbon;
 use App\Services\UserTokenService;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
+use Tests\TestCase;
 
 class UserTokenServiceTest extends TestCase
 {

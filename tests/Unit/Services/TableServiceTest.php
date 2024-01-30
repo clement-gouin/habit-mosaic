@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Tracker;
-use App\Models\Category;
-use Illuminate\Support\Carbon;
-use App\Services\TableService;
 use App\Http\Resources\DataPointResource;
+use App\Models\Category;
+use App\Models\Tracker;
+use App\Models\User;
+use App\Services\TableService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
+use Tests\TestCase;
 
 class TableServiceTest extends TestCase
 {
