@@ -21,7 +21,18 @@ class CategoryMosaicServiceTest extends MosaicServiceTestCase
 
     public function createTarget(): Model
     {
-        return Category::factory()->create();
+        $category = Category::factory()->create();
+
+        Tracker::factory()->create([
+            'category_id' => $category->id,
+            'value_step' => 1,
+            'target_value' => 1,
+            'single' => true,
+            'target_score' => 1,
+            'overflow' => true,
+        ]);
+
+        return $category;
     }
 
     public function getCacheRootKey(Model|Category $target): string
@@ -31,14 +42,8 @@ class CategoryMosaicServiceTest extends MosaicServiceTestCase
 
     public function attachDataPointsToTarget(Model|Category $target, array $dataPoints): void
     {
-        $tracker = Tracker::factory()->create([
-            'category_id' => $target->id,
-            'value_step' => 1,
-            'target_value' => 1,
-            'single' => true,
-            'target_score' => 1,
-            'overflow' => true,
-        ]);
+        /** @var Tracker $tracker */
+        $tracker = $target->trackers()->first();
 
         $tracker->dataPoints()->saveMany($dataPoints);
     }

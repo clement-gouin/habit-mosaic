@@ -21,7 +21,18 @@ class DayMosaicServiceTest extends MosaicServiceTestCase
 
     public function createTarget(): Model
     {
-        return User::factory()->create();
+        $user = User::factory()->create();
+
+        Tracker::factory()->create([
+            'user_id' => $user->id,
+            'value_step' => 1,
+            'target_value' => 1,
+            'single' => true,
+            'target_score' => 1,
+            'overflow' => true,
+        ]);
+
+        return $user;
     }
 
     public function getCacheRootKey(Model|User $target): string
@@ -31,14 +42,8 @@ class DayMosaicServiceTest extends MosaicServiceTestCase
 
     public function attachDataPointsToTarget(Model|User $target, array $dataPoints): void
     {
-        $tracker = Tracker::factory()->create([
-            'user_id' => $target->id,
-            'value_step' => 1,
-            'target_value' => 1,
-            'single' => true,
-            'target_score' => 1,
-            'overflow' => true,
-        ]);
+        /** @var Tracker $tracker */
+        $tracker = $target->trackers()->first();
 
         $tracker->dataPoints()->saveMany($dataPoints);
     }
