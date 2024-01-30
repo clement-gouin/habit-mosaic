@@ -46,17 +46,17 @@ parameters:
 			path: app/Services/Mosaic/AbstractMosaicService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Mosaic\\\\CategoryMosaicService\\:\\:getMaxDate\\(\\) should return Illuminate\\\\Support\\\\Carbon\\|null but returns mixed\\.$#"
+			message: "#^Parameter \\#1 \\$time of class Illuminate\\\\Support\\\\Carbon constructor expects DateTimeInterface\\|string\\|null, mixed given\\.$#"
 			count: 1
 			path: app/Services/Mosaic/CategoryMosaicService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Mosaic\\\\DayMosaicService\\:\\:getMaxDate\\(\\) should return Illuminate\\\\Support\\\\Carbon\\|null but returns mixed\\.$#"
+			message: "#^Parameter \\#1 \\$time of class Illuminate\\\\Support\\\\Carbon constructor expects DateTimeInterface\\|string\\|null, mixed given\\.$#"
 			count: 1
 			path: app/Services/Mosaic/DayMosaicService.php
 
 		-
-			message: "#^Method App\\\\Services\\\\Mosaic\\\\TrackerMosaicService\\:\\:getMaxDate\\(\\) should return Illuminate\\\\Support\\\\Carbon\\|null but returns mixed\\.$#"
+			message: "#^Parameter \\#1 \\$time of class Illuminate\\\\Support\\\\Carbon constructor expects DateTimeInterface\\|string\\|null, mixed given\\.$#"
 			count: 1
 			path: app/Services/Mosaic/TrackerMosaicService.php
 
