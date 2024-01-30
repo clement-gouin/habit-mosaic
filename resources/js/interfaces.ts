@@ -45,7 +45,9 @@ export interface Statistics extends Base {
     total: number
     minimum: number
     average: number
+    lower_quartile: number
     median: number
+    upper_quartile: number
     maximum: number
 }
 
