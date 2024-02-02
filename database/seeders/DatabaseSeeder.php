@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 
 class DatabaseSeeder extends Seeder
 {
@@ -11,6 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        if (App::environment('production')) {
+            return;
+        }
 
+        if (User::count() === 0) {
+            $this->call(UserSeeder::class);
+        }
+
+        $this->call(RandomDataSeeder::class);
     }
 }

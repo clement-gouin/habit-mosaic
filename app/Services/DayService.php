@@ -39,8 +39,7 @@ class DayService extends Service
             ->where('date', '=', $date)
             ->pluck('id');
 
-        DataPoint::query()
-            ->whereIn('id', $ids)
+        DataPoint::whereIn('id', $ids)
             ->delete();
     }
 

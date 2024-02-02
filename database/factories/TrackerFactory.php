@@ -24,6 +24,7 @@ class TrackerFactory extends Factory
             'icon' => fake()->randomElement(['bath', 'spoon', 'chair', 'jar', 'toilet', 'soap', 'sink', 'shower', 'tv', 'faucet', 'blender', 'plug']),
             'order' => fn () => Tracker::count() + 1,
             'target_score' => fake()->randomFloat(min: -10, max: 10),
+            'stale_delay' => fake()->boolean() ? (fake()->randomNumber() + 1) : null,
         ];
 
         if (fake()->boolean()) {

@@ -32,7 +32,7 @@ class NewTokenLink extends Mailable
             with: [
                 'newUser' => $this->newUser,
                 'user' => $this->token->user->name,
-                'url' => config('app.url').'/login/'.$this->token->token,
+                'url' => route('login.token', $this->token->token),
             ]
         );
     }

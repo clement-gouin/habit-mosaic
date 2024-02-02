@@ -26,6 +26,7 @@ use Illuminate\Support\Collection;
  * @property float $target_score
  * @property bool $single
  * @property bool $overflow
+ * @property int|null $stale_delay
  * @property-read User $user
  * @property-read Category $category
  * @property-read Collection<DataPoint> $dataPoints
@@ -59,6 +60,7 @@ class Tracker extends Model
         'target_score',
         'single',
         'overflow',
+        'stale_delay',
     ];
 
     /**
@@ -101,6 +103,13 @@ class Tracker extends Model
             ->firstOrCreate([
                 'date' => $date->startOfDay(),
             ])->refresh();
+    }
+
+    public function getLastDataPoint(): DataPoint|Model|null
+    {
+        return $this->dataPoints()
+            ->where('data_points.value', '!=', 0)
+            ->first();
     }
 
     public function getScoreAt(Carbon $date): float

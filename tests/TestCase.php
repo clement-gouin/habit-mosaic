@@ -4,11 +4,11 @@ namespace Tests;
 
 use App\Objects\Statistics;
 use App\Services\Mosaic\MosaicService;
-use Carbon\Carbon;
 use Event;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;

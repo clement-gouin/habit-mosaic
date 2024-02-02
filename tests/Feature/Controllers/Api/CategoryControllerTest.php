@@ -7,6 +7,7 @@ use App\Events\TrackerDeleted;
 use App\Models\Category;
 use App\Models\Tracker;
 use App\Models\User;
+use Database\Factories\CategoryFactory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -137,9 +138,8 @@ class CategoryControllerTest extends TestCase
     protected function getTargetData(): array
     {
         return [
-            'name' => fake()->word(),
-            'icon' => fake()->word(),
-            'order' => fake()->randomNumber(nbDigits: 3),
+            ...collect((new CategoryFactory())->definition())->except(['user_id', 'order'])->toArray(),
+            'order' => fake()->randomNumber(nbDigits: 2),
         ];
     }
 }

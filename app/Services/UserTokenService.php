@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Mail\NewTokenLink;
 use App\Models\User;
 use App\Models\UserToken;
-use Database\Seeders\NewUserSeeder;
+use Database\Seeders\UserBaseTrackersSeeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 
@@ -21,7 +21,7 @@ class UserTokenService extends Service
                 'expires_at' => Carbon::now(),
             ]);
 
-        $token = UserToken::query()->make([
+        $token = new UserToken([
             'expires_at' => Carbon::now()->add(static::TOKEN_EXPIRES),
             'token' => bin2hex(openssl_random_pseudo_bytes(20)),
         ]);
@@ -44,7 +44,7 @@ class UserTokenService extends Service
         ]);
 
         if (! $userToken->user->email_verified_at) {
-            (new NewUserSeeder())->run($userToken->user);
+            (new UserBaseTrackersSeeder())->run($userToken->user);
 
             $userToken->user->update([
                 'email_verified_at' => Carbon::now(),

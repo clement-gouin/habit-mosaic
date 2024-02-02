@@ -5,8 +5,8 @@ namespace Tests\Feature\Controllers\Web;
 use App\Models\User;
 use App\Services\Mosaic\DayMosaicService;
 use App\Services\TableService;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
 class TableViewControllerTest extends TestCase

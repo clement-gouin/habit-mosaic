@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\DataPoint;
-use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Carbon;
 
 return new class extends Migration
 {
@@ -11,8 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DataPoint::query()
-            ->where('date', '=', Carbon::createFromTimestamp(0))
+        DataPoint::where('date', '=', Carbon::createFromTimestamp(0))
             ->delete();
     }
 

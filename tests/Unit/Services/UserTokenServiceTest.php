@@ -44,7 +44,7 @@ class UserTokenServiceTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $token = UserToken::query()->make([
+        $token = new UserToken([
             'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
             'token' => fake()->md5(),
         ]);
@@ -70,7 +70,7 @@ class UserTokenServiceTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $token = UserToken::query()->make([
+        $token = new UserToken([
             'expires_at' => fake()->dateTimeBetween('-1 day', '-1 second'),
             'token' => fake()->md5(),
         ]);
@@ -85,7 +85,7 @@ class UserTokenServiceTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $token = UserToken::query()->make([
+        $token = new UserToken([
             'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
             'token' => fake()->md5(),
         ]);
@@ -114,7 +114,7 @@ class UserTokenServiceTest extends TestCase
             'email_verified_at' => null,
         ]);
 
-        $token = UserToken::query()->make([
+        $token = new UserToken([
             'expires_at' => fake()->dateTimeBetween('now', '+1 hour'),
             'token' => fake()->md5(),
         ]);

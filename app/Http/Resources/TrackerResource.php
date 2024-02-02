@@ -30,6 +30,7 @@ class TrackerResource extends JsonResource
             'target_score' => $this->resource->target_score,
             'single' => $this->resource->single,
             'overflow' => $this->resource->overflow,
+            'stale_delay' => $this->resource->stale_delay,
         ];
     }
 }

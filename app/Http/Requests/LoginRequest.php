@@ -28,11 +28,10 @@ class LoginRequest extends FormRequest
     public function toUser(): User
     {
         if ($this->boolean('new')) {
-            return User::query()
-                ->create([
-                    'email' => $this->input('email'),
-                    'name' => $this->input('name'),
-                ]);
+            return User::create([
+                'email' => $this->input('email'),
+                'name' => $this->input('name'),
+            ]);
         }
 
         return User::whereEmail($this->input('email'))

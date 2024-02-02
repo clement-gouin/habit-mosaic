@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Tracker;
 use App\Models\User;
 use App\Services\TrackerService;
+use Database\Factories\TrackerFactory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -141,16 +142,9 @@ class TrackerControllerTest extends TestCase
     protected function getTargetData(Category $category): array
     {
         return [
+            ...collect((new TrackerFactory())->definition())->except(['category_id', 'order'])->toArray(),
+            'order' => fake()->randomNumber(nbDigits: 2),
             'category_id' => $category->id,
-            'name' => fake()->word(),
-            'icon' => fake()->word(),
-            'order' => fake()->randomNumber(nbDigits: 3),
-            'unit' => fake()->boolean() ? fake()->word() : null,
-            'value_step' => fake()->randomFloat(min: 0.1),
-            'target_value' => fake()->randomFloat(min: 1),
-            'target_score' => fake()->randomFloat(min: 0.1),
-            'single' => fake()->boolean,
-            'overflow' => fake()->boolean,
         ];
     }
 }
