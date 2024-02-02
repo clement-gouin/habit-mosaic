@@ -21,8 +21,8 @@
                 @updated="fetchData"
                 @move-up="() => swapOrder(trackers[index], trackers[index - 1])"
                 @move-down="() => swapOrder(trackers[index], trackers[index + 1])"
-                :first="index === 0"
-                :last="index === trackers.length - 1"
+                :first="index === 0 || trackers[index - 1].category.id !== trackers[index].category.id"
+                :last="index === trackers.length - 1 || trackers[index + 1].category.id !== trackers[index].category.id"
             />
         </template>
     </datatable>
