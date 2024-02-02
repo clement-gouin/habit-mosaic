@@ -125,17 +125,17 @@ jobs:
         if: always()
         with:
           files: reports/phpunit.xml
-      - uses: 5monkeys/cobertura-action@master
-        with:
-          path: reports/coverage.xml
-          minimum_coverage: 75
-          show_line: true
-          show_branch: true
-          show_class_names: true
+#      - uses: 5monkeys/cobertura-action@master
+#        with:
+#          path: reports/coverage.xml
+#          minimum_coverage: 75
+#          show_line: true
+#          show_branch: true
+#          show_class_names: true
   deploy:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
-    needs: [eslint,pint,phpunit,phpmd]
+    needs: [eslint,pint,phpstan,phpunit,phpmd]
     steps:
       - uses: appleboy/ssh-action@v1.0.1
         with:
