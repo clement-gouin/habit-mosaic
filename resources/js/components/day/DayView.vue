@@ -11,7 +11,7 @@
         </h2>
     </div>
     <div class="position-relative user-select-none" style="min-height: calc(100% - 3.1em)">
-        <motivation-banner v-if="isToday && !loading" :score="score" :statistics="statistics" />
+        <motivation-banner :loading="loading" :is-today="isToday" :score="score" :statistics="statistics" />
         <category-panel
             v-for="(category,i) in categories"
             v-bind:key="category.id"
