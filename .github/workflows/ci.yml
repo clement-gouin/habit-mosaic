@@ -93,13 +93,7 @@ jobs:
         with:
           php-version: '8.2'
       - uses: php-actions/composer@v6
-      - uses: php-actions/phpmd@v1
-        with:
-          path: app
-          output: sarif
-          ruleset: phpmd.xml
-          reportfile: reports/phpmd.sarif
-          args: -vvv --ignore-errors-on-exit
+      - run: php vendor/bin/phpmd app sarif phpmd.xml -vvv --ignore-errors-on-exit > reports/phpmd.sarif
       - uses: github/codeql-action/upload-sarif@v2
         if: always()
         with:
@@ -124,13 +118,7 @@ jobs:
           php-version: '8.2'
           coverage: xdebug
       - uses: php-actions/composer@v6
-      - uses: php-actions/phpunit@v3
-        with:
-          configuration: phpunit.xml
-          log_junit: "reports/phpunit.xml"
-          php_extensions: "xdebug"
-          coverage_cobertura: "reports/coverage.xml"
-          args: "--testdox --no-progress"
+      - run: php vendor/bin/phpunit --testdox --no-progress --log-junit "reports/phpunit.xml" --coverage-clover "reports/coverage.xml"
         env:
           XDEBUG_MODE: coverage
       - uses: EnricoMi/publish-unit-test-result-action@v2
