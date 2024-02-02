@@ -3,6 +3,9 @@
         <span v-if="loading">
             Loading...
         </span>
+        <span v-else-if="statistics.total < 7">
+            We need more data, keep going !
+        </span>
         <span v-else-if="isToday">
             {{ level.text }}
             <small v-if="level.showDiff && statistics.average > score" class="text-dark-emphasis">{{ (statistics.average - score).toFixed(1) }} more to beat average</small>

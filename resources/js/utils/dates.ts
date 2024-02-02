@@ -1,9 +1,9 @@
-export function formatShortDate (utc: string): string {
-    return (new Date(Date.parse(utc))).toLocaleDateString('fr');
+export function formatDate (date: Date, withYear = false): string {
+    return date.toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short', year: withYear ? 'numeric' : undefined });
 }
 
-export function formatFullDate (utc: string): string {
-    return (new Date(Date.parse(utc))).toLocaleString('fr');
+export function isCurrentYear (date: Date): boolean {
+    return date.getFullYear() === (new Date()).getFullYear();
 }
 
 export function formatISODate (date: Date): string {

@@ -4,7 +4,7 @@
             <span class="d-none d-xl-block col-3"></span>
             <i class="fa-solid fa-caret-left col-1 col text-end" role="button" @click="previous"></i>
             <span class="col-10 col-xl-4 text-center">
-                {{ (new Date(rawDate)).toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' }) }}
+                {{ formatDate(new Date(rawDate)) }}
                 <span class="text-dark-emphasis superscript rounded" v-if="!loading">{{ score.toFixed(1) }}</span>
             </span>
             <i v-if="!isToday" class="fa-solid fa-caret-right col-1 text-start" role="button" @click="next"></i>
@@ -32,6 +32,7 @@ import useIdleWatcher from '@composables/useIdleWatcher';
 import LoadingMask from '@tools/LoadingMask.vue';
 import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
 import MotivationBanner from './MotivationBanner.vue';
+import { formatDate } from '@utils/dates';
 
 interface Props {
     date: string,

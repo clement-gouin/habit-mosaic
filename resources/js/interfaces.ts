@@ -54,7 +54,7 @@ export interface Statistics extends Base {
 export interface CategoryData extends Base {
     id?: number
     name: string
-    icon?: string
+    icon: string | null
 }
 
 export interface Category extends CategoryData {
@@ -71,7 +71,7 @@ export interface TrackerData extends Base {
     category: Category
     name: string
     icon: string
-    unit?: string
+    unit: string | null
     value_step: number
     target_value: number
     target_score: number
@@ -86,6 +86,7 @@ export interface Tracker extends TrackerData {
 
 export interface TrackerFull extends Tracker {
     data_point: DataPoint
+    staleness: number | null
     statistics: Statistics
 }
 

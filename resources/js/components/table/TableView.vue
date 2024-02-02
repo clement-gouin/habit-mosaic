@@ -1,7 +1,7 @@
 <template>
     <datatable style="height: 100vh" overflow :total="tableData.length" :data="tableData" :columns="columns" :with-pagination="false" :loading="loading">
         <template #col-date="{value}">
-            <small class="font-monospace">{{ (value as Date).toLocaleDateString('en', { weekday: 'short', day: 'numeric', month: 'short' }) }}</small>
+            <small class="font-monospace">{{ formatDate(value as Date) }}</small>
         </template>
         <template #col-score="{value}">
             {{ (value as number).toFixed(1) }}
@@ -27,6 +27,7 @@ import { precision } from '@utils/numbers';
 import { getTableData } from '@requests/table';
 import useIdleWatcher from '@composables/useIdleWatcher';
 import { referenceColor } from '@utils/colors';
+import { formatDate } from '../../utils/dates';
 
 interface Props {
     date: string,
