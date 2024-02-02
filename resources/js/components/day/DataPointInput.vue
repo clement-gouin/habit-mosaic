@@ -2,7 +2,7 @@
     <div
         :style="{color: color('text-emphasis')}"
         class="p-0 fs-6 text-nowrap shadow-sm rounded-pill text-center position-relative user-select-none lh-1"
-        :title="`${tracker.name}: ${rawValue.toFixed(precision(tracker.value_step))} ${tracker.unit ?? ''}`.trim()"
+        :title="title"
     >
         <template v-if="tracker.single && (!tracker.overflow || rawValue < tracker.target_value)">
             <span v-if="rawValue" @click="remove" role="button">
@@ -45,6 +45,8 @@ const tracker = ref<TrackerFull>(props.modelValue);
 const { value, rawValue } = useFullDebouncedRef<number>(tracker.value.data_point.value, 500);
 
 const isStale = computed(() => (!rawValue.value && tracker.value.stale_delay && tracker.value.staleness) ? tracker.value.staleness >= tracker.value.stale_delay : false);
+const title = computed(() => (`${tracker.value.name}: ${rawValue.value.toFixed(precision(tracker.value.value_step))} ${tracker.value.unit ?? ''}` + ((tracker.value.staleness && tracker.value.staleness > 0) ? `\nLast: ${tracker.value.staleness} days ago` : '')).trim());
+
 const color = (variable: string) => isStale.value ? `var(--bs-warning-${variable}) !important` : ratioColor(rawValue.value / tracker.value.target_value, tracker.value.target_score >= 0, variable);
 const colorDark = (variable: string) => darker(0.03, color(variable));
 
