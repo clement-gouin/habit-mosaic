@@ -76,6 +76,14 @@
                 type="number"
                 required
             />
+            <text-input
+                class="mb-2"
+                name="stale_delay"
+                label="Days before stale"
+                v-model="tracker.stale_delay"
+                v-model:error="errors['stale_delay']"
+                type="number"
+            />
         </div>
     </bs-form>
 </template>
@@ -114,7 +122,8 @@ const formInitValues: TrackerData = {
     value_step: 1,
     target_value: 1,
     single: true,
-    overflow: false
+    overflow: false,
+    stale_delay: undefined
 };
 
 const tracker = ref<TrackerData>(loadDataFromProps());

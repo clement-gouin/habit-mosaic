@@ -9,7 +9,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 use Throwable;
-use Illuminate\Support\Facades\App;
 
 class UserBaseTrackersSeeder extends Seeder
 {

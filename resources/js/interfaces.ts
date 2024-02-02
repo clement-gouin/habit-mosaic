@@ -54,7 +54,7 @@ export interface Statistics extends Base {
 export interface CategoryData extends Base {
     id?: number
     name: string
-    icon: string | null
+    icon?: string | null
 }
 
 export interface Category extends CategoryData {
@@ -68,19 +68,21 @@ export interface CategoryFull extends Category {
 
 export interface TrackerData extends Base {
     id?: number
-    category: Category
+    category?: Category
     name: string
     icon: string
-    unit: string | null
+    unit?: string | null
     value_step: number
     target_value: number
     target_score: number
     single: boolean
     overflow: boolean
+    stale_delay?: number | null
 }
 
 export interface Tracker extends TrackerData {
     id: number
+    category: Category
     order: number
 }
 

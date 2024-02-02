@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { DataPoint, TrackerFull } from '@interfaces';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { mapToClassName } from '@utils/icons';
 import { darker, ratioColor } from '@utils/colors';
 import { precision } from '@utils/numbers';
@@ -44,7 +44,8 @@ const tracker = ref<TrackerFull>(props.modelValue);
 
 const { value, rawValue } = useFullDebouncedRef<number>(tracker.value.data_point.value, 500);
 
-const color = (variable: string) => ratioColor(rawValue.value / tracker.value.target_value, tracker.value.target_score >= 0, variable);
+const isStale = computed(() => (!rawValue.value && tracker.value.stale_delay && tracker.value.staleness) ? tracker.value.staleness >= tracker.value.stale_delay : false);
+const color = (variable: string) => isStale.value ? `var(--bs-warning-${variable}) !important` : ratioColor(rawValue.value / tracker.value.target_value, tracker.value.target_score >= 0, variable);
 const colorDark = (variable: string) => darker(0.03, color(variable));
 
 function remove () {
