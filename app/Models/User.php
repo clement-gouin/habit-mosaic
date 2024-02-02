@@ -83,18 +83,18 @@ class User extends Authenticatable
         return $this->hasMany(UserToken::class);
     }
 
-    public function trackers(): HasMany
-    {
-        return $this->hasMany(Tracker::class)->orderBy('order');
-    }
-
     public function categories(): HasMany
     {
-        return $this->hasMany(Category::class)->orderBy('order');
+        return $this->hasMany(Category::class)->orderBy('categories.order');
+    }
+
+    public function trackers(): HasManyThrough
+    {
+        return $this->hasManyThrough(Tracker::class, Category::class)->orderBy('trackers.order');
     }
 
     public function dataPoints(): HasManyThrough
     {
-        return $this->hasManyThrough(DataPoint::class, Tracker::class);
+        return $this->trackers()->join('data_points', 'trackers.id', '=', 'data_points.tracker_id')->select('data_points.*');
     }
 }

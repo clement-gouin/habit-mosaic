@@ -34,10 +34,7 @@ class DayServiceTest extends TestCase
     /** @test */
     public function it_cleans_empty_day_without_empty_days(): void
     {
-        $user = User::factory()->create();
-
         $tracker = Tracker::factory()->create([
-            'user_id' => $user->id,
             'single' => false,
             'target_value' => 2,
             'target_score' => 1.5,
@@ -54,7 +51,7 @@ class DayServiceTest extends TestCase
             ]),
         ]);
 
-        $this->assertEquals(0, $this->service->cleanEmptyDays($user));
+        $this->assertEquals(0, $this->service->cleanEmptyDays($tracker->user));
 
         $this->assertDatabaseHas('data_points', [
             'tracker_id' => $tracker->id,
@@ -70,10 +67,7 @@ class DayServiceTest extends TestCase
     /** @test */
     public function it_cleans_empty_day(): void
     {
-        $user = User::factory()->create();
-
         $tracker = Tracker::factory()->create([
-            'user_id' => $user->id,
             'single' => false,
             'target_value' => 2,
             'target_score' => 1.5,
@@ -90,7 +84,7 @@ class DayServiceTest extends TestCase
             ]),
         ]);
 
-        $this->assertEquals(1, $this->service->cleanEmptyDays($user));
+        $this->assertEquals(1, $this->service->cleanEmptyDays($tracker->user));
 
         $this->assertDatabaseHas('data_points', [
             'tracker_id' => $tracker->id,

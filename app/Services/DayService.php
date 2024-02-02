@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\DataPoint;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 
@@ -34,8 +35,12 @@ class DayService extends Service
 
     protected function cleanDay(User $user, Carbon $date): void
     {
-        $user->dataPoints()
+        $ids = $user->dataPoints()
             ->where('date', '=', $date)
+            ->pluck('id');
+
+        DataPoint::query()
+            ->whereIn('id', $ids)
             ->delete();
     }
 

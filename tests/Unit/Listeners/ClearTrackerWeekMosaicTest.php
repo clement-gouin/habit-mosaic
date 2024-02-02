@@ -49,6 +49,12 @@ class ClearTrackerWeekMosaicTest extends TestCase
 
         /** @var CategoryMosaicService|MockInterface $catMosaicService */
         $catMosaicService = $this->mock(CategoryMosaicService::class);
+        $catMosaicService
+            ->expects('clearData')
+            ->with(
+                Mockery::on(fn (Category $arg) => $arg->id === $tracker->category->id),
+                Mockery::on(fn (Carbon $arg) => $arg->is($dataPoint->date)),
+            );
 
         /** @var DayMosaicService|MockInterface $dayMosaicService */
         $dayMosaicService = $this->mock(DayMosaicService::class);
@@ -71,11 +77,7 @@ class ClearTrackerWeekMosaicTest extends TestCase
     /** @test */
     public function it_process_event_with_category(): void
     {
-        $category = Category::factory()->create();
-
-        $tracker = Tracker::factory()->create([
-            'category_id' => $category->id,
-        ]);
+        $tracker = Tracker::factory()->create();
 
         $dataPoint = DataPoint::factory()->create([
             'tracker_id' => $tracker->id,
@@ -96,7 +98,7 @@ class ClearTrackerWeekMosaicTest extends TestCase
         $catMosaicService
             ->expects('clearData')
             ->with(
-                Mockery::on(fn (Category $arg) => $arg->id === $category->id),
+                Mockery::on(fn (Category $arg) => $arg->id === $tracker->category->id),
                 Mockery::on(fn (Carbon $arg) => $arg->is($dataPoint->date)),
             );
 

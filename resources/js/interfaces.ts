@@ -68,7 +68,7 @@ export interface CategoryFull extends Category {
 
 export interface TrackerData extends Base {
     id?: number
-    category?: Category
+    category: Category
     name: string
     icon: string
     unit?: string

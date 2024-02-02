@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Listeners;
 
+use App\Events\TrackerDeleted;
 use App\Events\TrackerScoreUpdated;
 use App\Listeners\WipeTrackerMosaic;
 use App\Models\Tracker;
@@ -19,6 +20,7 @@ class WipeTrackerMosaicTest extends TestCase
     public function it_listens_to_events(): void
     {
         Event::assertListening(TrackerScoreUpdated::class, WipeTrackerMosaic::class);
+        Event::assertListening(TrackerDeleted::class, WipeTrackerMosaic::class);
     }
 
     /** @test */

@@ -16,8 +16,7 @@ use Illuminate\Support\Collection;
  * App\Models\Tracker
  *
  * @property int $id
- * @property int $user_id
- * @property int|null $category_id
+ * @property int $category_id
  * @property string $name
  * @property string $icon
  * @property int $order
@@ -28,7 +27,7 @@ use Illuminate\Support\Collection;
  * @property bool $single
  * @property bool $overflow
  * @property-read User $user
- * @property-read Category|null $category
+ * @property-read Category $category
  * @property-read Collection<DataPoint> $dataPoints
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
@@ -71,14 +70,14 @@ class Tracker extends Model
         'target_score' => 'float',
     ];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function getUserAttribute(): User
+    {
+        return $this->category->user;
     }
 
     public function dataPoints(): HasMany

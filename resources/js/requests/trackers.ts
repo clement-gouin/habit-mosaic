@@ -29,7 +29,7 @@ export async function listTrackers (): Promise<Tracker[]> {
 export async function createTracker (tracker: TrackerData): Promise<Tracker> {
     return await axios.post(ENDPOINT, {
         ...tracker,
-        category_id: tracker.category?.id
+        category_id: tracker.category.id
     })
         .then(resp => {
             alertSuccess('Tracker created');
@@ -41,7 +41,7 @@ export async function createTracker (tracker: TrackerData): Promise<Tracker> {
 export async function updateTracker (tracker: TrackerData): Promise<Tracker> {
     return await axios.put(`${ENDPOINT}/${tracker.id as number}`, {
         ...tracker,
-        category_id: tracker.category?.id
+        category_id: tracker.category.id
     })
         .then(resp => {
             alertSuccess('Tracker updated');

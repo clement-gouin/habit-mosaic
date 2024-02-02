@@ -16,10 +16,7 @@
             v-for="(category,i) in categories"
             v-bind:key="category.id"
             v-model="categories[i]"
-            :trackers="trackers.filter(tracker => tracker.category?.id === category.id)"
-        />
-        <category-panel
-            :trackers="trackers.filter(tracker => tracker.category === null)"
+            :trackers="trackers.filter(tracker => tracker.category.id === category.id)"
         />
         <LoadingMask v-if="loading" />
     </div>

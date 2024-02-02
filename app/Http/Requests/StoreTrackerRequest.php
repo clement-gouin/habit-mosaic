@@ -25,7 +25,7 @@ class StoreTrackerRequest extends FormRequest
 
         return [
             'category_id' => [
-                'nullable',
+                'required',
                 'numeric',
                 'exists:App\Models\Category,id',
                 function (string $attribute, int $value, Closure $fail) use ($user) {

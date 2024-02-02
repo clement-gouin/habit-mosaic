@@ -2,7 +2,9 @@
 
 namespace Tests\Unit\Listeners;
 
+use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
+use App\Events\TrackerDeleted;
 use App\Events\TrackerScoreUpdated;
 use App\Listeners\WipeDayMosaic;
 use App\Models\Category;
@@ -21,7 +23,9 @@ class WipeDayMosaicTest extends TestCase
     public function it_listens_to_events(): void
     {
         Event::assertListening(TrackerScoreUpdated::class, WipeDayMosaic::class);
+        Event::assertListening(TrackerDeleted::class, WipeDayMosaic::class);
         Event::assertListening(CategoryUpdated::class, WipeDayMosaic::class);
+        Event::assertListening(CategoryDeleted::class, WipeDayMosaic::class);
     }
 
     /** @test */

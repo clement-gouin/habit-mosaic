@@ -3,7 +3,6 @@
 namespace Tests\Unit\Services;
 
 use App\Http\Resources\DataPointResource;
-use App\Models\Category;
 use App\Models\Tracker;
 use App\Models\User;
 use App\Services\TableService;
@@ -27,23 +26,15 @@ class TableServiceTest extends TestCase
     /** @test */
     public function it_gets_current_span_data(): void
     {
-        $user = User::factory()->create();
-
         $span = fake()->randomNumber(nbDigits: 2, strict: true) + 2;
 
-        $category = Category::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
         $tracker = Tracker::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => $category->id,
             'single' => false,
             'target_value' => 2,
             'target_score' => 1.5,
         ]);
 
-        $result = $this->service->getTableData($user, Carbon::today(), $span);
+        $result = $this->service->getTableData($tracker->user, Carbon::today(), $span);
 
         $today = Carbon::today()->format('Y-m-d');
         $this->assertArrayHasKey($today, $result);

@@ -21,10 +21,7 @@ class CategoryMosaicServiceTest extends MosaicServiceTestCase
 
     public function createTarget(): Model
     {
-        $category = Category::factory()->create();
-
-        Tracker::factory()->create([
-            'category_id' => $category->id,
+        $tracker = Tracker::factory()->create([
             'value_step' => 1,
             'target_value' => 1,
             'single' => true,
@@ -32,7 +29,7 @@ class CategoryMosaicServiceTest extends MosaicServiceTestCase
             'overflow' => true,
         ]);
 
-        return $category;
+        return $tracker->category;
     }
 
     public function getCacheRootKey(Model|Category $target): string

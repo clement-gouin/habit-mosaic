@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#1 \\$tracker of event class App\\\\Events\\\\TrackerDeleted constructor expects App\\\\Models\\\\Tracker in App\\\\Events\\\\TrackerDeleted\\:\\:dispatch\\(\\), mixed given\\.$#"
+			count: 1
+			path: app/Http/Controllers/Api/CategoryController.php
+
+		-
 			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
 			count: 1
 			path: app/Http/Middleware/VersionMiddleware.php

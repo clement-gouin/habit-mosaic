@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Events\CategoryUpdated;
+use App\Events\CategoryDeleted;
+use App\Events\TrackerDeleted;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
@@ -69,7 +70,9 @@ class CategoryController extends Controller
     {
         $this->authorize('delete', $category);
 
-        CategoryUpdated::dispatch($category);
+        CategoryDeleted::dispatch($category);
+
+        $category->trackers->each(fn ($tracker) => TrackerDeleted::dispatch($tracker));
 
         $category->delete();
 

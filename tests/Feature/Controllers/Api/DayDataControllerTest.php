@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use App\Models\Category;
 use App\Models\Tracker;
 use App\Models\User;
 use App\Services\Mosaic\CategoryMosaicService;
@@ -19,22 +18,13 @@ class DayDataControllerTest extends TestCase
     /** @test */
     public function it_shows_today_data(): void
     {
-        $user = User::factory()->create();
+        $tracker = Tracker::factory()->create();
 
-        $category = Category::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
-        $tracker = Tracker::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => $category->id,
-        ]);
-
-        $this->mockMosaicServiceStatistics(DayMosaicService::class, $user);
-        $this->mockMosaicServiceStatistics(CategoryMosaicService::class, $category);
+        $this->mockMosaicServiceStatistics(DayMosaicService::class, $tracker->user);
+        $this->mockMosaicServiceStatistics(CategoryMosaicService::class, $tracker->category);
         $this->mockMosaicServiceStatistics(TrackerMosaicService::class, $tracker);
 
-        $this->actingAs($user)
+        $this->actingAs($tracker->user)
             ->getJson(route('day.data'))
             ->assertJsonFragment(['date' => Carbon::today()->format('Y-m-d')])
             ->assertSuccessful()

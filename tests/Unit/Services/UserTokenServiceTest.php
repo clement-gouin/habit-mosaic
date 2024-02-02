@@ -131,7 +131,7 @@ class UserTokenServiceTest extends TestCase
             'email_verified_at' => Carbon::now(),
         ]);
 
-        $this->assertDatabaseHas('trackers', [
+        $this->assertDatabaseHas('categories', [
             'user_id' => $user->id,
         ]);
     }

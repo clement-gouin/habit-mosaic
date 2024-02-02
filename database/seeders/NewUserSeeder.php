@@ -125,7 +125,7 @@ class NewUserSeeder extends Seeder
                         ...$trackerData,
                     ]);
 
-                    $user->trackers()->save($tracker);
+                    $category->trackers()->save($tracker);
                 }
             }
 

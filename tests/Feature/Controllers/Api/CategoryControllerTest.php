@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Controllers\Api;
 
-use App\Events\CategoryUpdated;
+use App\Events\CategoryDeleted;
+use App\Events\TrackerDeleted;
 use App\Models\Category;
+use App\Models\Tracker;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\Event;
@@ -99,12 +101,36 @@ class CategoryControllerTest extends TestCase
             ->assertSuccessful();
 
         Event::assertDispatched(
-            CategoryUpdated::class,
-            fn (CategoryUpdated $event) => $event->category->id === $category->id
+            CategoryDeleted::class,
+            fn (CategoryDeleted $event) => $event->category->id === $category->id
         );
 
         $this->assertDatabaseMissing('categories', [
             'id' => $category->id,
+        ]);
+    }
+
+    /** @test */
+    public function it_deletes_category_with_tracker(): void
+    {
+        $tracker = Tracker::factory()->create();
+
+        $this->actingAs($tracker->user)
+            ->deleteJson(route('categories.destroy', $tracker->category))
+            ->assertSuccessful();
+
+        Event::assertDispatched(
+            CategoryDeleted::class,
+            fn (CategoryDeleted $event) => $event->category->id === $tracker->category->id
+        );
+
+        Event::assertDispatched(
+            TrackerDeleted::class,
+            fn (TrackerDeleted $event) => $event->tracker->id === $tracker->id
+        );
+
+        $this->assertDatabaseMissing('categories', [
+            'id' => $tracker->category->id,
         ]);
     }
 

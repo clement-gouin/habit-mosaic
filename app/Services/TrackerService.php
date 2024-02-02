@@ -10,11 +10,11 @@ class TrackerService extends Service
 {
     public function update(Tracker $tracker, array $attributes): void
     {
-        $categoryChange = ($attributes['category_id'] ?? null) !== $tracker->category_id;
+        $categoryChange = $attributes['category_id'] !== $tracker->category_id;
         $targetChange = $attributes['target_value'] !== $tracker->target_value ||
             $attributes['target_score'] !== $tracker->target_score;
 
-        if ($categoryChange && $tracker->category) {
+        if ($categoryChange) {
             CategoryUpdated::dispatch($tracker->category);
         }
 
@@ -26,7 +26,7 @@ class TrackerService extends Service
             TrackerScoreUpdated::dispatch($tracker);
         }
 
-        if (($targetChange || $categoryChange) && $tracker->category) {
+        if ($targetChange || $categoryChange) {
             CategoryUpdated::dispatch($tracker->category);
         }
     }

@@ -21,10 +21,7 @@ class DayMosaicServiceTest extends MosaicServiceTestCase
 
     public function createTarget(): Model
     {
-        $user = User::factory()->create();
-
-        Tracker::factory()->create([
-            'user_id' => $user->id,
+        $tracker = Tracker::factory()->create([
             'value_step' => 1,
             'target_value' => 1,
             'single' => true,
@@ -32,7 +29,7 @@ class DayMosaicServiceTest extends MosaicServiceTestCase
             'overflow' => true,
         ]);
 
-        return $user;
+        return $tracker->user;
     }
 
     public function getCacheRootKey(Model|User $target): string

@@ -56,7 +56,7 @@ class Category extends Model
 
     public function trackers(): HasMany
     {
-        return $this->hasMany(Tracker::class)->orderByDesc('order');
+        return $this->hasMany(Tracker::class)->orderBy('trackers.order');
     }
 
     public function dataPoints(): HasManyThrough

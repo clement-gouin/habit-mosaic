@@ -2,7 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Events\CategoryUpdated;
+use App\Events\CategoryEvent;
 use App\Services\Mosaic\CategoryMosaicService;
 
 class WipeCategoryMosaic
@@ -11,7 +11,7 @@ class WipeCategoryMosaic
     {
     }
 
-    public function handle(CategoryUpdated $event): void
+    public function handle(CategoryEvent $event): void
     {
         $this->mosaicService->wipeData($event->category);
     }

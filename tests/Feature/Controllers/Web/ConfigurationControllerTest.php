@@ -22,7 +22,6 @@ class ConfigurationControllerTest extends TestCase
         ]);
 
         Tracker::factory(20)->create([
-            'user_id' => $user->id,
             'category_id' => fake()->randomElement($categories)->id,
         ]);
 

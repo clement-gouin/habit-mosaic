@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Listeners;
 
+use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
 use App\Listeners\WipeCategoryMosaic;
 use App\Models\Category;
@@ -19,6 +20,7 @@ class WipeCategoryMosaicTest extends TestCase
     public function it_listens_to_events(): void
     {
         Event::assertListening(CategoryUpdated::class, WipeCategoryMosaic::class);
+        Event::assertListening(CategoryDeleted::class, WipeCategoryMosaic::class);
     }
 
     /** @test */

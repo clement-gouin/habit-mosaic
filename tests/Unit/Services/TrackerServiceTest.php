@@ -48,30 +48,10 @@ class TrackerServiceTest extends TestCase
             TrackerScoreUpdated::class,
             fn (TrackerScoreUpdated $event) => $event->tracker->id === $tracker->id
         );
-    }
-
-    /** @test */
-    public function it_update_tracker_with_target_change_with_category(): void
-    {
-        $category = Category::factory()->create();
-
-        $tracker = Tracker::factory()->create([
-            'category_id' => $category->id,
-        ]);
-
-        $this->service->update($tracker, [
-            ...$tracker->attributesToArray(),
-            'target_score' => 15,
-        ]);
-
-        Event::assertDispatched(
-            TrackerScoreUpdated::class,
-            fn (TrackerScoreUpdated $event) => $event->tracker->id === $tracker->id
-        );
 
         Event::assertDispatched(
             CategoryUpdated::class,
-            fn (CategoryUpdated $event) => $event->category->id === $category->id
+            fn (CategoryUpdated $event) => $event->category->id === $tracker->category->id
         );
     }
 
@@ -98,46 +78,6 @@ class TrackerServiceTest extends TestCase
         Event::assertDispatched(
             CategoryUpdated::class,
             fn (CategoryUpdated $event) => $event->category->id === $category2->id
-        );
-    }
-
-    /** @test */
-    public function it_update_tracker_adds_category(): void
-    {
-        $category = Category::factory()->create();
-
-        $tracker = Tracker::factory()->create([
-            'category_id' => null,
-        ]);
-
-        $this->service->update($tracker, [
-            ...$tracker->attributesToArray(),
-            'category_id' => $category->id,
-        ]);
-
-        Event::assertDispatched(
-            CategoryUpdated::class,
-            fn (CategoryUpdated $event) => $event->category->id === $category->id
-        );
-    }
-
-    /** @test */
-    public function it_update_tracker_removes_category(): void
-    {
-        $category = Category::factory()->create();
-
-        $tracker = Tracker::factory()->create([
-            'category_id' => $category->id,
-        ]);
-
-        $this->service->update($tracker, [
-            ...$tracker->attributesToArray(),
-            'category_id' => null,
-        ]);
-
-        Event::assertDispatched(
-            CategoryUpdated::class,
-            fn (CategoryUpdated $event) => $event->category->id === $category->id
         );
     }
 }

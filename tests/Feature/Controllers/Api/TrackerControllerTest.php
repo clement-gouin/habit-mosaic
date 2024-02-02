@@ -2,12 +2,13 @@
 
 namespace Tests\Feature\Controllers\Api;
 
+use App\Events\TrackerDeleted;
 use App\Models\Category;
 use App\Models\Tracker;
 use App\Models\User;
-use App\Services\Mosaic\TrackerMosaicService;
 use App\Services\TrackerService;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class TrackerControllerTest extends TestCase
@@ -28,41 +29,15 @@ class TrackerControllerTest extends TestCase
     /** @test */
     public function it_creates_tracker_without_category(): void
     {
-        $user = User::factory()->create();
+        $category = Category::factory()->create();
 
-        $targetData = $this->getTargetData();
+        $targetData = $this->getTargetData($category);
 
-        $this->actingAs($user)
+        $this->actingAs($category->user)
             ->postJson(route('trackers.store'), $targetData)
             ->assertSuccessful();
 
         $this->assertDatabaseHas('trackers', [
-            'user_id' => $user->id,
-            'category_id' => null,
-            ...$targetData,
-        ]);
-    }
-
-    /** @test */
-    public function it_creates_tracker_with_category(): void
-    {
-        $user = User::factory()->create();
-
-        $category = Category::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
-        $targetData = [
-            'category_id' => $category->id,
-            ...$this->getTargetData(),
-        ];
-
-        $this->actingAs($user)
-            ->postJson(route('trackers.store'), $targetData)
-            ->assertSuccessful();
-
-        $this->assertDatabaseHas('trackers', [
-            'user_id' => $user->id,
             ...$targetData,
         ]);
     }
@@ -70,16 +45,11 @@ class TrackerControllerTest extends TestCase
     /** @test */
     public function it_cannot_create_tracker_with_other_user_category(): void
     {
-        $user = User::factory()->create();
-
         $category = Category::factory()->create();
 
-        $targetData = [
-            'category_id' => $category->id,
-            ...$this->getTargetData(),
-        ];
+        $targetData = $this->getTargetData($category);
 
-        $this->actingAs($user)
+        $this->actingAs(User::factory()->create())
             ->postJson(route('trackers.store'), $targetData)
             ->assertUnprocessable();
 
@@ -93,7 +63,7 @@ class TrackerControllerTest extends TestCase
     {
         $tracker = Tracker::factory()->create();
 
-        $targetData = $this->getTargetData();
+        $targetData = $this->getTargetData($tracker->category);
 
         $this->actingAs(User::factory()->create())
             ->putJson(route('trackers.update', $tracker), $targetData)
@@ -110,7 +80,7 @@ class TrackerControllerTest extends TestCase
     {
         $tracker = Tracker::factory()->create();
 
-        $targetData = $this->getTargetData();
+        $targetData = $this->getTargetData($tracker->category);
 
         $this->getMock(TrackerService::class)
             ->expects('update')
@@ -124,19 +94,11 @@ class TrackerControllerTest extends TestCase
     /** @test */
     public function it_cannot_update_tracker_with_other_user_category(): void
     {
-        $user = User::factory()->create();
-
         $category = Category::factory()->create();
 
-        $tracker = Tracker::factory()->create([
-            'user_id' => $user->id,
-            'category_id' => null,
-        ]);
+        $tracker = Tracker::factory()->create();
 
-        $targetData = [
-            'category_id' => $category->id,
-            ...$this->getTargetData(),
-        ];
+        $targetData = $this->getTargetData($category);
 
         $this->actingAs($tracker->user)
             ->putJson(route('trackers.update', $tracker), $targetData)
@@ -162,22 +124,24 @@ class TrackerControllerTest extends TestCase
     {
         $tracker = Tracker::factory()->create();
 
-        $this->getMock(TrackerMosaicService::class)
-            ->expects('wipeData')
-            ->with(self::modelArg($tracker));
-
         $this->actingAs($tracker->user)
             ->deleteJson(route('trackers.destroy', $tracker))
             ->assertSuccessful();
+
+        Event::assertDispatched(
+            TrackerDeleted::class,
+            fn (TrackerDeleted $event) => $event->tracker->id === $tracker->id
+        );
 
         $this->assertDatabaseMissing('trackers', [
             'id' => $tracker->id,
         ]);
     }
 
-    protected function getTargetData(): array
+    protected function getTargetData(Category $category): array
     {
         return [
+            'category_id' => $category->id,
             'name' => fake()->word(),
             'icon' => fake()->word(),
             'order' => fake()->randomNumber(nbDigits: 3),

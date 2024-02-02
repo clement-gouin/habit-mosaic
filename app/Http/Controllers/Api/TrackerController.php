@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\TrackerDeleted;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTrackerRequest;
 use App\Http\Requests\UpdateTrackerRequest;
 use App\Http\Resources\TrackerResource;
 use App\Models\Tracker;
 use App\Models\User;
-use App\Services\Mosaic\TrackerMosaicService;
 use App\Services\TrackerService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +21,6 @@ class TrackerController extends Controller
 {
     public function __construct(
         protected TrackerService $trackerService,
-        protected TrackerMosaicService $trackerMosaicService,
     ) {
     }
 
@@ -48,7 +47,7 @@ class TrackerController extends Controller
             ...$request->validated(),
         ]);
 
-        $user->trackers()->save($tracker);
+        $tracker->save();
 
         return TrackerResource::make($tracker->refresh())
             ->toResponse($request)
@@ -74,7 +73,7 @@ class TrackerController extends Controller
     {
         $this->authorize('delete', $tracker);
 
-        $this->trackerMosaicService->wipeData($tracker);
+        TrackerDeleted::dispatch($tracker);
 
         $tracker->delete();
 

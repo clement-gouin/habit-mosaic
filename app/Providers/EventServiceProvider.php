@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\CategoryDeleted;
 use App\Events\CategoryUpdated;
 use App\Events\DataPointUpdated;
+use App\Events\TrackerDeleted;
 use App\Events\TrackerScoreUpdated;
 use App\Listeners\ClearTrackerWeekMosaic;
 use App\Listeners\WipeCategoryMosaic;
@@ -26,7 +28,15 @@ class EventServiceProvider extends ServiceProvider
             WipeTrackerMosaic::class,
             WipeDayMosaic::class,
         ],
+        TrackerDeleted::class => [
+            WipeTrackerMosaic::class,
+            WipeDayMosaic::class,
+        ],
         CategoryUpdated::class => [
+            WipeCategoryMosaic::class,
+            WipeDayMosaic::class,
+        ],
+        CategoryDeleted::class => [
             WipeCategoryMosaic::class,
             WipeDayMosaic::class,
         ],

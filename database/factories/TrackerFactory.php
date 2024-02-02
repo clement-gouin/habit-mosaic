@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use App\Models\Tracker;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +19,7 @@ class TrackerFactory extends Factory
     public function definition(): array
     {
         $data = [
-            'user_id' => User::factory(),
-            'category_id' => null,
+            'category_id' => Category::factory(),
             'name' => fake()->unique()->word(),
             'icon' => fake()->randomElement(['bath', 'spoon', 'chair', 'jar', 'toilet', 'soap', 'sink', 'shower', 'tv', 'faucet', 'blender', 'plug']),
             'order' => fn () => Tracker::count() + 1,
