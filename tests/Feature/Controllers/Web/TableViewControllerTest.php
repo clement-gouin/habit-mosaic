@@ -32,7 +32,6 @@ class TableViewControllerTest extends TestCase
             ->assertViewHas('days', 31)
             ->assertViewHas('statistics')
             ->assertViewHas('categories')
-            ->assertViewHas('trackers')
-            ->assertViewHas('data');
+            ->assertViewHas('trackers');
     }
 }

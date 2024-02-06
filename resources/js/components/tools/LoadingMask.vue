@@ -1,6 +1,6 @@
 <template>
   <div class="loading">
-    <div class="spinner-border" style="margin: 1em" role="status"></div>
+    <div class="spinner-border" role="status"></div>
   </div>
 </template>
 

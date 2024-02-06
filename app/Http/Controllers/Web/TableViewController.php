@@ -33,7 +33,6 @@ class TableViewController extends Controller
             'statistics' => StatisticsResource::make($this->mosaicService->getStatistics($user)),
             'categories' => CategoryResource::collection($user->categories),
             'trackers' => TrackerResource::collection($user->trackers),
-            'data' => $this->tableService->getTableData($user, $endDate, $days),
         ]);
     }
 }

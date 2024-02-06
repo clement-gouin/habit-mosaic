@@ -1,5 +1,6 @@
 <template>
-    <datatable style="height: 100vh" overflow :total="tableData.length" :data="tableData" :columns="columns" :with-pagination="false" :loading="loading">
+    <loading-mask v-if="loading" />
+    <datatable style="height: 100vh" overflow :total="tableData.length" :data="tableData" :columns="columns" :with-pagination="false">
         <template #col-date="{value}">
             <small class="font-monospace">{{ formatDate(value as Date) }}</small>
         </template>
@@ -19,7 +20,7 @@
 
 <script setup lang="ts">
 import { Category, DataPoint, Statistics, TableColumn, Tracker, TrackerFull } from '@interfaces';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeMount, onMounted, ref } from 'vue';
 import Datatable from '@tools/tables/Datatable.vue';
 import { updateDataPoint } from '@requests/dataPoints';
 import { round } from '@popperjs/core/lib/utils/math';
@@ -27,7 +28,8 @@ import { precision } from '@utils/numbers';
 import { getTableData } from '@requests/table';
 import useIdleWatcher from '@composables/useIdleWatcher';
 import { referenceColor } from '@utils/colors';
-import { formatDate } from '../../utils/dates';
+import { formatDate } from '@utils/dates';
+import LoadingMask from '@tools/LoadingMask.vue';
 
 interface Props {
     date: string,
@@ -35,7 +37,6 @@ interface Props {
     statistics: Statistics
     categories: Category[],
     trackers: TrackerFull[],
-    data: Record<string, DataPoint[]>
 }
 
 const props = defineProps<Props>();
@@ -45,8 +46,8 @@ const days = ref<number>(props.days);
 const statistics = ref<Statistics>(props.statistics);
 const categories = ref(props.categories);
 const trackers = ref(props.trackers);
-const loading = ref(false);
-const tableData = ref<Record<string, unknown>[]>(computeData(props.data));
+const loading = ref(true);
+const tableData = ref<Record<string, unknown>[]>([]);
 
 const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.map(tracker => {
     return {
@@ -189,11 +190,16 @@ function getData () {
             categories.value = newCategories;
             trackers.value = newTrackers;
             tableData.value = computeData(newData);
+            recomputeScore();
         })
         .finally(() => {
             loading.value = false;
         });
 }
+
+onBeforeMount(() => {
+    getData();
+});
 
 onMounted(recomputeScore);
 
