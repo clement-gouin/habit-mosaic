@@ -40,8 +40,8 @@ interface Level {
 }
 
 const levels = computed<Level[]>(() => [
-    { minScore: props.statistics.maximum, text: '🏆 Unbelievable !!!!', showDiff: true, otherText: '🏆 Top day' },
-    { minScore: props.statistics.upper_quartile * 0.5 + props.statistics.maximum * 0.5, text: '🎖️ What a day !!!', showDiff: true, otherText: '🎖️ One of the best days' },
+    { minScore: props.statistics.max, text: '🏆 Unbelievable !!!!', showDiff: true, otherText: '🏆 Top day' },
+    { minScore: props.statistics.upper_quartile * 0.5 + props.statistics.max * 0.5, text: '🎖️ What a day !!!', showDiff: true, otherText: '🎖️ One of the best days' },
     { minScore: props.statistics.upper_quartile, text: '🏅 You crushed it !!', showDiff: true, otherText: '🏅 Better than 75% of days' },
     { minScore: props.statistics.average, text: '🎉 You did it !', showDiff: true, otherText: '🎉' },
     { minScore: props.statistics.average * 0.5 + props.statistics.lower_quartile * 0.5, text: '🏃 Almost there...', showDiff: true, otherText: '🚶 Better than 25% of days' },

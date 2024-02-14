@@ -43,12 +43,12 @@ export interface ErrorResponse extends Base {
 
 export interface Statistics extends Base {
     total: number
-    minimum: number
+    min: number
     average: number
     lower_quartile: number
     median: number
     upper_quartile: number
-    maximum: number
+    max: number
 }
 
 export interface CategoryData extends Base {
