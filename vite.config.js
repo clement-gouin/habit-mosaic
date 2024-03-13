@@ -3,7 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import fs from 'fs';
-import iconsManifest from '@fortawesome/fontawesome-free/metadata/icon-families.json';
+import iconsManifest from '@fortawesome/fontawesome-free/metadata/icon-families.json' assert { type: "json" };
 
 function computeIconNames () {
     return JSON.stringify(Object.keys(iconsManifest));
