@@ -20,15 +20,15 @@
 
 <script setup lang="ts">
 import { Category, DataPoint, Statistics, TableColumn, Tracker, TrackerFull } from '@interfaces';
-import { computed, onBeforeMount, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Datatable from '@tools/tables/Datatable.vue';
 import { updateDataPoint } from '@requests/dataPoints';
 import { round } from '@popperjs/core/lib/utils/math';
 import { precision } from '@utils/numbers';
 import { getTableData } from '@requests/table';
-import useIdleWatcher from '@composables/useIdleWatcher';
 import { referenceColor } from '@utils/colors';
 import { formatDate } from '@utils/dates';
+import { useBackgroundFetch } from '@composables/useBackgroundFetch';
 import LoadingMask from '@tools/LoadingMask.vue';
 
 interface Props {
@@ -58,6 +58,15 @@ const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.ma
 
 const color = (tracker: Tracker, value: number, variable: string) => referenceColor(Math.sign(tracker.target_score) * value, tracker.target_value, variable);
 const colorDay = (value: number, variable: string) => referenceColor(value, statistics.value.average, variable);
+
+const { loading: loadingInternal } = useBackgroundFetch(async () => getTableData(new Date(date.value), days.value), ([newStatistics, newCategories, newTrackers, newData]) => {
+    statistics.value = newStatistics;
+    categories.value = newCategories;
+    trackers.value = newTrackers;
+    tableData.value = computeData(newData);
+    recomputeScore();
+    loading.value = false;
+});
 
 const columns = computed<TableColumn[]>(() => {
     return [
@@ -173,7 +182,11 @@ function update (tracker: Tracker, dataPoint: DataPoint, value: number) {
     dataPoint.value = value;
     dataPoint.score = tracker.target_score * dataPoint.value / tracker.target_value;
     recomputeScore();
-    updateDataPoint(dataPoint);
+    loadingInternal.value = true;
+    updateDataPoint(dataPoint)
+        .finally(() => {
+            loadingInternal.value = false;
+        });
 }
 
 function selectAll (event: FocusEvent) {
@@ -182,28 +195,7 @@ function selectAll (event: FocusEvent) {
     }
 }
 
-function getData () {
-    loading.value = true;
-    getTableData(new Date(date.value), days.value)
-        .then(([newStatistics, newCategories, newTrackers, newData]) => {
-            statistics.value = newStatistics;
-            categories.value = newCategories;
-            trackers.value = newTrackers;
-            tableData.value = computeData(newData);
-            recomputeScore();
-        })
-        .finally(() => {
-            loading.value = false;
-        });
-}
-
-onBeforeMount(() => {
-    getData();
-});
-
 onMounted(recomputeScore);
-
-useIdleWatcher(getData);
 </script>
 
 <script lang="ts">

@@ -26,7 +26,7 @@ class ErrorNotification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            to: [config('mail.error.to')],
+            to: [strval(Config::get('mail.error.to'))],
             subject: sprintf(
                 '%s [%s] : %s',
                 ucfirst(strval(Config::get('app.name'))),
