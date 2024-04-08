@@ -10,6 +10,7 @@
                 v-bind:key="tracker.id"
                 class="me-1 me-lg-2 mb-1 mb-lg-2"
                 v-model="trackers[i]"
+                v-model:loading="loading"
             />
         </div>
     </div>
@@ -28,6 +29,8 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const loading = defineModel<boolean>('loading');
 
 // TODO compute real data or require category
 const DEFAULT_CATEGORY = { id: 0, name: 'Other', order: 0, statistics: { total: 0, minimum: 0, average: 0, median: 0, maximum: 0 } };

@@ -42,6 +42,8 @@ const props = defineProps<Props>();
 
 const tracker = ref<TrackerFull>(props.modelValue);
 
+const loading = defineModel<boolean>('loading');
+
 const { value, rawValue } = useFullDebouncedRef<number>(tracker.value.data_point.value, 500);
 
 const isStale = computed(() => (!rawValue.value && tracker.value.stale_delay && tracker.value.staleness) ? tracker.value.staleness >= tracker.value.stale_delay : false);
@@ -73,8 +75,12 @@ function update (dataPoint: DataPoint) {
 
 watch(value, () => {
     if (value.value !== tracker.value.data_point.value) {
+        loading.value = true;
         updateDataPoint({ ...tracker.value.data_point, value: value.value })
-            .then(update);
+            .then(update)
+            .finally(() => {
+                loading.value = false;
+            });
     }
 });
 

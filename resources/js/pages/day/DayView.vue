@@ -17,6 +17,7 @@
             v-bind:key="category.id"
             v-model="categories[i]"
             :trackers="trackers.filter(tracker => tracker.category.id === category.id)"
+            v-model:loading="loadingInternal"
         />
         <LoadingMask v-if="loading" />
     </div>
@@ -33,6 +34,7 @@ import LoadingMask from '@tools/LoadingMask.vue';
 import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
 import MotivationBanner from '@components/day/MotivationBanner.vue';
 import { formatDate } from '@utils/dates';
+import { useBackgroundFetch } from '@composables/useBackgroundFetch';
 
 interface Props {
     date: string,
@@ -57,20 +59,14 @@ const wasToday = ref<boolean>(isToday.value);
 
 const color = (variable: string) => referenceColor(score.value, averageScore.value, variable);
 
-function getData () {
-    loading.value = true;
-    getDayData(new Date(date.value))
-        .then(([newDate, newStatistics, newCategories, newTrackers]) => {
-            date.value = Date.parse(newDate);
-            wasToday.value = isToday.value;
-            statistics.value = newStatistics;
-            categories.value = newCategories;
-            trackers.value = newTrackers;
-        })
-        .finally(() => {
-            loading.value = false;
-        });
-}
+const { loading: loadingInternal, forceFetch } = useBackgroundFetch(async () => getDayData(new Date(date.value)), ([newDate, newStatistics, newCategories, newTrackers]) => {
+    date.value = Date.parse(newDate);
+    wasToday.value = isToday.value;
+    statistics.value = newStatistics;
+    categories.value = newCategories;
+    trackers.value = newTrackers;
+    loading.value = false;
+});
 
 function previous () {
     const before = new Date(rawDate.value);
@@ -84,13 +80,11 @@ function next () {
     date.value = before.setDate(before.getDate() + 1);
 }
 
-watch(date, getData);
+watch(date, forceFetch);
 
 useIdleWatcher(() => {
     if (wasToday.value && !isToday.value) {
         date.value = (new Date()).setHours(((new Date(date.value)).getHours()), 0, 0, 0);
-    } else {
-        getData();
     }
 });
 </script>
