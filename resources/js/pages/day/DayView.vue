@@ -70,15 +70,18 @@ const { loading: loadingInternal, forceFetch } = useBackgroundFetch(async () => 
 
 function previous () {
     const before = new Date(rawDate.value);
-    loading.value = true;
     date.value = before.setDate(before.getDate() - 1);
 }
 
 function next () {
     const before = new Date(rawDate.value);
-    loading.value = true;
     date.value = before.setDate(before.getDate() + 1);
 }
+
+watch(rawDate, () => {
+    loading.value = true;
+    loadingInternal.value = true;
+});
 
 watch(date, forceFetch);
 

@@ -74,14 +74,16 @@ function update (dataPoint: DataPoint) {
 }
 
 watch(value, () => {
-    if (value.value !== tracker.value.data_point.value) {
-        loading.value = true;
-        updateDataPoint({ ...tracker.value.data_point, value: value.value })
-            .then(update)
-            .finally(() => {
-                loading.value = false;
-            });
-    }
+    loading.value = true;
+    updateDataPoint({ ...tracker.value.data_point, value: value.value })
+        .then(update)
+        .finally(() => {
+            loading.value = false;
+        });
+});
+
+watch(rawValue, () => {
+    loading.value = true;
 });
 
 watch(() => props.modelValue, () => {
