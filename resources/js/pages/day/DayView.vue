@@ -27,11 +27,11 @@ import { CategoryFull, Statistics, TrackerFull } from '@interfaces';
 import { computed, ref, watch } from 'vue';
 import { getDayData } from '@requests/day';
 import { referenceColor } from '@utils/colors';
-import CategoryPanel from './CategoryPanel.vue';
+import CategoryPanel from '@components/day/CategoryPanel.vue';
 import useIdleWatcher from '@composables/useIdleWatcher';
 import LoadingMask from '@tools/LoadingMask.vue';
 import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
-import MotivationBanner from './MotivationBanner.vue';
+import MotivationBanner from '@components/day/MotivationBanner.vue';
 import { formatDate } from '@utils/dates';
 
 interface Props {

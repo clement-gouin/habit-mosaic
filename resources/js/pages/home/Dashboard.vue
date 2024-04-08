@@ -29,13 +29,13 @@
 
 <script setup lang="ts">
 import { CategoryFull, Statistics, TrackerFull } from '@interfaces';
-import Mosaic from './Mosaic.vue';
+import Mosaic from '@components/home/Mosaic.vue';
 import { computed, inject, onMounted, ref, watch } from 'vue';
 import { getDayMosaicData, getTrackerMosaicData } from '@requests/mosaic';
-import CategoryMosaic from './CategoryMosaic.vue';
-import TrackerInput from '../trackers/TrackerInput.vue';
+import CategoryMosaic from '@components/home/CategoryMosaic.vue';
+import TrackerInput from '@components/trackers/TrackerInput.vue';
 import { VueCookies } from 'vue-cookies';
-import TrackerLabel from '../trackers/TrackerLabel.vue';
+import TrackerLabel from '@components/trackers/TrackerLabel.vue';
 import ScoreBadge from '@tools/ScoreBadge.vue';
 import { precision } from '@utils/numbers';
 

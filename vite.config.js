@@ -3,7 +3,7 @@ import laravel from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
 import fs from 'fs';
-import iconsManifest from '@fortawesome/fontawesome-free/metadata/icon-families.json' assert { type: "json" };
+import iconsManifest from '@fortawesome/fontawesome-free/metadata/icon-families.json' assert { type: 'json' };
 
 function computeIconNames () {
     return JSON.stringify(Object.keys(iconsManifest));
@@ -70,6 +70,7 @@ export default defineConfig(({ mode }) => {
                 vue: 'vue/dist/vue.esm-bundler.js',
                 '@utils': path.resolve(__dirname, 'resources/js/utils'),
                 '@requests': path.resolve(__dirname, 'resources/js/requests'),
+                '@components': path.resolve(__dirname, 'resources/js/components'),
                 '@tools': path.resolve(__dirname, 'resources/js/components/tools'),
                 '@stores': path.resolve(__dirname, 'resources/js/stores'),
                 '@composables': path.resolve(__dirname, 'resources/js/composables'),

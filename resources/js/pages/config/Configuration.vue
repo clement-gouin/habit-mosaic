@@ -17,8 +17,8 @@
 <script setup lang="ts">
 import { Category, Tracker } from '@interfaces';
 import { ref } from 'vue';
-import CategoryList from '../categories/CategoryList.vue';
-import TrackerList from '../trackers/TrackerList.vue';
+import CategoryList from '@components/categories/CategoryList.vue';
+import TrackerList from '@components/trackers/TrackerList.vue';
 
 interface Props {
     categories: Category[],

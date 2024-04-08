@@ -97,7 +97,7 @@ import IconInput from '@tools/forms/IconInput.vue';
 import BsForm from '@tools/forms/BsForm.vue';
 import { createTracker, updateTracker } from '@requests/trackers';
 import CheckboxInput from '@tools/forms/CheckboxInput.vue';
-import CategoryInput from '../categories/CategoryInput.vue';
+import CategoryInput from '@components/categories/CategoryInput.vue';
 
 interface Props {
     modelValue?: TrackerData

@@ -13,7 +13,7 @@ import { ref } from 'vue';
 import { CategoryFull } from '@interfaces';
 import { getCategoryMosaicData } from '@requests/mosaic';
 import Mosaic from './Mosaic.vue';
-import CategoryLabel from '../categories/CategoryLabel.vue';
+import CategoryLabel from '@components/categories/CategoryLabel.vue';
 import ScoreBadge from '@tools/ScoreBadge.vue';
 
 interface Props {

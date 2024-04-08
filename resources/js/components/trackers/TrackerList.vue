@@ -52,7 +52,7 @@ import { listTrackers, updateTracker } from '@requests/trackers';
 import Modal from '@tools/Modal.vue';
 import TrackerForm from './TrackerForm.vue';
 import TrackerActions from './TrackerActions.vue';
-import CategoryLabel from '../categories/CategoryLabel.vue';
+import CategoryLabel from '@components/categories/CategoryLabel.vue';
 import TrackerLabel from './TrackerLabel.vue';
 import useIdleWatcher from '@composables/useIdleWatcher';
 

@@ -1,7 +1,7 @@
 import './bootstrap';
 
 import { createApp, h } from 'vue';
-import Components from './components/index.ts';
+import Components from './pages/index.ts';
 import VueCookies from 'vue-cookies';
 import { createPinia } from 'pinia';
 import AlertsContainer from './components/alerts/AlertsContainer.vue';
