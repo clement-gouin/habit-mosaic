@@ -5,7 +5,7 @@ interface BackgroundFetch {
     forceFetch: () => Promise<void>
 }
 
-export function useBackgroundFetch<T> (promise: () => Promise<T>, callback: (data: T) => void, refreshRate = 10 * 1000): BackgroundFetch {
+export function useBackgroundFetch<T> (promise: () => Promise<T>, callback: (data: T) => void, refreshRate = 10 * 1000, initialFetch = true): BackgroundFetch {
     const loading = ref<boolean>(false);
     const force = ref<number>(0);
     const timeoutId = ref<number>(0);
@@ -22,11 +22,13 @@ export function useBackgroundFetch<T> (promise: () => Promise<T>, callback: (dat
                     callback(data);
                 }
             })
-            .finally(() => {
-                if (timeoutId.value === 0) {
-                    timeoutId.value = setTimeout(() => { void getData(); }, refreshRate);
-                }
-            });
+            .finally(scheduleNextFetch);
+    }
+
+    function scheduleNextFetch (): void {
+        if (timeoutId.value === 0) {
+            timeoutId.value = setTimeout(() => { void getData(); }, refreshRate);
+        }
     }
 
     async function forceFetch (): Promise<void> {
@@ -36,7 +38,11 @@ export function useBackgroundFetch<T> (promise: () => Promise<T>, callback: (dat
     }
 
     onBeforeMount(() => {
-        void forceFetch();
+        if (initialFetch) {
+            void forceFetch();
+        } else {
+            scheduleNextFetch();
+        }
     });
 
     onBeforeUnmount(() => {

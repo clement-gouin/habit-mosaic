@@ -66,7 +66,7 @@ const { loading: loadingInternal, forceFetch } = useBackgroundFetch(async () => 
     categories.value = newCategories;
     trackers.value = newTrackers;
     loading.value = false;
-});
+}, 10 * 1000, false);
 
 function previous () {
     const before = new Date(rawDate.value);
