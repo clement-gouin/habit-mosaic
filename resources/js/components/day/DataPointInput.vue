@@ -88,7 +88,9 @@ watch(rawValue, () => {
 
 watch(() => props.modelValue, () => {
     tracker.value = props.modelValue;
-    value.value = tracker.value.data_point.value;
+    if (!loading.value) {
+        value.value = tracker.value.data_point.value;
+    }
 });
 </script>
 

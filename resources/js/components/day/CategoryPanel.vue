@@ -32,8 +32,7 @@ const props = defineProps<Props>();
 
 const loading = defineModel<boolean>('loading');
 
-// TODO compute real data or require category
-const DEFAULT_CATEGORY = { id: 0, name: 'Other', order: 0, statistics: { total: 0, minimum: 0, average: 0, median: 0, maximum: 0 } };
+const DEFAULT_CATEGORY: CategoryFull = { id: 0, name: 'Other', order: 0, statistics: { total: 0, min: 0, average: 0, lower_quartile: 0, median: 0, upper_quartile: 0, max: 0 } };
 
 const category = ref<CategoryFull>(props.modelValue ?? DEFAULT_CATEGORY);
 const trackers = ref<TrackerFull[]>(props.trackers);
