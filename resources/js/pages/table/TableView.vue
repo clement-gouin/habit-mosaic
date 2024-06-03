@@ -128,9 +128,14 @@ function computeData (data: Record<string, DataPoint[]>): Record<string, unknown
                 date: new Date(Date.parse(date)),
                 score: 0
             };
+            const currentRow: Record<string, unknown>|undefined = tableData.value.find(r => r.date?.toISOString().substring(0, 10) === date);
             data[date].forEach(dataPoint => {
                 const tracker = trackers.value.find(tracker => tracker.id === dataPoint.tracker_id);
                 if (tracker) {
+                    const currentDataPoint: DataPoint|undefined = currentRow ? currentRow[`tracker-${tracker.id}`] as DataPoint : undefined;
+                    if (currentDataPoint && Date.parse(currentDataPoint.updated_at) > Date.parse(dataPoint.updated_at)) {
+                        dataPoint = currentDataPoint;
+                    }
                     dataPoint.tracker = tracker;
                     dataPoint.score = tracker.target_score * dataPoint.value / tracker.target_value;
                     row[`tracker-${tracker.id}`] = dataPoint;
@@ -180,6 +185,7 @@ function keyDown (tracker: Tracker, dataPoint: DataPoint, event: KeyboardEvent) 
 
 function update (tracker: Tracker, dataPoint: DataPoint, value: number) {
     dataPoint.value = value;
+    dataPoint.updated_at = (new Date()).toISOString();
     dataPoint.score = tracker.target_score * dataPoint.value / tracker.target_value;
     recomputeScore();
     loadingInternal.value = true;
