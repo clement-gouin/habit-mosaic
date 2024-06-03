@@ -43,6 +43,8 @@ const props = defineProps<Props>();
 const tracker = ref<TrackerFull>(props.modelValue);
 
 const loading = defineModel<boolean>('loading');
+const updating = ref<boolean>(false);
+const lastUpdated = ref<number>(Date.parse(props.modelValue.data_point.updated_at));
 
 const { value, rawValue } = useFullDebouncedRef<number>(tracker.value.data_point.value, 500);
 
@@ -65,6 +67,8 @@ function add () {
 }
 
 function updateValue (v: number) {
+    updating.value = true;
+    lastUpdated.value = Date.now();
     value.value = v;
     tracker.value.data_point.score = tracker.value.target_score * v / tracker.value.target_value;
 }
@@ -75,21 +79,22 @@ function update (dataPoint: DataPoint) {
 
 watch(value, () => {
     loading.value = true;
-    updateDataPoint({ ...tracker.value.data_point, value: value.value })
-        .then(update)
-        .finally(() => {
-            loading.value = false;
-        });
-});
-
-watch(rawValue, () => {
-    loading.value = true;
+    if (updating.value) {
+        updateDataPoint({ ...tracker.value.data_point, value: value.value })
+            .then(update)
+            .finally(() => {
+                loading.value = false;
+                updating.value = false;
+            });
+    }
 });
 
 watch(() => props.modelValue, () => {
     tracker.value = props.modelValue;
-    if (!loading.value) {
+    const updated = Date.parse(props.modelValue.data_point.updated_at);
+    if (!updating.value && lastUpdated.value < updated) {
         value.value = tracker.value.data_point.value;
+        lastUpdated.value = updated;
     }
 });
 </script>

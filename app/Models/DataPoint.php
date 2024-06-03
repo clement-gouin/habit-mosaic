@@ -18,6 +18,8 @@ use Illuminate\Support\Carbon;
  * @property Carbon $date
  * @property float $value
  * @property-read Tracker $tracker
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  *
  * @method static DataPointFactory factory($count = null, $state = [])
  * @method static Builder|DataPoint newModelQuery()
@@ -30,8 +32,6 @@ class DataPoint extends Model
 {
     use HasFactory;
 
-    public $timestamps = false;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -40,6 +40,8 @@ class DataPoint extends Model
     protected $fillable = [
         'date',
         'value',
+        'created_at',
+        'updated_at',
     ];
 
     /**

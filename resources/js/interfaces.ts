@@ -98,6 +98,7 @@ export interface DataPoint extends Base {
     date: string
     value: number
     score: number
+    updated_at: string
     tracker?: Tracker
     tableElement?: HTMLDivElement
 }
