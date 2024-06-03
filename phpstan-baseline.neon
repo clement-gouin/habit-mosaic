@@ -16,6 +16,11 @@ parameters:
 			path: app/Mail/ErrorNotification.php
 
 		-
+			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			count: 3
+			path: app/Mail/ReleaseMail.php
+
+		-
 			message: "#^Parameter \\$max of class App\\\\Objects\\\\Statistics constructor expects float, mixed given\\.$#"
 			count: 1
 			path: app/Objects/Statistics.php
