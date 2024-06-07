@@ -3,26 +3,13 @@
     <head>
         <title>{{ ucfirst(config('app.name')) }}</title>
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
         <script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
                 integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M" crossorigin="anonymous">
         </script>
 
         @vite(['resources/js/app.js'])
 
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-        <link rel="manifest" href="/images/site.webmanifest">
-        <link rel="shortcut icon" href="/images/favicon.ico">
-
-        <style>
-            html,
-            body {
-                height: 100%;
-            }
-        </style>
+        @include('layouts.head')
 
         @yield('head')
     </head>

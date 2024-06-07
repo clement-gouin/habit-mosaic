@@ -1,0 +1,9 @@
+<svg viewBox="0 0 240 240" width="240" height="240" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        * {
+            font: bold 145px sans-serif;
+        }
+    </style>
+    <text x="-3" y="178" fill="rgb(194, 24, 91)">H</text>
+    <text x="99" y="178" fill="rgb(236, 64, 122)">M</text>
+</svg>
