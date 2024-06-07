@@ -48,7 +48,7 @@ const lastUpdated = ref<number>(Date.parse(props.modelValue.data_point.updated_a
 
 const { value, rawValue } = useFullDebouncedRef<number>(tracker.value.data_point.value, 500);
 
-const isStale = computed(() => (!rawValue.value && tracker.value.stale_delay && tracker.value.staleness) ? tracker.value.staleness >= tracker.value.stale_delay : false);
+const isStale = computed(() => (!rawValue.value && tracker.value.stale_delay) ? (tracker.value.staleness ? tracker.value.staleness >= tracker.value.stale_delay : true) : false);
 const title = computed(() => (`${tracker.value.name}: ${rawValue.value.toFixed(precision(tracker.value.value_step))} ${tracker.value.unit ?? ''}` + ((tracker.value.staleness && tracker.value.staleness > 0) ? `\nLast: ${tracker.value.staleness} days ago` : '')).trim());
 
 const color = (variable: string) => isStale.value ? `var(--bs-warning-${variable}) !important` : ratioColor(rawValue.value / tracker.value.target_value, tracker.value.target_score >= 0, variable);
@@ -90,12 +90,12 @@ watch(value, () => {
 });
 
 watch(() => props.modelValue, () => {
-    tracker.value = props.modelValue;
     const updated = Date.parse(props.modelValue.data_point.updated_at);
-    if (!updating.value && lastUpdated.value < updated) {
-        value.value = tracker.value.data_point.value;
+    if (tracker.value.data_point.id === props.modelValue.data_point.id && !updating.value && lastUpdated.value < updated) {
+        value.value = props.modelValue.data_point.value;
         lastUpdated.value = updated;
     }
+    tracker.value = props.modelValue;
 });
 </script>
 

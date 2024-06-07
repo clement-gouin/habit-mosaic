@@ -133,7 +133,7 @@ function computeData (data: Record<string, DataPoint[]>): Record<string, unknown
                 const tracker = trackers.value.find(tracker => tracker.id === dataPoint.tracker_id);
                 if (tracker) {
                     const currentDataPoint: DataPoint|undefined = currentRow ? currentRow[`tracker-${tracker.id}`] as DataPoint : undefined;
-                    if (currentDataPoint && Date.parse(currentDataPoint.updated_at) > Date.parse(dataPoint.updated_at)) {
+                    if (currentDataPoint?.id === dataPoint.id && Date.parse(currentDataPoint.updated_at) > Date.parse(dataPoint.updated_at)) {
                         dataPoint = currentDataPoint;
                     }
                     dataPoint.tracker = tracker;
