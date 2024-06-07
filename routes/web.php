@@ -75,10 +75,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::fallback(function (Request $request) {
-    $path = realpath(public_path().$request->path());
-    if (! $path || ! str_starts_with($path, public_path())) {
-        abort(404);
+    if (! str_starts_with($request->path(), 'static/')) {
+        return redirect('/static/'.$request->path());
     }
-
-    return File::get($path);
+    abort(404);
 });
