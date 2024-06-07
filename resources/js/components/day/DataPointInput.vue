@@ -78,8 +78,8 @@ function update (dataPoint: DataPoint) {
 }
 
 watch(value, () => {
-    loading.value = true;
     if (updating.value) {
+        loading.value = true;
         updateDataPoint({ ...tracker.value.data_point, value: value.value })
             .then(update)
             .finally(() => {
@@ -91,7 +91,7 @@ watch(value, () => {
 
 watch(() => props.modelValue, () => {
     const updated = Date.parse(props.modelValue.data_point.updated_at);
-    if (tracker.value.data_point.id === props.modelValue.data_point.id && !updating.value && lastUpdated.value < updated) {
+    if (!updating.value && (tracker.value.data_point.id !== props.modelValue.data_point.id || lastUpdated.value < updated)) {
         value.value = props.modelValue.data_point.value;
         lastUpdated.value = updated;
     }
