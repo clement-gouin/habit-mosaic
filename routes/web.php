@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\ConfigurationController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DayViewController;
 use App\Http\Controllers\Web\TableViewController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,4 +72,13 @@ Route::middleware('auth')->group(function () {
             Route::put('{data_point}', [DataPointController::class, 'update'])->name('data_points.update');
         });
     });
+});
+
+Route::fallback(function (Request $request) {
+    $path = realpath(public_path().$request->path());
+    if (! $path || ! str_starts_with($path, public_path())) {
+        abort(404);
+    }
+
+    return File::get($path);
 });
