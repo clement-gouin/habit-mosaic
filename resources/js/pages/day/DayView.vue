@@ -25,11 +25,10 @@
 
 <script setup lang="ts">
 import { CategoryFull, Statistics, TrackerFull } from '@interfaces';
-import { computed, ref, watch } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import { getDayData } from '@requests/day';
 import { referenceColor } from '@utils/colors';
 import CategoryPanel from '@components/day/CategoryPanel.vue';
-import useIdleWatcher from '@composables/useIdleWatcher';
 import LoadingMask from '@tools/LoadingMask.vue';
 import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
 import MotivationBanner from '@components/day/MotivationBanner.vue';
@@ -55,13 +54,10 @@ const score = computed<number>(() => trackers.value.map(tracker => tracker.data_
 const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.statistics.average).reduce((a, b) => a + b, 0)));
 const isToday = computed<boolean>(() => (new Date(rawDate.value)).setHours(0, 0, 0, 0) === (new Date()).setHours(0, 0, 0, 0));
 
-const wasToday = ref<boolean>(isToday.value);
-
 const color = (variable: string) => referenceColor(score.value, averageScore.value, variable);
 
 const { loading: loadingInternal, forceFetch } = useBackgroundFetch(async () => getDayData(new Date(date.value)), ([newDate, newStatistics, newCategories, newTrackers]) => {
     date.value = Date.parse(newDate);
-    wasToday.value = isToday.value;
     statistics.value = newStatistics;
     categories.value = newCategories;
     trackers.value = newTrackers;
@@ -78,6 +74,16 @@ function next () {
     date.value = before.setDate(before.getDate() + 1);
 }
 
+function enforceToday () {
+    if (loading.value || loadingInternal.value) {
+        return;
+    }
+    const params = new URL(document.location.toString()).searchParams;
+    if (!params.has('date')) {
+        date.value = (new Date()).setHours(((new Date(date.value)).getHours()), 0, 0, 0);
+    }
+}
+
 watch(rawDate, () => {
     loading.value = true;
     loadingInternal.value = true;
@@ -85,10 +91,8 @@ watch(rawDate, () => {
 
 watch(date, forceFetch);
 
-useIdleWatcher(() => {
-    if (wasToday.value && !isToday.value) {
-        date.value = (new Date()).setHours(((new Date(date.value)).getHours()), 0, 0, 0);
-    }
+onBeforeMount(() => {
+    setInterval(enforceToday, 100);
 });
 </script>
 
