@@ -3,6 +3,7 @@
 namespace App\Services\Mosaic;
 
 use App\Models\Tracker;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Support\Carbon;
 class TrackerMosaicService extends MosaicService
 {
     /** @param Tracker $value */
-    protected function computeWeekData($value, Carbon $startDate): array
+    protected function computeWeekData($value, CarbonInterface $startDate): array
     {
         $today = Carbon::today();
         $endDate = $startDate->clone()->startOfWeek()->addWeek()->subDay();
@@ -31,7 +32,7 @@ class TrackerMosaicService extends MosaicService
     }
 
     /** @param Tracker $value */
-    protected function getMaxDate($value): ?Carbon
+    protected function getMaxDate($value): ?CarbonInterface
     {
         return new Carbon(strval($value->dataPoints()->min('date')));
     }

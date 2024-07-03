@@ -3,6 +3,7 @@
 namespace App\Services\Mosaic;
 
 use App\Models\User;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
 
 /**
@@ -10,12 +11,10 @@ use Illuminate\Support\Carbon;
  */
 class DayMosaicService extends MosaicService
 {
-    public function __construct(protected TrackerMosaicService $trackerMosaicService)
-    {
-    }
+    public function __construct(protected TrackerMosaicService $trackerMosaicService) {}
 
     /** @param User $value */
-    protected function computeWeekData($value, Carbon $startDate): array
+    protected function computeWeekData($value, CarbonInterface $startDate): array
     {
         return $this->trackerMosaicService->getCollectionWeekData($value->trackers, $startDate);
     }
@@ -27,7 +26,7 @@ class DayMosaicService extends MosaicService
     }
 
     /** @param User $value */
-    protected function getMaxDate($value): ?Carbon
+    protected function getMaxDate($value): ?CarbonInterface
     {
         return new Carbon(strval($value->dataPoints()->min('date')));
     }

@@ -4,6 +4,7 @@ namespace App\Services\Mosaic;
 
 use App\Objects\Statistics;
 use App\Services\Service;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -23,7 +24,7 @@ abstract class MosaicService extends Service
         /** @var Collection<float|null> $result */
         $result = collect();
         $date = Carbon::today()->startOfWeek();
-        while ($date->diffInWeeks($maxDate, absolute: false) <= 0) {
+        while ($date->diffInWeeks($maxDate) <= 0) {
             $result->push(...$this->getWeekData($value, $date));
             $date = $date->subWeek();
         }
@@ -52,7 +53,7 @@ abstract class MosaicService extends Service
      * @param  Collection<T>  $values
      * @return array<int, float|null>
      */
-    protected function getCollectionWeekData(Collection $values, Carbon $startDate): array
+    protected function getCollectionWeekData(Collection $values, CarbonInterface $startDate): array
     {
         $collectionData = $values->map(fn ($value) => $this->getWeekData($value, $startDate));
         $firstRow = $collectionData->first() ?? [null, null, null, null, null, null, null];
@@ -68,7 +69,7 @@ abstract class MosaicService extends Service
      * @param  T  $value
      * @return array<int, float|null>
      */
-    protected function getWeekData($value, Carbon $startDate): array
+    protected function getWeekData($value, CarbonInterface $startDate): array
     {
         if ($startDate->isSameWeek(Carbon::today())) {
             return Cache::remember(
@@ -87,7 +88,7 @@ abstract class MosaicService extends Service
     /**
      * @param  T  $value
      */
-    public function clearData($value, Carbon $date): void
+    public function clearData($value, CarbonInterface $date): void
     {
         Cache::forget($this->getCacheKey($value, $date));
     }
@@ -95,10 +96,11 @@ abstract class MosaicService extends Service
     /**
      * @param  T  $value
      */
-    protected function getCacheKey($value, Carbon $date): string
+    protected function getCacheKey($value, CarbonInterface $date): string
     {
         $rootCacheKey = $this->getRootCacheKey($value);
 
+        /** @var ?CarbonInterface $maxDate */
         $maxDate = Cache::get($rootCacheKey.'.max');
 
         if (! $maxDate || $date->isBefore($maxDate)) {
@@ -129,7 +131,7 @@ abstract class MosaicService extends Service
      * @param  T  $value
      * @return array<int, float|null>
      */
-    abstract protected function computeWeekData($value, Carbon $startDate): array;
+    abstract protected function computeWeekData($value, CarbonInterface $startDate): array;
 
     /**
      * @param  T  $value
@@ -137,7 +139,7 @@ abstract class MosaicService extends Service
     abstract protected static function getRootCacheKey($value): string;
 
     /** @param T $value */
-    abstract protected function getMaxDate($value): ?Carbon;
+    abstract protected function getMaxDate($value): ?CarbonInterface;
 
     /**
      * @param  T  $value
@@ -146,7 +148,7 @@ abstract class MosaicService extends Service
     {
         $rootCacheKey = $this->getRootCacheKey($value);
 
-        /** @var ?Carbon $date */
+        /** @var ?CarbonInterface $date */
         $date = Cache::get($rootCacheKey.'.max');
 
         if ($date) {

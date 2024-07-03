@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Database\Factories\TrackerFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -112,7 +113,7 @@ class Tracker extends Model
             ->first();
     }
 
-    public function getScoreAt(Carbon $date): float
+    public function getScoreAt(CarbonInterface $date): float
     {
         $value = $this->dataPoints()->firstWhere('date', $date->startOfDay())?->value ?? 0;
 
