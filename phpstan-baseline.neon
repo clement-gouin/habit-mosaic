@@ -46,6 +46,11 @@ parameters:
 			path: app/Services/Mosaic/MosaicService.php
 
 		-
+			message: "#^Method App\\\\Services\\\\Mosaic\\\\MosaicService\\:\\:getAverageData\\(\\) should return array\\<int, float\\> but returns array\\.$#"
+			count: 1
+			path: app/Services/Mosaic/MosaicService.php
+
+		-
 			message: "#^Method App\\\\Services\\\\Mosaic\\\\MosaicService\\:\\:getCollectionWeekData\\(\\) should return array\\<int, float\\|null\\> but returns array\\<int, mixed\\>\\.$#"
 			count: 1
 			path: app/Services/Mosaic/MosaicService.php

@@ -169,6 +169,88 @@ abstract class MosaicServiceTestCase extends TestCase
     }
 
     /** @test */
+    public function it_gets_average_data_empty(): void
+    {
+        $target = $this->createTarget();
+
+        $data = $this->service->getAverageData($target, 3);
+
+        $this->assertEquals([0.0], $data);
+    }
+
+    /** @test */
+    public function it_gets_average_data_first_week(): void
+    {
+        $target = $this->createTarget();
+
+        $this->attachDataPointsToTarget($target, [
+            DataPoint::factory()->make([
+                'date' => Carbon::today(),
+                'value' => 1,
+            ]),
+            DataPoint::factory()->make([
+                'date' => Carbon::today()->subDay(),
+                'value' => 2,
+            ]),
+        ]);
+
+        $data = $this->service->getAverageData($target, 3);
+
+        $this->assertEquals([1.5], $data);
+    }
+
+    /** @test */
+    public function it_gets_average_data_middle_week(): void
+    {
+        $target = $this->createTarget();
+
+        $maxDay = Carbon::today()->subWeek()->startOfWeek();
+
+        Cache::put($this->getCacheRootKey($target).'.max', $maxDay);
+        Cache::put(
+            $this->getCacheRootKey($target).'.'.$maxDay->year.'.'.$maxDay->week.'.avg',
+            2.5
+        );
+
+        $this->attachDataPointsToTarget($target, [
+            DataPoint::factory()->make([
+                'date' => Carbon::today(),
+                'value' => 1,
+            ]),
+            DataPoint::factory()->make([
+                'date' => Carbon::today()->subDay(),
+                'value' => 2,
+            ]),
+        ]);
+
+        $data = $this->service->getAverageData($target, 14);
+
+        $this->assertEquals([2.0, 2.5], $data);
+    }
+
+    /** @test */
+    public function it_gets_average_data_with_cache(): void
+    {
+        $target = $this->createTarget();
+
+        $maxDay = Carbon::today()->subWeek()->startOfWeek();
+
+        Cache::put($this->getCacheRootKey($target).'.max', $maxDay);
+        Cache::put(
+            $this->getCacheRootKey($target).'.'.$maxDay->year.'.'.$maxDay->week.'.avg',
+            2.5
+        );
+        Cache::put(
+            $this->getCacheRootKey($target).'.'.Carbon::today()->year.'.'.Carbon::today()->week.'.avg',
+            2.0
+        );
+
+        $data = $this->service->getAverageData($target, 14);
+
+        $this->assertEquals([2.0, 2.5], $data);
+    }
+
+    /** @test */
     public function it_can_clear_data_for_week(): void
     {
         $target = $this->createTarget();
@@ -178,11 +260,18 @@ abstract class MosaicServiceTestCase extends TestCase
             $this->getCacheRootKey($target).'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
+        Cache::put(
+            $this->getCacheRootKey($target).'.'.$lastWeek->year.'.'.$lastWeek->week.'.avg',
+            1.5
+        );
 
         $this->service->clearData($target, $lastWeek);
 
         $this->assertFalse(
             Cache::has($this->getCacheRootKey($target).'.'.$lastWeek->year.'.'.$lastWeek->week)
+        );
+        $this->assertFalse(
+            Cache::has($this->getCacheRootKey($target).'.'.$lastWeek->year.'.'.$lastWeek->week.'.avg')
         );
     }
 
@@ -202,6 +291,10 @@ abstract class MosaicServiceTestCase extends TestCase
             $this->getCacheRootKey($target).'.'.$lastWeek->year.'.'.$lastWeek->week,
             [1, 2, 3, 4, 5, 6, 7]
         );
+        Cache::put(
+            $this->getCacheRootKey($target).'.'.$lastWeek->year.'.'.$lastWeek->week.'.avg',
+            1.5
+        );
 
         $this->service->wipeData($target);
 
@@ -213,6 +306,9 @@ abstract class MosaicServiceTestCase extends TestCase
         );
         $this->assertFalse(
             Cache::has($this->getCacheRootKey($target).'.'.$lastWeek->year.'.'.$lastWeek->week)
+        );
+        $this->assertFalse(
+            Cache::has($this->getCacheRootKey($target).'.'.$lastWeek->year.'.'.$lastWeek->week.'.avg')
         );
     }
 

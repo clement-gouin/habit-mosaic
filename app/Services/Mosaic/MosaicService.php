@@ -26,7 +26,7 @@ abstract class MosaicService extends Service
         $date = Carbon::today()->startOfWeek();
         while (floor($date->diffInWeeks($maxDate)) <= 0) {
             $result->push(...$this->getWeekData($value, $date));
-            $date = $date->subWeek();
+            $date->subWeek();
         }
 
         return $result->toArray();
@@ -43,7 +43,25 @@ abstract class MosaicService extends Service
         $date = Carbon::today()->startOfWeek();
         for ($i = 0; $i < $days / 7; $i++) {
             $result->push(...$this->getWeekData($value, $date));
-            $date = $date->subWeek();
+            $date->subWeek();
+        }
+
+        return $result->toArray();
+    }
+
+    /**
+     * @param  T  $value
+     * @return array<int, float>
+     */
+    public function getAverageData($value, int $days): array
+    {
+        /** @var Collection<float> $result */
+        $result = collect();
+
+        $date = Carbon::today()->startOfWeek();
+        for ($i = 0; $i < $days / 7; $i++) {
+            $result->push($this->getWeekAverageData($value, $date));
+            $date->subWeek();
         }
 
         return $result->toArray();
@@ -88,15 +106,58 @@ abstract class MosaicService extends Service
     /**
      * @param  T  $value
      */
-    public function clearData($value, CarbonInterface $date): void
+    protected function getWeekAverageData($value, CarbonInterface $startDate): float
     {
-        Cache::forget($this->getCacheKey($value, $date));
+        if ($startDate->isSameWeek(Carbon::today())) {
+            return Cache::remember(
+                $this->getCacheKey($value, $startDate, '.avg'),
+                5 * 60,
+                fn () => $this->computeWeekAverageData($value, $startDate)
+            );
+        }
+
+        return Cache::rememberForever(
+            $this->getCacheKey($value, $startDate, '.avg'),
+            fn () => $this->computeWeekAverageData($value, $startDate)
+        );
     }
 
     /**
      * @param  T  $value
      */
-    protected function getCacheKey($value, CarbonInterface $date): string
+    private function computeWeekAverageData($value, CarbonInterface $startDate): float
+    {
+        $rootCacheKey = $this->getRootCacheKey($value);
+
+        $weekAverage = collect($this->getWeekData($value, $startDate))->filter()->average() ?? 0;
+
+        /** @var CarbonInterface $maxDate */
+        $maxDate = Cache::get($rootCacheKey.'.max');
+
+        $nWeeks = floor($startDate->diffInWeeks($maxDate, absolute: true));
+
+        if ($nWeeks < 1) {
+            return $weekAverage;
+        }
+
+        $beforeAverage = $this->getWeekAverageData($value, $startDate->clone()->subWeek());
+
+        return ($beforeAverage * $nWeeks + $weekAverage) / ($nWeeks + 1);
+    }
+
+    /**
+     * @param  T  $value
+     */
+    public function clearData($value, CarbonInterface $date): void
+    {
+        Cache::forget($this->getCacheKey($value, $date));
+        Cache::forget($this->getCacheKey($value, $date, '.avg'));
+    }
+
+    /**
+     * @param  T  $value
+     */
+    protected function getCacheKey($value, CarbonInterface $date, string $suffix = ''): string
     {
         $rootCacheKey = $this->getRootCacheKey($value);
 
@@ -107,7 +168,7 @@ abstract class MosaicService extends Service
             Cache::put($rootCacheKey.'.max', $date);
         }
 
-        return $this->getRootCacheKey($value).'.'.$date->year.'.'.$date->week;
+        return $rootCacheKey.'.'.$date->year.'.'.$date->week.$suffix;
     }
 
     /**
