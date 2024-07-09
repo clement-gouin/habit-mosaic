@@ -24,7 +24,7 @@ abstract class MosaicService extends Service
         /** @var Collection<float|null> $result */
         $result = collect();
         $date = Carbon::today()->startOfWeek();
-        while ($date->diffInWeeks($maxDate) <= 0) {
+        while (floor($date->diffInWeeks($maxDate)) <= 0) {
             $result->push(...$this->getWeekData($value, $date));
             $date = $date->subWeek();
         }

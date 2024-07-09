@@ -25,7 +25,7 @@ class TrackerFullResource extends TrackerResource
 
         return array_merge(parent::toArray($request), [
             'data_point' => DataPointResource::make($this->resource->getDataPointAt($date)),
-            'staleness' => $lastDataPoint?->date->diffInDays($date),
+            'staleness' => $lastDataPoint ? floor($lastDataPoint->date->diffInDays($date)) : null,
             'statistics' => StatisticsResource::make(TrackerMosaicService::instance()->getStatistics($this->resource)),
         ]);
     }
