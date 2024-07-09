@@ -13,8 +13,7 @@ class ClearTrackerWeekMosaic
         protected TrackerMosaicService $mosaicService,
         protected CategoryMosaicService $catMosaicService,
         protected DayMosaicService $dayMosaicService,
-    ) {
-    }
+    ) {}
 
     public function handle(DataPointEvent $event): void
     {

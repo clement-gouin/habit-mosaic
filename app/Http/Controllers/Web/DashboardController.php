@@ -13,9 +13,7 @@ use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __construct(protected DayMosaicService $mosaicService)
-    {
-    }
+    public function __construct(protected DayMosaicService $mosaicService) {}
 
     public function __invoke(Request $request): View
     {

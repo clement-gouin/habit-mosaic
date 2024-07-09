@@ -7,9 +7,7 @@ use App\Services\Mosaic\CategoryMosaicService;
 
 class WipeCategoryMosaic
 {
-    public function __construct(protected CategoryMosaicService $mosaicService)
-    {
-    }
+    public function __construct(protected CategoryMosaicService $mosaicService) {}
 
     public function handle(CategoryEvent $event): void
     {

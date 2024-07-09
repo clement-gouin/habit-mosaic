@@ -9,8 +9,7 @@ class WipeDayMosaic
 {
     public function __construct(
         protected DayMosaicService $mosaicService,
-    ) {
-    }
+    ) {}
 
     public function handle(WithUser $event): void
     {

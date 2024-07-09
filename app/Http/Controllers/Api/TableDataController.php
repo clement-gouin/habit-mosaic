@@ -15,9 +15,7 @@ use Illuminate\Http\Request;
 
 class TableDataController extends Controller
 {
-    public function __construct(protected TableService $tableService, protected DayMosaicService $mosaicService)
-    {
-    }
+    public function __construct(protected TableService $tableService, protected DayMosaicService $mosaicService) {}
 
     public function data(Request $request): JsonResponse
     {

@@ -2,6 +2,4 @@
 
 namespace App\Events;
 
-class CategoryDeleted extends CategoryEvent
-{
-}
+class CategoryDeleted extends CategoryEvent {}

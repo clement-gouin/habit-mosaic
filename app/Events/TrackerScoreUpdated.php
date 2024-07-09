@@ -2,6 +2,4 @@
 
 namespace App\Events;
 
-class TrackerScoreUpdated extends TrackerEvent
-{
-}
+class TrackerScoreUpdated extends TrackerEvent {}

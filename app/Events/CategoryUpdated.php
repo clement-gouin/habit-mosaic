@@ -2,6 +2,4 @@
 
 namespace App\Events;
 
-class CategoryUpdated extends CategoryEvent
-{
-}
+class CategoryUpdated extends CategoryEvent {}

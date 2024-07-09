@@ -2,6 +2,4 @@
 
 namespace App\Events;
 
-class TrackerDeleted extends TrackerEvent
-{
-}
+class TrackerDeleted extends TrackerEvent {}

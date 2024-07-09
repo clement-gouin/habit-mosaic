@@ -15,9 +15,7 @@ use Illuminate\View\View;
 
 class TableViewController extends Controller
 {
-    public function __construct(protected TableService $tableService, protected DayMosaicService $mosaicService)
-    {
-    }
+    public function __construct(protected TableService $tableService, protected DayMosaicService $mosaicService) {}
 
     public function __invoke(Request $request): View
     {

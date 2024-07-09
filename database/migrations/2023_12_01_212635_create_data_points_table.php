@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('data_points', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Tracker::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Tracker::class)->constrained()->cascadeOnDelete();
             $table->date('date');
             $table->float('value')->default(0);
         });

@@ -13,9 +13,7 @@ abstract class TrackerEvent implements WithUser
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public Tracker $tracker)
-    {
-    }
+    public function __construct(public Tracker $tracker) {}
 
     public function getUser(): User
     {

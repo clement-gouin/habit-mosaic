@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
-    public function __construct(protected UserTokenService $userTokenService)
-    {
-    }
+    public function __construct(protected UserTokenService $userTokenService) {}
 
     public function create(): View
     {

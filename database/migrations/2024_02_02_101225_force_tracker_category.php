@@ -20,11 +20,21 @@ return new class extends Migration
                 $table->dropConstrainedForeignIdFor(User::class);
             });
         } else {
-            Schema::table('trackers', function (Blueprint $table) {
-                $table->dropColumn(['category_id', 'user_id']);
-            });
-            Schema::table('trackers', function (Blueprint $table) {
+            Schema::dropIfExists('trackers');
+
+            Schema::create('trackers', function (Blueprint $table) {
+                $table->id();
                 $table->foreignIdFor(Category::class)->constrained()->cascadeOnDelete();
+                $table->string('name');
+                $table->integer('order');
+                $table->string('icon');
+                $table->string('unit')->nullable();
+                $table->float('value_step');
+                $table->float('target_value');
+                $table->float('target_score');
+                $table->boolean('single');
+                $table->timestamps();
+                $table->boolean('overflow')->default(true);
             });
         }
     }
@@ -41,12 +51,22 @@ return new class extends Migration
                 $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
             });
         } else {
-            Schema::table('trackers', function (Blueprint $table) {
-                $table->dropColumn('category_id');
-            });
-            Schema::table('trackers', function (Blueprint $table) {
-                $table->foreignIdFor(Category::class)->nullable()->constrained()->nullOnDelete();
+            Schema::dropIfExists('trackers');
+
+            Schema::create('trackers', function (Blueprint $table) {
+                $table->id();
                 $table->foreignIdFor(User::class)->nullable()->constrained()->cascadeOnDelete();
+                $table->foreignIdFor(Category::class)->nullable()->constrained()->cascadeOnDelete();
+                $table->string('name');
+                $table->integer('order');
+                $table->string('icon');
+                $table->string('unit')->nullable();
+                $table->float('value_step');
+                $table->float('target_value');
+                $table->float('target_score');
+                $table->boolean('single');
+                $table->timestamps();
+                $table->boolean('overflow')->default(true);
             });
         }
     }

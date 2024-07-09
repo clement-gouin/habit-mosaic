@@ -21,8 +21,7 @@ class TrackerController extends Controller
 {
     public function __construct(
         protected TrackerService $trackerService,
-    ) {
-    }
+    ) {}
 
     public function list(Request $request): ResourceCollection
     {

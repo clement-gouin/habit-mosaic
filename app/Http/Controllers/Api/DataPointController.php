@@ -11,9 +11,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class DataPointController extends Controller
 {
-    public function __construct(protected DataPointService $dataPointService)
-    {
-    }
+    public function __construct(protected DataPointService $dataPointService) {}
 
     /**
      * Update the specified resource in storage.

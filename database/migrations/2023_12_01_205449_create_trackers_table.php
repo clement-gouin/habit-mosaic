@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('trackers', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Category::class)->nullable()->constrained()->onDelete('cascade');
+            $table->foreignIdFor(User::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Category::class)->nullable()->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->integer('order');
             $table->string('icon');

@@ -14,8 +14,7 @@ readonly class Statistics
         public float $median = 0,
         public float $upperQuartile = 0,
         public float $max = 0
-    ) {
-    }
+    ) {}
 
     public static function deserialize(array $data): Statistics
     {

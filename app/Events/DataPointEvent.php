@@ -11,7 +11,5 @@ abstract class DataPointEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public DataPoint $dataPoint)
-    {
-    }
+    public function __construct(public DataPoint $dataPoint) {}
 }

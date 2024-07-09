@@ -19,8 +19,7 @@ class MosaicDataController extends Controller
         protected TrackerMosaicService $trackerMosaicService,
         protected CategoryMosaicService $catMosaicService,
         protected DayMosaicService $dayMosaicService,
-    ) {
-    }
+    ) {}
 
     public function day(Request $request): JsonResponse
     {
