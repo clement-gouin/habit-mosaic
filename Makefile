@@ -37,12 +37,11 @@ migrate: vendor
 
 .PHONY: test
 test: vendor
-	php vendor/bin/phpunit --log-junit "reports/phpunit.xml" --testdox-html "reports/phpunit.html" --no-coverage
-	open reports/phpunit.html &> /dev/null &
+	php artisan test --parallel --log-junit "reports/phpunit.xml" --no-coverage
 
 .PHONY: coverage
 coverage: vendor
-	XDEBUG_MODE=coverage php vendor/bin/phpunit --coverage-clover "reports/coverage.xml" --coverage-html "reports/coverage"
+	XDEBUG_MODE=coverage php artisan test --parallel --log-junit "reports/phpunit.xml" --coverage-clover "reports/coverage.xml" --coverage-html "reports/coverage"
 	open reports/coverage/index.html &> /dev/null &
 
 .PHONY: lint
