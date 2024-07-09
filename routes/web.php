@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DataPointController;
 use App\Http\Controllers\Api\DayDataController;
+use App\Http\Controllers\Api\GraphDataController;
 use App\Http\Controllers\Api\MosaicDataController;
 use App\Http\Controllers\Api\TableDataController;
 use App\Http\Controllers\Api\TrackerController;
@@ -48,6 +49,12 @@ Route::middleware('auth')->group(function () {
             Route::get('day', [MosaicDataController::class, 'day'])->name('mosaic.day');
             Route::get('categories/{category}', [MosaicDataController::class, 'category'])->name('mosaic.category');
             Route::get('trackers/{tracker}', [MosaicDataController::class, 'tracker'])->name('mosaic.tracker');
+        });
+
+        Route::prefix('graph')->group(function () {
+            Route::get('day', [GraphDataController::class, 'day'])->name('graph.day');
+            Route::get('categories/{category}', [GraphDataController::class, 'category'])->name('graph.category');
+            Route::get('trackers/{tracker}', [GraphDataController::class, 'tracker'])->name('graph.tracker');
         });
 
         Route::prefix('table')->group(function () {
