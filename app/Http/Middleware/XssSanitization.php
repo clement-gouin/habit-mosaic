@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,9 +15,9 @@ class XssSanitization
     /**
      * Handle an incoming request.
      *
-     * @param  Closure(Request): (\Illuminate\Http\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    public function handle(Request $request, Closure $next): Response
     {
         $input = $request->all();
 
