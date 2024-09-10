@@ -139,6 +139,8 @@ jobs:
     steps:
       - uses: appleboy/ssh-action@v1.0.3
         with:
+          script_stop: true
+          debug: ${{ vars.RUNNER_DEBUG }}
           host: ${{ vars.SSH_HOST }}
           username: ${{ vars.SSH_USER }}
           port: ${{ secrets.SSH_PORT }}
