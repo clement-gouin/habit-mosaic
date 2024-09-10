@@ -137,7 +137,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     needs: [eslint,pint,phpstan,phpunit,phpmd]
     steps:
-      - uses: appleboy/ssh-action@v1.0.1
+      - uses: appleboy/ssh-action
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
