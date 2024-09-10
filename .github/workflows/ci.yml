@@ -144,4 +144,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.SSH_PASSPHRASE }}
-          script: ${{ format(secrets.SSH_SCRIPT, github.run_number)
+          script: ${{ format(secrets.SSH_SCRIPT, github.run_number) }}
