@@ -20,7 +20,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
         \App\Http\Middleware\XssSanitization::class,
-        \App\Http\Middleware\VersionMiddleware::class,
+        \App\Http\Middleware\Version::class,
+        \App\Http\Middleware\CacheControl::class,
     ];
 
     /**

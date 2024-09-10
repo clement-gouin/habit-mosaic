@@ -5,12 +5,18 @@ namespace App\Http\Middleware;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Config;
 use Symfony\Component\HttpFoundation\Response;
 
-class VersionMiddleware
+class Version
 {
-    public function handle(Request $request, Closure $next): Response
+    /**
+     * Handle an incoming request.
+     *
+     * @param  Closure(Request): (\Illuminate\Http\Response)  $next
+     */
+    public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
         /** @var Response $response */
         $response = $next($request);
