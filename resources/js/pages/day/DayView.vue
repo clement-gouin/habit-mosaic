@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { CategoryFull, Statistics, TrackerFull } from '@interfaces';
-import { computed, onBeforeMount, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { getDayData } from '@requests/day';
 import { referenceColor } from '@utils/colors';
 import CategoryPanel from '@components/day/CategoryPanel.vue';
@@ -74,15 +74,15 @@ function next () {
     date.value = before.setDate(before.getDate() + 1);
 }
 
-function enforceToday () {
-    if (loading.value || loadingInternal.value) {
-        return;
-    }
-    const params = new URL(document.location.toString()).searchParams;
-    if (!params.has('date')) {
-        date.value = (new Date()).setHours(((new Date(date.value)).getHours()), 0, 0, 0);
-    }
-}
+// function enforceToday () {
+//     if (loading.value || loadingInternal.value) {
+//         return;
+//     }
+//     const params = new URL(document.location.toString()).searchParams;
+//     if (!params.has('date')) {
+//         date.value = (new Date()).setHours(((new Date(date.value)).getHours()), 0, 0, 0);
+//     }
+// }
 
 watch(rawDate, () => {
     loading.value = true;
@@ -91,9 +91,9 @@ watch(rawDate, () => {
 
 watch(date, forceFetch);
 
-onBeforeMount(() => {
-    setInterval(enforceToday, 100);
-});
+// onBeforeMount(() => {
+//     setInterval(enforceToday, 100);
+// });
 </script>
 
 <script lang="ts">
