@@ -10,11 +10,14 @@
         </div>
         <hr class="my-0 my-lg-3">
         <ul class="nav nav-pills nav-flush flex-column mb-auto text-center text-lg-start">
-            <x-menu.item route="dashboard" pattern="dashboard" icon="fa-solid fa-house-chimney">
-                Dashboard
+            <x-menu.item route="dashboard" pattern="dashboard" icon="fa-solid fa-grip">
+                Mosaic
             </x-menu.item>
             <x-menu.item route="day" pattern="day" icon="fa-solid fa-calendar-check">
                 Day to day
+            </x-menu.item>
+            <x-menu.item route="graph" pattern="graph" icon="fa-solid fa-chart-column">
+                Graphics
             </x-menu.item>
             <x-menu.item route="table" pattern="table" icon="fa-solid fa-table-cells">
                 Table view

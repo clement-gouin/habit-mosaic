@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\AuthenticatedSessionController;
 use App\Http\Controllers\Web\ConfigurationController;
 use App\Http\Controllers\Web\DashboardController;
 use App\Http\Controllers\Web\DayViewController;
+use App\Http\Controllers\Web\GraphViewController;
 use App\Http\Controllers\Web\TableViewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -37,6 +38,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('dashboard', DashboardController::class)->name('dashboard');
     Route::get('day', DayViewController::class)->name('day');
+    Route::get('graph', GraphViewController::class)->name('graph');
     Route::get('table', TableViewController::class)->name('table');
     Route::get('configuration', ConfigurationController::class)->name('configuration');
 

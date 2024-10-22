@@ -4,7 +4,7 @@
             ref="input"
             :name="name"
             v-model="tracker"
-            :placeholder="placeholder"
+            :placeholder="placeholder ?? 'Select a tracker...'"
             :label="label"
             :error="error"
             :disabled="disabled"

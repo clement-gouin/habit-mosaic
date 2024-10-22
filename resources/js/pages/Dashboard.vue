@@ -1,7 +1,7 @@
 <template>
     <div class="p-1 py-2 p-sm-2 p-md-4 user-select-none">
         <h1 class="border-bottom border-1 pb-2">
-            Dashboard
+            <i class="fa-solid fa-grip" />&nbsp;Mosaic
             <score-badge :reference="1" :value="statistics.average" />
         </h1>
         <mosaic class="w-100" style="height: 10em" :data="daysData" @change-resolution="fetchDayData" />
