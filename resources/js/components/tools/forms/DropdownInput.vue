@@ -1,7 +1,7 @@
 <template>
     <div :id="`dropdown-input-${name}`" class="form-group" :class="{ 'has-error': error || internalError, 'has-feedback': true, 'row': isHorizontal }">
         <slot name="label">
-            <label :class="labelClass" :for="name">
+            <label v-if="label" :class="labelClass" :for="name">
                 <template v-if="helpText">
                     <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;<span class="badge">?</span></Tooltip>
                 </template>

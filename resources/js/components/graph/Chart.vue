@@ -1,11 +1,11 @@
 <template>
-    <canvas ref="graph"></canvas>
+    <canvas :id="id" />
 </template>
 
 <script setup lang="ts">
-import { ChartData, ChartOptions } from 'chart.js/dist/types';
+import { ChartData, ChartItem, ChartOptions } from 'chart.js/dist/types';
 import Chart from 'chart.js/auto';
-import { onMounted, ref, useTemplateRef } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 interface Props {
     data: ChartData
@@ -14,23 +14,32 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const graphCanvas = useTemplateRef<HTMLCanvasElement>('graph');
+const id = ref<string>('graph-' + Math.random().toString(36)
+    .substring(2));
 
-const chart = ref<Chart|null>(null);
+let chart: Chart|null = null;
 
-onMounted(() => {
-    if (graphCanvas.value !== null) {
-        chart.value = new Chart(
-            graphCanvas.value,
+function makeChart () {
+    if (chart) {
+        try {
+            chart.destroy();
+        } catch (error) {
+            // ignore
+        }
+    }
+    const ctx = document.getElementById(id.value);
+    if (ctx !== null) {
+        chart = new Chart(
+            ctx as ChartItem,
             {
                 data: props.data,
                 options: props.options ?? {}
             }
         );
     }
-});
+}
+
+onMounted(makeChart);
+watch(() => props.options, makeChart);
+watch(() => props.data, makeChart);
 </script>
-
-<style scoped>
-
-</style>

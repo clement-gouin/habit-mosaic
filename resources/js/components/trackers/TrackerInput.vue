@@ -19,6 +19,8 @@
             :cursor-offset="cursorOffset ?? (withCreateButton ? '3em' : '1em')"
             @change="onChange"
             :notice="notice"
+            :label-col-size="labelColSize"
+            :inputWrapperColSize="inputWrapperColSize"
         >
             <template #item="{value}">
                 <tracker-label :tracker="value" />
@@ -73,6 +75,8 @@ interface Props {
     withCreateButton?: boolean,
     notice?: string,
     cursorOffset?: string
+    labelColSize?: number,
+    inputWrapperColSize?: number,
 }
 
 const props = defineProps<Props>();
