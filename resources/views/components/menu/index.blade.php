@@ -1,6 +1,6 @@
 @props(['class', 'style'])
 
-<nav style="{{ $style }}" class="{{ $class }} w-20 lg:w-60 bg-white h-full border-r-2 border-gray-200 p-0 lg:p-4 lg:pt-8 flex flex-col fixed top-0 left-0">
+<nav style="{{ $style }}" class="{{ $class }} w-22 lg:w-60 bg-white h-full border-r-2 border-gray-200 px-2 py-2 pb-4 lg:pt-8 flex flex-col top-0 left-0 fixed">
     <div class="text-center hidden lg:block">
         <x-full-logo />
     </div>

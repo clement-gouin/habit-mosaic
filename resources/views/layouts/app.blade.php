@@ -14,15 +14,15 @@
         @yield('head')
     </head>
     <body class="antialiased text-gray-800 bg-gray-50 relative" x-data="{open: false}">
-        <x-menu style="z-index: 1002" class="hidden md:block"/>
+        <x-menu style="z-index: 1002" class="hidden md:flex"/>
         <main style="background-color: #f5f5f5;min-height: 100vh" class="ml-0 md:ml-20 lg:ml-60 flex-grow" x-on:click="open = false">
             @yield('content')
         </main>
-        <div class="h-100 p-0 fixed start-0" style="z-index: 1002" x-show="open">
+        <div class="" style="z-index: 1002" x-show="open">
             <x-menu class="" style=""/>
         </div>
         <div x-on:click="open = true" x-show="!open" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu"
-             class="cursor-pointer block md:hidden fixed start-0 bottom-0 rounded-tr-md p-2 py-1 text-center border border-e-gray-500 border-t-gray-500 bg-white"
+             class="cursor-pointer block md:hidden fixed start-0 bottom-0 rounded-tr-md p-2 py-1 text-center shadow border border-e-gray-50 border-t-gray-50 bg-white"
              style="width: 4em; z-index: 1002;"
         >
             <i class="fa-solid fa-bars"></i>
