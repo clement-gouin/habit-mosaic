@@ -55,7 +55,7 @@ export default defineConfig(({ mode }) => {
             watch: { usePolling: true }
         },
         plugins: [
-            laravel({ input: ['resources/js/app.js'] }),
+            laravel({ input: ['resources/css/app.css', 'resources/js/app.js'] }),
             vue({
                 template: {
                     transformAssetUrls: {
@@ -78,7 +78,6 @@ export default defineConfig(({ mode }) => {
                 '@interfaces': path.resolve(__dirname, 'resources/js/interfaces.ts'),
                 '@constants': path.resolve(__dirname, 'resources/js/constants.ts'),
                 '@symbols': path.resolve(__dirname, 'resources/js/symbols.ts'),
-                '~bootstrap': path.resolve(__dirname, 'node_modules/bootstrap'),
                 '~fontawesome': path.resolve(__dirname, 'node_modules/@fortawesome/fontawesome-free'),
                 '@css': path.resolve(__dirname, 'resources/css'),
                 '@fonts': path.resolve(__dirname, 'resources/fonts'),

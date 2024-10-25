@@ -1,12 +1,7 @@
 @props(['route', 'pattern', 'icon'])
 
-<li class="nav-item d-none d-lg-block">
-    <a href="{{ isset($route) ? route($route) : '#' }}" class="nav-link fs-5 {{ (isset($pattern) && request()->is($pattern)) ? 'active' : 'link-dark' }}">
-        <i class="{{ $icon }} me-1" title="{{ $slot }}"></i> {{ $slot }}
-    </a>
-</li>
-<li class="nav-item d-block d-lg-none">
-    <a href="{{ isset($route) ? route($route) : '#' }}" class="nav-link fs-4 rounded-0 py-3 px-0 w-100 d-flex justify-content-center {{ (isset($pattern) && request()->is($pattern)) ? 'active' : 'link-dark' }}">
-        <i class="{{ $icon }}" title="{{ $slot }}"></i>
+<li class="m-auto lg:m-0">
+    <a href="{{ isset($route) ? route($route) : '#' }}" class="{{ (isset($pattern) && request()->is($pattern)) ? 'active' : '' }}">
+        <i class="{{ $icon }}" title="{{ $slot }}"></i><span class="hidden lg:inline">{{ $slot }}</span>
     </a>
 </li>

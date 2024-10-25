@@ -28,13 +28,9 @@ import axios from 'axios';
 //     enabledTransports: ['ws', 'wss'],
 // });
 
-import '../scss/app.scss';
-
-import * as bootstrap from 'bootstrap';
 import * as Popper from '@popperjs/core';
 
 window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-window.bootstrap = bootstrap;
 window.Popper = Popper;
