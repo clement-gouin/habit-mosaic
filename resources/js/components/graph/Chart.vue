@@ -3,13 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import { ChartData, ChartItem, ChartOptions } from 'chart.js/dist/types';
 import Chart from 'chart.js/auto';
 import { onMounted, ref, watch } from 'vue';
 
 interface Props {
-    data: ChartData
-    options?: ChartOptions
+    data: any
+    options?: any
 }
 
 const props = defineProps<Props>();
@@ -30,7 +29,7 @@ function makeChart () {
     const ctx = document.getElementById(id.value);
     if (ctx !== null) {
         chart = new Chart(
-            ctx as ChartItem,
+            ctx,
             {
                 data: props.data,
                 options: props.options ?? {}
