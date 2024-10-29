@@ -14,6 +14,7 @@ module.exports = {
         { pattern: /grid-cols-*/ },
         { pattern: /text-*-*/ },
         { pattern: /bg-*-*/ },
+        { pattern: /bg-primary/ },
         { pattern: /border-*-*/ }
     ],
     theme: {

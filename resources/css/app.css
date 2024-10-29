@@ -23,7 +23,8 @@
 }
 
 .menu li > :not(ul, .menu-title, details, .btn).active, .menu li > :not(ul, .menu-title, details, .btn):active{
-    @apply bg-primary-500 text-white;
+    --n: var(--p);
+    @apply text-white;
 }
 
 #collapseMenu {

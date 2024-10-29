@@ -9,7 +9,7 @@
             <i class="fa-solid w-8 fa-caret-right text-start my-auto" :class="isToday ? 'opacity-0 pointer-events-none' : ''" role="button" @click="next"></i>
         </h2>
     </div>
-    <div class="position-relative user-select-none" style="min-height: calc(100% - 3.1em)">
+    <div class="position-relative select-none" style="min-height: calc(100% - 3.1em)">
         <motivation-banner :loading="loading" :is-today="isToday" :score="score" :statistics="statistics" />
         <category-panel
             v-for="(category,i) in categories"
