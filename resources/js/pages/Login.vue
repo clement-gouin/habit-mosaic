@@ -68,9 +68,3 @@ function onSubmit () {
         });
 }
 </script>
-
-<style scoped>
-  .card {
-    background-color: #f5f5f5 !important;
-  }
-</style>

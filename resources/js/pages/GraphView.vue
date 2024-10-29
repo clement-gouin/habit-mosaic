@@ -39,7 +39,7 @@ function reduceChunks (data: (number|null)[], chunkSize: number): number[] {
     data = data.slice().reverse();
 
     for (let i = 0; i < data.length; i += chunkSize) {
-        const slice = data.slice(i, i + chunkSize).filter(i => i !== null);
+        const slice = data.slice(i, i + chunkSize).filter(i => i !== null) as number[];
         output.push(slice.reduce((a, b) => a + b) / (slice.length ?? 1));
     }
 

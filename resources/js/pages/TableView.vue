@@ -75,7 +75,7 @@ const columns = computed<TableColumn[]>(() => {
             label: 'Date',
             icon: '',
             title: '',
-            cssStyle: row => {
+            cssStyle: (row: {score: number}|null) => {
                 if (row) {
                     return `z-index:50;background-color: ${backgroundColor(baseColorDay(row.score))}; color: ${textColor(baseColorDay(row.score))}`;
                 }
@@ -88,7 +88,7 @@ const columns = computed<TableColumn[]>(() => {
             label: 'Score',
             icon: '',
             title: '',
-            cssStyle: row => {
+            cssStyle: (row: {score: number}|null) => {
                 if (row) {
                     return `background-color: ${backgroundColor(baseColorDay(row.score))}; color: ${textColor(baseColorDay(row.score))}`;
                 }
@@ -101,7 +101,7 @@ const columns = computed<TableColumn[]>(() => {
                 label: '',
                 icon: tracker.icon,
                 title: tracker.name,
-                cssStyle: row => {
+                cssStyle: (row: Record<string, { value: number }>|null) => {
                     const base = 'min-width:3em;line-height:3em;font-size:.9em;';
                     if (row) {
                         return base + `background-color: ${backgroundColor(baseColor(tracker, row[`tracker-${tracker.id}`].value))}; color: ${textColor(baseColor(tracker, row[`tracker-${tracker.id}`].value))}`;
@@ -111,7 +111,7 @@ const columns = computed<TableColumn[]>(() => {
                 cssClass: 'align-middle text-center p-0'
             };
         })
-    ];
+    ] as TableColumn[];
 });
 
 function sortTrackers (data: Tracker[]) {
@@ -196,7 +196,7 @@ function update (tracker: Tracker, dataPoint: DataPoint, value: number) {
 
 function selectAll (event: FocusEvent) {
     if (event.target) {
-        window.getSelection()?.selectAllChildren(event.target);
+        window.getSelection()?.selectAllChildren(event.target as HTMLElement);
     }
 }
 

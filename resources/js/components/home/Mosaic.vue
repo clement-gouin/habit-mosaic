@@ -39,7 +39,7 @@ function draw (consumePointerDown = false) {
         return;
     }
 
-    const notNullData: number[] = props.data.filter(d => d !== null);
+    const notNullData = props.data.filter(d => d !== null) as number[];
     const maxValue = Math.max(Math.max(...notNullData), -Math.min(...notNullData));
 
     const rect = canvas.value.getBoundingClientRect();
@@ -52,8 +52,8 @@ function draw (consumePointerDown = false) {
     const square = height / 10;
     const spacing = (height - square * 7) / 7;
 
-    const xValue = x => spacing * 0.5 + (square + spacing) * x;
-    const yValue = y => height - (square + spacing) * y - square - spacing * 0.5;
+    const xValue = (x: number) => spacing * 0.5 + (square + spacing) * x;
+    const yValue = (y: number) => height - (square + spacing) * y - square - spacing * 0.5;
 
     context.clearRect(0, 0, width, height);
 

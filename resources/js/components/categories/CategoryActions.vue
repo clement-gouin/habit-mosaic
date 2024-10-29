@@ -55,7 +55,7 @@ const confirmDeleteDialog = ref<InstanceType<typeof ConfirmDialog>|null>(null);
 
 function updateModalSubmit () {
     updateForm.value?.submit()
-        .then(category => {
+        .then((category: Category) => {
             updateModal.value?.close();
             updateForm.value?.reset();
             emit('update:modelValue', category);

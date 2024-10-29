@@ -19,7 +19,7 @@ export interface Alert {
     type: AlertType
     title?: string
     text: string
-    show: boolean
+    fade: boolean
 }
 
 export enum AlertType {

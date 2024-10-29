@@ -32,7 +32,7 @@ import { computed, ref, watch } from 'vue';
 import { BaseFormInput, Option } from '@interfaces';
 
 interface Props extends BaseFormInput {
-    options: Option[]
+    options: Option<unknown>[]
     emptyText?: string
 }
 
@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<Props>(), { emptyText: '(none)' });
 
 const emit = defineEmits(['change']);
 
-const value = defineModel<Option|null>();
+const value = defineModel<Option<unknown>|null>();
 const internalError = ref<string>();
 const internalValue = ref<string|null>(value.value?.key ?? '');
 
@@ -49,7 +49,7 @@ const displayError = computed<undefined|string|boolean>(() => (typeof props.erro
 const displayColor = computed<undefined|string>(() => hasError.value ? 'error' : props.color);
 
 function updateInternal () {
-    value.value = props.options.find((option: Option) => option.key === internalValue.value);
+    value.value = props.options.find((option: Option<unknown>) => option.key === internalValue.value);
     emit('change', value.value);
 }
 

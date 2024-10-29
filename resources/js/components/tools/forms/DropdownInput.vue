@@ -59,7 +59,7 @@ import { useDebouncedRef } from '@composables/useDebouncedRef';
 import LoadingMask from '@tools/LoadingMask.vue';
 
 interface Props extends BaseFormInput {
-    options: Option[],
+    options: Option<unknown>[],
     loading?: boolean,
     withHighlight?: boolean,
     debounce?: number | boolean,
@@ -68,7 +68,7 @@ interface Props extends BaseFormInput {
 
 const props = defineProps<Props>();
 
-const selected = defineModel<Option|null>();
+const selected = defineModel<Option<unknown>|null>();
 
 const internalError = ref<string>();
 
@@ -136,7 +136,7 @@ function highlight (value: string) {
     return value;
 }
 
-function select (selectedOption: Option) {
+function select (selectedOption: Option<unknown>) {
     internalError.value = '';
     const changed = selected.value?.key !== selectedOption.key;
     selected.value = props.options.find(option => option.key === selectedOption.key) ?? null;

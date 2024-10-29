@@ -15,7 +15,7 @@
             v-for="(category,i) in categories"
             v-bind:key="category.id"
             v-model="categories[i]"
-            :trackers="trackers.filter(tracker => tracker.category.id === category.id)"
+            :trackers="trackers.filter((tracker: Tracker) => tracker.category.id === category.id)"
             v-model:loading="loadingInternal"
         />
         <LoadingMask v-if="loading" />
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { CategoryFull, Statistics, TrackerFull } from '@interfaces';
+import { CategoryFull, Statistics, Tracker, TrackerFull } from '@interfaces';
 import { computed, ref, watch } from 'vue';
 import { getDayData } from '@requests/day';
 import { backgroundColor, borderColor, referenceColor, textColor } from '@utils/colors';
