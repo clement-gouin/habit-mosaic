@@ -1,84 +1,54 @@
 <template>
-    <div class="form-group" :class="{'has-error': (error || internalError), 'row': isHorizontal}">
-        <label :class="labelClass" :for="name" v-if="label">
-            <template v-if="helpText">
-                <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;<span
-                    class="badge">?</span></Tooltip>
-            </template>
-            <template v-else>
-                {{ label }}<span v-if="required" class="text-danger">*</span>
-            </template>
+    <div class="form-control text-base my-2">
+        <label :for="id" v-if="label" class="label pt-0">
+            <span class="label-text" :class="hasError ? 'text-error' : ''">{{ label }}<span v-if="required" class="text-error">*</span></span>
         </label>
-        <div :class="inputWrapperClass">
-          <textarea
-              :name="name"
-              :rows="rows"
-              class="form-control"
-              :value="modelValue"
-              :disabled="disabled"
-              :aria-describedby="'help-' + name"
-              :required="required"
-              :placeholder="placeholder"
-              :autocomplete="autocomplete"
-              :readonly="readonly"
-              v-bind="$attrs"
-              @change="onChange"
-              @input="onInput"
-          ></textarea>
-            <span v-if="internalError" :id="`help-${name}`" class="form-text">{{ internalError }}</span>
-            <span v-else-if="error" :id="`help-${name}`" class="form-text">{{ error }}</span>
-            <span v-else-if="notice || $slots.notice" :id="`help-${name}`" class="form-text"><slot name="notice">{{ notice }}</slot></span>
+        <textarea
+            v-model="value"
+            :id="id"
+            :name="name ?? id"
+            :placeholder="placeholder"
+            :disabled="disabled"
+            :required="required"
+            :readonly="readonly"
+            class="textarea textarea-bordered"
+            :class="`textarea-${displayColor} ` + (hasError ? 'input-error text-error' : '')"
+            @blur="onBlur"
+        />
+        <div v-if="helpText ?? (typeof displayError === 'string' && displayError.length)" class="label pb-0">
+      <span class="label-text-alt" :class="hasError ? 'font-bold text-error' : 'italic'">{{
+              (typeof displayError === 'string' && displayError.length) ? displayError : helpText
+          }}</span>
         </div>
     </div>
 </template>
-<script setup lang="ts">
-import { onDeactivated, ref } from 'vue';
-import Tooltip from '@tools/Tooltip.vue';
-import { useBsForm } from '@composables/useBsForm';
 
-interface Props {
-    name: string,
-    modelValue?: string,
-    placeholder?: string,
-    label?: string,
-    helpText?: string,
-    notice?: string,
-    error?: string,
-    disabled?: boolean,
-    required?: boolean,
-    autocomplete?: string,
-    readonly?: boolean,
-    labelColSize?: number,
-    inputWrapperColSize?: number,
-    rows?: number
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { BaseFormInput } from '@interfaces';
+
+interface Props extends BaseFormInput {
+    placeholder?: string
 }
 
 const props = defineProps<Props>();
 
-const emit = defineEmits(['update:modelValue', 'change']);
+const emit = defineEmits(['change']);
 
-const internalError = ref<string | null>(null);
+const value = defineModel<string>();
+const internalError = ref<string>();
 
-const { labelClass, inputWrapperClass, isHorizontal } = useBsForm(props);
+const hasError = computed<boolean>(() => !!props.error || !!internalError.value || false);
+const displayError = computed<undefined|string|boolean>(() => (typeof props.error === 'string' && props.error.length) ? props.error : internalError.value);
+const displayColor = computed<undefined|string>(() => hasError.value ? 'error' : props.color);
 
-function onInput (event: InputEvent) {
-    const value = (event.currentTarget as HTMLInputElement).value;
-    emit('update:modelValue', value);
-    internalError.value = null;
-    if ((props.required as boolean) && (value === '')) {
+function onBlur () {
+    internalError.value = '';
+
+    if (props.required && value.value?.length === 0) {
         internalError.value = 'This field is required';
     }
-}
 
-function onChange (event: InputEvent) {
-    const target = (event.currentTarget as HTMLInputElement);
-    emit('change', target.value);
+    emit('change', value.value);
 }
-
-onDeactivated(() => {
-    internalError.value = null;
-});
-</script>
-<script lang="ts">
-export default { inheritAttrs: false };
 </script>

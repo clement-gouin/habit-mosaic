@@ -1,13 +1,12 @@
 <template>
-    <div class="w-100 position-sticky top-0 z-1 user-select-none">
-        <h2 class="w-100 border-bottom border-1 py-2 m-0 row" :style="{backgroundColor: color('bg-subtle'), borderColor: color('border-subtle'), color: color('text-emphasis')}">
-            <span class="d-none d-xl-block col-3"></span>
-            <i class="fa-solid fa-caret-left col-1 col text-end" role="button" @click="previous"></i>
-            <span class="col-10 col-xl-4 text-center">
+    <div class="w-full sticky top-0 z-1 select-none">
+        <h2 class="w-full h-14 text-3xl font-bold border-b border-1 m-0 flex justify-between md:justify-center gap-14" :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor), color: textColor(baseColor)}">
+            <i class="fa-solid w-8 fa-caret-left text-end my-auto" role="button" @click="previous"></i>
+            <span class="text-center inline-block my-auto">
                 {{ formatDate(new Date(rawDate)) }}
-                <span class="text-dark-emphasis superscript rounded" v-if="!loading">{{ score.toFixed(1) }}</span>
+                <span class="text-gray-600 superscript rounded">{{ loading ? '???' : score.toFixed(1) }}</span>
             </span>
-            <i v-if="!isToday" class="fa-solid fa-caret-right col-1 text-start" role="button" @click="next"></i>
+            <i class="fa-solid w-8 fa-caret-right text-start my-auto" :class="isToday ? 'opacity-0 pointer-events-none' : ''" role="button" @click="next"></i>
         </h2>
     </div>
     <div class="position-relative user-select-none" style="min-height: calc(100% - 3.1em)">
@@ -27,7 +26,7 @@
 import { CategoryFull, Statistics, TrackerFull } from '@interfaces';
 import { computed, ref, watch } from 'vue';
 import { getDayData } from '@requests/day';
-import { referenceColor } from '@utils/colors';
+import { backgroundColor, borderColor, referenceColor, textColor } from '@utils/colors';
 import CategoryPanel from '@components/day/CategoryPanel.vue';
 import LoadingMask from '@tools/LoadingMask.vue';
 import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
@@ -54,7 +53,7 @@ const score = computed<number>(() => trackers.value.map(tracker => tracker.data_
 const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.statistics.average).reduce((a, b) => a + b, 0)));
 const isToday = computed<boolean>(() => (new Date(rawDate.value)).setHours(0, 0, 0, 0) === (new Date()).setHours(0, 0, 0, 0));
 
-const color = (variable: string) => referenceColor(score.value, averageScore.value, variable);
+const baseColor = computed(() => referenceColor(score.value, averageScore.value));
 
 const { loading: loadingInternal, forceFetch } = useBackgroundFetch(async () => getDayData(new Date(date.value)), ([newDate, newStatistics, newCategories, newTrackers]) => {
     date.value = Date.parse(newDate);

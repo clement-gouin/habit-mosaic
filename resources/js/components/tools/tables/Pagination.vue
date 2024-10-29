@@ -1,129 +1,71 @@
 <template>
-    <div>
-        <div class="d-flex flex-row mt-3 justify-content-between">
-            <div>
-                <span>
-                  <span>Showing <span class="font-medium">{{ firstItemIndex }}</span> to <span class="font-medium">{{ lastItemIndex }}</span> of <span class="font-medium">{{ total }}</span> results.</span><br>
-                  <span>Number of results per page&nbsp;&nbsp;
-                    <select
-                        class="select-items btn btn-default btn-secondary"
-                        @change="updateLimit"
-                    >
-                      <option
-                          class="dropdown-item"
-                          v-for="item in rowsPerPageOptions"
-                          :key="item"
-                          :selected="item === params.perPage"
-                          :value="item"
-                      >
-                        {{ item }}
-                      </option>
-                    </select>
-                  </span>
-                </span>
-            </div>
-            <nav v-if="pageCount > 0">
-                <ul class="pagination">
-                    <li class="page-item" :class="isFirstPage ? 'disabled' : ''" @click.prevent="prevPage"><a class="page-link" href="#">&laquo;</a></li>
-                    <template v-if="pageCount > maxPages && params.page >= 5">
-                        <li class="page-item" @click.prevent="updatePage(1)"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                    </template>
-                    <li v-for="page in shownPages" :key="page" class="page-item" :class="page === params.page ? 'active' : ''" @click.prevent="updatePage(page)">
-                        <a class="page-link" href="#">{{page}}</a>
-                    </li>
-                    <template v-if="pageCount > maxPages && params.page <= pageCount - 4">
-                        <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
-                        <li class="page-item" @click.prevent="updatePage(pageCount)"><a class="page-link" href="#">{{ pageCount }}</a></li>
-                    </template>
-                    <li class="page-item" :class="isLastPage ? 'disabled' : ''" @click.prevent="nextPage"><a class="page-link" href="#">&raquo;</a></li>
-                </ul>
-            </nav>
-        </div>
+    <div class="join" v-if="pageCount > 0">
+        <button class="join-item btn" :class="isFirstPage ? 'btn-disabled' : ''" @click="prevPage">&laquo;</button>
+        <template v-if="pageCount > maxPages && page >= 5">
+            <button class="join-item btn" @click="updatePage(1)">1</button>
+            <button class="join-item btn btn-disabled">...</button>
+        </template>
+        <button v-for="pageIndex in shownPages" :key="pageIndex" class="join-item btn" :class="pageIndex === page ? 'btn-active' : ''" @click="updatePage(pageIndex)">{{ pageIndex }}</button>
+        <template v-if="pageCount > maxPages && page <= pageCount - 4">
+            <button class="join-item btn btn-disabled">...</button>
+            <button class="join-item btn" @click="updatePage(pageCount)">{{ pageCount }}</button>
+        </template>
+        <button class="join-item btn" :class="isLastPage ? 'btn-disabled' : ''" @click="nextPage">&raquo;</button>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { QueryParameters } from '@interfaces';
 
 interface Props {
-    /** total length of data (all pages) */
-    total: number,
-    /** query parameters */
-    params: QueryParameters,
+    total: number
+    perPage: number
 }
 
 const props = defineProps<Props>();
+const page = defineModel<number>({ required: true, default: 1 });
 
-const emit = defineEmits(['update']);
+interface Events {
+    (e: 'change', params: number): void;
+}
 
-const rowsPerPageOptions = [10, 25, 50, 100];
+const emit = defineEmits<Events>();
+
 const maxPages = 7;
 
-const pageCount = computed(() => props.total === 0 ? 1 : Math.ceil(props.total / props.params.perPage));
-const offset = computed(() => (props.params.page - 1) * props.params.perPage);
-const isFirstPage = computed(() => props.params.page <= 1);
-const firstItemIndex = computed(() => props.total === 0 ? 0 : offset.value + 1);
-const isLastPage = computed(() => props.params.page >= pageCount.value);
-const lastItemIndex = computed(() => isLastPage.value ? props.total : offset.value + props.params.perPage);
+const pageCount = computed(() => props.total === 0 ? 1 : Math.ceil(props.total / props.perPage));
+const isFirstPage = computed(() => page.value <= 1);
+const isLastPage = computed(() => page.value >= pageCount.value);
 
 const shownPages = computed(() => {
     if (pageCount.value <= maxPages) {
         return Array(pageCount.value).fill(null)
             .map((_, i) => i + 1);
     }
-    if (props.params.page < 5) {
+    if (page.value < 5) {
         return Array(maxPages - 2).fill(null)
             .map((_, i) => i + 1);
     }
-    if (props.params.page > pageCount.value - 4) {
+    if (page.value > pageCount.value - 4) {
         return Array(maxPages - 2).fill(null)
             .map((_, i) => pageCount.value - 4 + i);
     }
     return Array(maxPages - 4).fill(null)
-        .map((_, i) => props.params.page - Math.floor((maxPages - 4) / 2) + i);
+        .map((_, i) => page.value - Math.floor((maxPages - 4) / 2) + i);
 });
 
-function updatePage (page: number) {
-    emit('update', {
-        ...props.params,
-        ...{ page }
-    });
+function updatePage (pageNumber: number) {
+    page.value = pageNumber;
+
+    emit('change', page.value);
 }
 
 function prevPage () {
-    emit('update', {
-        ...props.params,
-        ...{ page: props.params.page - 1 }
-    });
+    updatePage(page.value - 1);
 }
 
 function nextPage () {
-    emit('update', {
-        ...props.params,
-        ...{ page: props.params.page + 1 }
-    });
-}
-
-function updateLimit (event: Event) {
-    emit('update', {
-        ...props.params,
-        ...{
-            page: 1,
-            perPage: parseInt((event.target as HTMLInputElement).value)
-        }
-    });
+    updatePage(page.value + 1);
 }
 
 </script>
-
-<style scoped>
-.page-item {
-    user-select: none;
-}
-
-.page-item.disabled, .page-item.active {
-    pointer-events: none;
-}
-</style>

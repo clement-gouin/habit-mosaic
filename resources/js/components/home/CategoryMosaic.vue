@@ -1,10 +1,10 @@
 <template>
     <div>
-        <h3>
+        <h3 class="text-2xl font-bold mb-2">
             <category-label :category="category"/>
             <score-badge :value="category.statistics.average" />
         </h3>
-        <mosaic class="w-100" style="height: 10em" :data="data" @change-resolution="fetchData" />
+        <mosaic class="w-full" style="height: 10em" :data="data" @change-resolution="fetchData" />
     </div>
 </template>
 

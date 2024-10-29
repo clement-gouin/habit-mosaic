@@ -1,10 +1,10 @@
 @props(['class', 'style'])
 
 <nav style="{{ $style }}" class="{{ $class }} w-22 lg:w-60 bg-white h-full border-r-2 border-gray-200 px-2 py-2 pb-4 lg:pt-8 flex flex-col top-0 left-0 fixed">
-    <div class="text-center hidden lg:block">
+    <div class="text-center hidden lg:block text-3xl">
         <x-full-logo />
     </div>
-    <div class="text-center block my-2 lg:hidden">
+    <div class="text-center block my-2 lg:hidden text-3xl">
         <x-logo />
     </div>
     <hr class="my-6 hidden lg:block">

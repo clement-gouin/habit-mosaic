@@ -1,23 +1,21 @@
 <template>
-    <bs-form horizontal>
-        <div>
-            <text-input
-                class="mb-2"
-                name="name"
-                label="Name"
-                v-model="category.name"
-                v-model:error="errors['name']"
-                required
-            />
-            <icon-input
-                class="mb-2"
-                name="icon"
-                label="Icon"
-                v-model="category.icon"
-                v-model:error="errors['icon']"
-            />
-        </div>
-    </bs-form>
+    <div>
+        <text-input
+            class="mb-2"
+            name="name"
+            label="Name"
+            v-model="category.name"
+            v-model:error="errors['name']"
+            required
+        />
+        <icon-input
+            class="mb-2"
+            name="icon"
+            label="Icon"
+            v-model="category.icon"
+            v-model:error="errors['icon']"
+        />
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -27,7 +25,6 @@ import { createCategory, updateCategory } from '@requests/categories';
 import { handleFormErrors } from '@utils/forms';
 import TextInput from '@tools/forms/TextInput.vue';
 import IconInput from '@tools/forms/IconInput.vue';
-import BsForm from '@tools/forms/BsForm.vue';
 
 interface Props {
     modelValue?: CategoryData

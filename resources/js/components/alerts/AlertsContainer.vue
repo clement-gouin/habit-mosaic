@@ -1,32 +1,14 @@
 <template>
-    <div class="alerts-container user-select-none">
-        <alert
-            v-for="alert in alerts"
-            v-bind:key="alert.id"
-            :alert="alert"
-        />
+    <div class="fixed bottom-0 right-0 gap-2 mr-4 z-50" style="z-index: 1003;">
+        <template v-for="alert in alerts" v-bind:key="alert.id">
+            <Alert :alert="alert" />
+        </template>
     </div>
 </template>
 
 <script setup lang="ts">
 import { useAlertsStore } from '@stores/alerts';
-import Alert from './Alert.vue';
+import Alert from '@components/alerts/Alert.vue';
 
 const { alerts } = useAlertsStore();
 </script>
-
-<script lang="ts">
-export default { inheritAttrs: false };
-</script>
-
-<style scoped>
-.alerts-container {
-    position: fixed;
-    z-index: 1000;
-    width: 30%;
-    top: 0;
-    right: 0;
-    padding-top: 1em;
-    padding-right: 1em;
-}
-</style>

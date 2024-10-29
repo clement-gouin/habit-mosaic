@@ -1,29 +1,14 @@
 @extends('layouts.minimal')
 
-@section('head')
-<style>
-    body {
-        display: flex;
-        align-items: center;
-        padding-top: 40px;
-        padding-bottom: 40px;
-    }
-
-    .form-signin {
-        max-width: 330px;
-        padding: 15px;
-    }
-</style>
-@endsection
-
 @section('content')
-    <main class="form-signin w-100 m-auto">
-        <h1 class="h3 mb-3 text-primary">
-            <x-full-logo />
-        </h1>
-        @vue(Login)
-        <p class="mt-3 text-muted">
-            By <a href="https://github.com/clement-gouin/">@clement-gouin</a> with <i class="fa-solid fa-heart"></i>
-        </p>
-    </main>
+    <div class="hero bg-base-200 min-h-screen">
+        <div class="hero-content flex-col lg:flex-row-reverse">
+            <div class="text-center lg:text-left">
+                <h1 class="text-5xl font-bold text-primary-500"><x-full-logo /></h1>
+            </div>
+            <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+                @vue(Login)
+            </div>
+        </div>
+    </div>
 @endsection

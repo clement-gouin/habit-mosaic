@@ -1,12 +1,32 @@
 import { TableCellFunction } from '@types';
 export interface Base extends Record<string, unknown> {}
 
+export interface BaseFormInput {
+    id?: string
+    name?: string
+    label?: string
+    placeholder?: string
+    disabled?: boolean
+    required?: boolean
+    readonly?: boolean
+    helpText?: string
+    color?: string
+    error?: string | boolean
+}
+
 export interface Alert {
     id: number
-    type: string
+    type: AlertType
     title?: string
     text: string
     show: boolean
+}
+
+export enum AlertType {
+    Info = 'info',
+    Success = 'success',
+    Warning = 'warning',
+    Error = 'error',
 }
 
 export interface QueryParameters extends Base {
@@ -30,10 +50,10 @@ export interface TableColumn extends Base {
     clickable?: boolean
 }
 
-export interface Option extends Base {
-    key: string | number
+export interface Option<T> extends Base {
+    key: string
     label: string | number
-    value: unknown
+    value: T
     disabled?: boolean
 }
 

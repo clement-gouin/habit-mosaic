@@ -1,5 +1,5 @@
 <template>
-    <a :href="href ?? '#'" role="button" @click="click" class="btn btn-default" :class="`btn-${type} ${sizeClass} ${disabled ? 'disabled' : ''}`"><slot /></a>
+    <a :href="href ?? '#'" role="button" @click="click" class="btn" :class="`btn-${type} ${sizeClass} ${disabled ? 'disabled' : ''}`"><slot /></a>
 </template>
 
 <script setup lang="ts">

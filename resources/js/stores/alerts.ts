@@ -1,65 +1,80 @@
 import { defineStore } from 'pinia';
-import { Alert } from '@interfaces';
+import { Alert, AlertType } from '@interfaces';
 import { ref } from 'vue';
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
 
 export const useAlertsStore = defineStore('alerts', () => {
     const alerts = ref<Alert[]>([]);
 
-    function showAlert (id: number): void {
+    function fadeIn (id: number): void {
         alerts.value.forEach(notification => {
             if (notification.id === id) {
-                notification.show = true;
+                notification.fade = false;
             }
         });
     }
 
-    function hideAlert (id: number): void {
+    function fadeOut (id: number): void {
         alerts.value.forEach(notification => {
             if (notification.id === id) {
-                notification.show = false;
+                notification.fade = true;
             }
         });
     }
 
-    function deleteAlert (id: number): void {
+    function deleteNotification (id: number): void {
         const index = alerts.value.findIndex(notification => notification.id === id);
         if (index >= 0) {
             alerts.value.splice(index, 1);
         }
     }
 
-    function alert (type: string, text: string, title?: string): void {
-        const id = Date.now();
+    function alert (type: AlertType, text: string, title?: string): void {
+        const id = Math.random();
         alerts.value.push({
             id,
             type,
             title,
             text,
-            show: false
+            fade: true
         });
-        setTimeout(() => { showAlert(id); });
-        setTimeout(() => { hideAlert(id); }, 5000);
-        setTimeout(() => { deleteAlert(id); }, 6000);
+        // https://ux.stackexchange.com/questions/11203/how-long-should-a-temporary-notification-toast-appear
+        const duration = Math.max(Math.min(((title ?? '') + text).length * 50, 2000), 7000);
+        setTimeout(() => { fadeIn(id); });
+        setTimeout(() => { fadeOut(id); }, 200 + duration);
+        setTimeout(() => { deleteNotification(id); }, 200 + duration + 700);
+    }
+
+    function alertInfo (text: string, title?: string): void {
+        alert(AlertType.Info, text, title);
     }
 
     function alertSuccess (text: string, title?: string): void {
-        alert('success', text, title);
+        alert(AlertType.Success, text, title);
+    }
+
+    function alertWarning (text: string, title?: string): void {
+        alert(AlertType.Warning, text, title);
     }
 
     function alertError (text: string, title?: string): void {
-        alert('error', text, title);
+        alert(AlertType.Error, text, title);
     }
 
-    function alertAxiosError (error: AxiosError): never {
-        if (error.message !== 'canceled' && error.message !== 'Request aborted') {
-            alertError(
-                error.response?.data?.message ?? error.response?.statusText ?? error.message,
-                `Error ${error.response?.status ?? 0}`
-            );
+    axios.interceptors.response.use(
+        response => {
+            return response;
+        },
+        async (error: AxiosError) => {
+            if (error.message !== 'canceled' && error.message !== 'Request aborted') {
+                alertError(
+                    (error.response?.data as { message: string })?.message ?? error.response?.statusText ?? error.message,
+                    `Error ${error.response?.status ?? 0}`
+                );
+            }
+            throw error;
         }
-        throw error;
-    }
+    );
 
-    return { alerts, alert, alertSuccess, alertError, alertAxiosError };
+    return { alerts, alert, alertInfo, alertSuccess, alertWarning, alertError };
 });

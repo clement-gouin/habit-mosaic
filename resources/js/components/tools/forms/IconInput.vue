@@ -1,68 +1,62 @@
 <template>
     <dropdown-input
-        ref="input"
-        :name="name"
         v-model="icon"
-        :placeholder="placeholder"
+        :id="id"
+        :name="name"
         :label="label"
-        :error="error"
+        :placeholder="placeholder ?? 'Search icon...'"
         :disabled="disabled"
         :required="required"
+        :readonly="readonly"
+        :help-text="helpText"
+        :color="color"
+        :error="error"
         :options="options"
         @search="onSearch"
-        :help-text="helpText"
-        :readonly="readonly"
         :debounce="500"
         with-highlight
-        @change="onChange"
-        :notice="notice"
-        :label-col-size="labelColSize"
-        :input-wrapper-col-size="inputWrapperColSize"
     >
+        <template #left>
+            <slot name="left"></slot>
+        </template>
         <template #item="option">
             <i :class="mapToClassName(option.value)"></i> {{ option.value }}
+        </template>
+        <template #right>
+            <slot name="right"></slot>
         </template>
     </dropdown-input>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { Option } from '@interfaces';
+import { BaseFormInput, Option } from '@interfaces';
 import { searchIcon, mapToClassName } from '@utils/icons';
 import DropdownInput from '@tools/forms/DropdownInput.vue';
 
-interface Props{
-    name: string,
-    modelValue?: string,
-    placeholder?: string,
-    label?: string,
-    helpText?: string,
-    error?: string,
-    disabled?: boolean,
-    required?: boolean,
-    readonly?: boolean,
-    notice?: string,
+type Props = BaseFormInput;
 
-    labelColSize?: number,
-    inputWrapperColSize?: number,
-}
-
-function iconNameToOption (name: string): Option {
+function iconNameToOption (name: string): Option<string> {
     return { key: name, label: name, value: name };
 }
 
-const icon = computed<Option|null>({
-    get (): Option | null {
-        return props.modelValue == null ? null : iconNameToOption(props.modelValue);
+const iconModel = defineModel<string|null>();
+
+const icon = computed<Option<string>|null>({
+    get (): Option<string> | null {
+        return iconModel.value == null ? null : iconNameToOption(iconModel.value);
     },
-    set (selected: Option | null) {
-        emit('update:modelValue', selected?.value);
+    set (selected: Option<string> | null) {
+        iconModel.value = (selected?.value as string|undefined) ?? null;
+        emit('change', iconModel.value);
     }
 });
 
-const props = defineProps<Props>();
-const emit = defineEmits(['update:modelValue', 'change']);
-const options = ref<Option[]>([]);
+defineProps<Props>();
+
+const emit = defineEmits(['change']);
+
+const options = ref<Option<string>[]>([]);
 const loading = ref(false);
 
 async function onSearch (value = '') {
@@ -72,9 +66,5 @@ async function onSearch (value = '') {
     } else {
         options.value = [];
     }
-}
-
-function onChange (value: Option | null) {
-    emit('change', value?.value);
 }
 </script>

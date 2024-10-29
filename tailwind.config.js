@@ -1,7 +1,7 @@
 const colors = require('tailwindcss/colors');
 
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
     content: [
         './resources/**/*.blade.php',
         './resources/**/*.vue'
@@ -34,7 +34,17 @@ export default {
             }
         }
     },
-    daisyui: { themes: ['light'] },
+    daisyui: {
+        themes: [
+            {
+                light: {
+                    ...require('daisyui/src/theming/themes').light,
+                    primary: '#D81B60',
+                    secondary: '#EC407A'
+                }
+            }
+        ]
+    },
     plugins: [
         require('@tailwindcss/typography'),
         require('@tailwindcss/container-queries'),

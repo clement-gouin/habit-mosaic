@@ -1,6 +1,6 @@
 <template>
     <loading-mask v-if="loading" />
-    <datatable style="height: 100vh" overflow :total="tableData.length" :data="tableData" :columns="columns" :with-pagination="false">
+    <datatable style="height: 100vh" overflow :total="tableData.length" :data="tableData" :columns="columns" no-pagination>
         <template #col-date="{value}">
             <small class="font-monospace">{{ formatDate(value as Date) }}</small>
         </template>
@@ -26,7 +26,7 @@ import { updateDataPoint } from '@requests/dataPoints';
 import { round } from '@popperjs/core/lib/utils/math';
 import { precision } from '@utils/numbers';
 import { getTableData } from '@requests/table';
-import { referenceColor } from '@utils/colors';
+import { backgroundColor, referenceColor, textColor } from '@utils/colors';
 import { formatDate } from '@utils/dates';
 import { useBackgroundFetch } from '@composables/useBackgroundFetch';
 import LoadingMask from '@tools/LoadingMask.vue';
@@ -56,8 +56,8 @@ const slots = computed<{id: string, tracker: Tracker}[]>(() => trackers.value.ma
     };
 }));
 
-const color = (tracker: Tracker, value: number, variable: string) => referenceColor(Math.sign(tracker.target_score) * value, tracker.target_value, variable);
-const colorDay = (value: number, variable: string) => referenceColor(value, statistics.value.average, variable);
+const baseColor = (tracker: Tracker, value: number) => referenceColor(Math.sign(tracker.target_score) * value, tracker.target_value);
+const baseColorDay = (value: number) => referenceColor(value, statistics.value.average);
 
 const { loading: loadingInternal } = useBackgroundFetch(async () => getTableData(new Date(date.value), days.value), ([newStatistics, newCategories, newTrackers, newData]) => {
     statistics.value = newStatistics;
@@ -76,13 +76,12 @@ const columns = computed<TableColumn[]>(() => {
             icon: '',
             title: '',
             cssStyle: row => {
-                const base = 'position: sticky;left: 0;z-index:50;';
                 if (row) {
-                    return base + `background-color: ${colorDay(row.score, 'bg-subtle')}; color: ${colorDay(row.score, 'text-emphasis')}`;
+                    return `z-index:50;background-color: ${backgroundColor(baseColorDay(row.score))}; color: ${textColor(baseColorDay(row.score))}`;
                 }
-                return base;
+                return 'z-index: 200;';
             },
-            cssClass: 'align-middle w-fit text-center'
+            cssClass: 'sticky align-middle left-0 w-fit text-center'
         },
         {
             id: 'score',
@@ -91,7 +90,7 @@ const columns = computed<TableColumn[]>(() => {
             title: '',
             cssStyle: row => {
                 if (row) {
-                    return `background-color: ${colorDay(row.score, 'bg-subtle')}; color: ${colorDay(row.score, 'text-emphasis')}`;
+                    return `background-color: ${backgroundColor(baseColorDay(row.score))}; color: ${textColor(baseColorDay(row.score))}`;
                 }
             },
             cssClass: 'align-middle w-fit text-center'
@@ -103,13 +102,13 @@ const columns = computed<TableColumn[]>(() => {
                 icon: tracker.icon,
                 title: tracker.name,
                 cssStyle: row => {
-                    const base = 'min-width:3em;line-height: 3em;font-size:.9em;';
+                    const base = 'min-width:3em;line-height:3em;font-size:.9em;';
                     if (row) {
-                        return base + `background-color: ${color(tracker, row[`tracker-${tracker.id}`].value, 'bg-subtle')}; color: ${color(tracker, row[`tracker-${tracker.id}`].value, 'text-emphasis')}`;
+                        return base + `background-color: ${backgroundColor(baseColor(tracker, row[`tracker-${tracker.id}`].value))}; color: ${textColor(baseColor(tracker, row[`tracker-${tracker.id}`].value))}`;
                     }
                     return base;
                 },
-                cssClass: 'align-middle text-center align-middle p-0'
+                cssClass: 'align-middle text-center p-0'
             };
         })
     ];

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-100 border-bottom border-1 py-2 user-select-none m-0 text-center bg-white">
+    <div class="w-full border-b border-1 py-2 select-none m-0 text-center bg-white">
         <span v-if="loading">
             Loading...
         </span>
@@ -8,13 +8,13 @@
         </span>
         <span v-else-if="isToday">
             {{ level.text }}
-            <small v-if="level.showDiff && statistics.average > score" class="text-dark-emphasis">{{ (statistics.average - score).toFixed(1) }} more to beat average</small>
-            <small v-else-if="level.showDiff" class="text-dark-emphasis">{{ (score - statistics.average).toFixed(1) }} over average</small>
+            <small v-if="level.showDiff && statistics.average > score" class="text-gray-600">{{ (statistics.average - score).toFixed(1) }} more to beat average</small>
+            <small v-else-if="level.showDiff" class="text-gray-600">{{ (score - statistics.average).toFixed(1) }} over average</small>
         </span>
         <span v-else>
             {{ level.otherText }}
-            <small v-if="statistics.average > score" class="text-dark-emphasis">{{ (statistics.average - score).toFixed(1) }} under average</small>
-            <small v-else class="text-dark-emphasis">{{ (score - statistics.average).toFixed(1) }} over average</small>
+            <small v-if="statistics.average > score" class="text-gray-600">{{ (statistics.average - score).toFixed(1) }} under average</small>
+            <small v-else class="text-gray-600">{{ (score - statistics.average).toFixed(1) }} over average</small>
         </span>
     </div>
 </template>

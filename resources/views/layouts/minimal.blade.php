@@ -1,15 +1,12 @@
+<!DOCTYPE html>
 <html>
 <head>
-    <title>{{ ucfirst(config('app.name')) }}</title>
+    <title>{{ isset($title) ? config('app.name') . ' - ' . $title : config('app.name') }}</title>
 
-    @vite(['resources/js/app.js'])
-
-    @include('layouts.head')
-
-    @yield('head')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-    <body class="text-center">
-        @yield('content')
-        <footer class="position-fixed bottom-0 start-0 ps-2" style="color: #AAA">{{ config('app.version') }}</footer>
-    </body>
+<body class="minimal-body">
+@yield('content')
+@stack('scripts')
+</body>
 </html>

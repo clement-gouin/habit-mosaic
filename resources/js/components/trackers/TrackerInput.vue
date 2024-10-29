@@ -1,44 +1,40 @@
 <template>
     <div>
         <dropdown-input
-            ref="input"
-            :name="name"
             v-model="tracker"
-            :placeholder="placeholder ?? 'Select a tracker...'"
+            ref="input"
+            :id="id"
+            :name="name"
             :label="label"
-            :error="error"
+            :placeholder="placeholder ?? 'Select a tracker...'"
             :disabled="disabled"
             :required="required"
+            :readonly="readonly"
+            :help-text="helpText"
+            :color="color"
+            :error="error"
             :options="options"
             @search="onSearch"
-            :help-text="helpText"
-            :readonly="readonly"
             :loading="isLoading"
             :debounce="500"
-            with-highlight
-            :cursor-offset="cursorOffset ?? (withCreateButton ? '3em' : '1em')"
-            @change="onChange"
-            :notice="notice"
-            :label-col-size="labelColSize"
-            :inputWrapperColSize="inputWrapperColSize"
+            :no-clear="noClear"
         >
+            <template #left>
+                <slot name="left"></slot>
+            </template>
             <template #item="{value}">
                 <tracker-label :tracker="value" />
             </template>
-            <template v-if="withCreateButton || $slots.addon" #addon>
-                <div v-if="withCreateButton" class="input-group-addon btn btn-primary" @click="onCreate" title="New tracker"><i class="fa-solid fa-circle-plus"/></div>
-                <slot name="addon"/>
-            </template>
-            <template v-if="$slots.label" #label>
-                <slot name="label"></slot>
-            </template>
-            <template v-if="$slots.notice" #notice>
-                <slot name="notice"></slot>
+            <template #right>
+                <div v-if="withCreateButton" class="cursor-pointer" @click="onCreate" title="New tracker">
+                    <i class="fa-solid fa-circle-plus"/>
+                </div>
+                <slot name="right"></slot>
             </template>
         </dropdown-input>
         <modal
             ref="createModal"
-            title="Create new category"
+            title="Create new tracker"
             action-text="Create"
             close-text="Cancel"
             :auto-close="false"
@@ -54,7 +50,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { Tracker, Option } from '@interfaces';
+import { Tracker, Option, BaseFormInput } from '@interfaces';
 import Modal from '@tools/Modal.vue';
 import DropdownInput from '@tools/forms/DropdownInput.vue';
 import { useAsyncState } from '@composables/useAsyncState';
@@ -62,29 +58,20 @@ import TrackerLabel from './TrackerLabel.vue';
 import TrackerForm from './TrackerForm.vue';
 import { listTrackers } from '@requests/trackers';
 
-interface Props {
-    name: string,
-    modelValue: Tracker|null,
-    placeholder?: string,
-    label?: string,
-    helpText?: string,
-    error?: string,
-    disabled?: boolean,
-    required?: boolean,
-    readonly?: boolean,
+interface Props extends BaseFormInput {
     withCreateButton?: boolean,
-    notice?: string,
-    cursorOffset?: string
-    labelColSize?: number,
-    inputWrapperColSize?: number,
+    noClear?: boolean
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits(['update:modelValue', 'change']);
+
+const emit = defineEmits(['change']);
 
 const search = ref<string>('');
 
-const { state: options, isReady, isLoading, updateState: updateOptions } = useAsyncState<Option[]>(loadOptions, [], props.modelValue?.id === undefined);
+const trackerModel = defineModel<Tracker|null>();
+
+const { state: options, isReady, isLoading, updateState: updateOptions } = useAsyncState<Option<Tracker>[]>(loadOptions, [], trackerModel.value?.id === undefined);
 const disabled = computed<boolean>(() => props.disabled || !isReady.value);
 const input = ref<InstanceType<typeof DropdownInput>|null>(null);
 
@@ -92,16 +79,17 @@ const createModal = ref<InstanceType<typeof Modal> | null>(null);
 
 const createForm = ref<InstanceType<typeof TrackerForm>|null>(null);
 
-function trackerToOption (tracker: Tracker): Option {
-    return { key: tracker.id, label: tracker.name, value: tracker } as Option;
+function trackerToOption (tracker: Tracker): Option<Tracker> {
+    return { key: tracker.id.toString(), label: tracker.name, value: tracker };
 }
 
-const tracker = computed<Option|null>({
-    get (): Option | null {
-        return props.modelValue == null ? null : trackerToOption(props.modelValue);
+const tracker = computed<Option<Tracker>|null>({
+    get (): Option<Tracker> | null {
+        return trackerModel.value ? trackerToOption(trackerModel.value) : null;
     },
-    set (selected: Option|null) {
-        emit('update:modelValue', selected?.value);
+    set (selected: Option<Tracker>|null) {
+        trackerModel.value = (selected?.value as Tracker|undefined) ?? null;
+        emit('change', trackerModel.value);
     }
 });
 
@@ -111,7 +99,7 @@ function sortTrackers (data: Tracker[]) {
         .reverse();
 }
 
-async function loadOptions (): Promise<Option[]> {
+async function loadOptions (): Promise<Option<Tracker>[]> {
     return await listTrackers()
         .then(data => {
             return sortTrackers(data)
@@ -123,10 +111,6 @@ async function loadOptions (): Promise<Option[]> {
 async function onSearch (value = '') {
     search.value = value;
     await updateOptions();
-}
-
-function onChange (value: Option | null) {
-    emit('change', value?.value);
 }
 
 function onCreate () {
@@ -143,7 +127,8 @@ function createModalSubmit () {
             createModal.value?.close();
             createForm.value?.reset();
             await updateOptions();
-            emit('update:modelValue', tracker);
+            trackerModel.value = tracker;
+            emit('change', trackerModel.value);
         })
         .catch(() => {
             // ignore

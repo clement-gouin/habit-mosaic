@@ -1,107 +1,83 @@
 <template>
-    <div class="form-group" :class="{'has-error': (error || fieldError), 'row': isHorizontal && !isFloating}">
-        <label v-if="!isFloating" :class="labelClass" :for="name">
-            <template v-if="helpText">
-                <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;<span
-                    class="badge">?</span></Tooltip>
-            </template>
-            <template v-else>
-                {{ label }}<span v-if="required" class="text-danger">*</span>
-            </template>
+    <div class="form-control text-base my-2">
+        <label :for="id" v-if="label" class="label pb-0">
+            <span class="label-text" :class="hasError ? 'text-error' : ''">{{ label }}<span v-if="required" class="text-error">*</span></span>
         </label>
-        <div :class="inputWrapperClass">
+        <label
+            :for="id"
+            class="input input-bordered flex items-center gap-2"
+            :class="`input-${displayColor} ` + (hasError ? 'text-error' : '')"
+        >
+            <slot name="left">
+                <span class="text-lg"><i v-if="icon" class="w-5 h-5 opacity-70 fas" :class="`fa-${icon}`" /></span>
+                <span v-if="inLabel" class="label-text" :class="{'text-error': hasError}">
+                    {{ inLabel }}<span v-if="required" class="text-error">*</span>
+                </span>
+            </slot>
             <input
-                ref="input"
-                :name="name"
                 :type="type"
-                class="form-control"
-                :value="modelValue"
-                :disabled="disabled"
-                :aria-describedby="'help-' + name"
-                :required="required"
+                v-model="value"
+                :id="id"
+                :name="name ?? id"
                 :placeholder="placeholder"
-                :autocomplete="autocomplete"
+                :disabled="disabled"
+                :required="required"
                 :readonly="readonly"
-                :title="error ?? fieldError ?? notice"
-                @input="onInput"
+                class="grow"
                 @blur="onBlur"
-                @change="onChange"
-            >
-            <span v-if="!hideHelp">
-                <span v-if="error" :id="'help-' + name" class="form-text">{{ error }}</span>
-                <span v-else-if="fieldError" :id="'help-' + name" class="form-text">{{ fieldError }}</span>
-                <span v-else-if="notice || $slots.notice" class="form-text"><slot name="notice">{{ notice }}</slot></span>
-            </span>
-            <label v-if="isFloating" :class="labelClass" :for="name">{{ label }}<span v-if="required" class="text-danger">*</span></label>
+            />
+            <slot name="right"></slot>
+        </label>
+        <div v-if="helpText ?? (typeof displayError === 'string' && displayError.length)" class="label pb-0">
+      <span class="label-text-alt" :class="hasError ? 'font-bold text-error' : 'italic'">{{
+              (typeof displayError === 'string' && displayError.length) ? displayError : helpText
+          }}</span>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { onDeactivated, ref } from 'vue';
-import Tooltip from '@tools/Tooltip.vue';
+import { computed, ref } from 'vue';
+import { BaseFormInput } from '@interfaces';
 import { validateEmail } from '@utils/forms';
-import { useBsForm } from '@composables/useBsForm';
 
-interface Props {
-    name: string,
-    modelValue?: string,
-    type?: string,
-    placeholder?: string,
-    label?: string,
-    helpText?: string,
-    error?: string,
-    disabled?: boolean,
-    required?: boolean,
-    autocomplete?: string,
-    readonly?: boolean,
-    labelColSize?: number,
-    inputWrapperColSize?: number,
-    notice?: string,
-    hideHelp?: boolean,
+interface Props extends BaseFormInput {
+    inLabel?: string
+    placeholder?: string
+    icon?: string
+    type?: string
 }
 
-const props = withDefaults(defineProps<Props>(), { type: 'text' });
+const props = defineProps<Props>();
 
-const emit = defineEmits(['update:modelValue', 'change']);
+const emit = defineEmits(['change']);
 
-const input = ref<HTMLInputElement | null>(null);
-const fieldError = ref('');
+const value = defineModel<string>();
+const internalError = ref<string>();
 
-const { labelClass, inputWrapperClass, isHorizontal, isFloating } = useBsForm(props);
+const hasError = computed<boolean>(() => !!props.error || !!internalError.value || false);
+const displayError = computed<undefined|string|boolean>(() => (typeof props.error === 'string' && props.error.length) ? props.error : internalError.value);
+const displayColor = computed<undefined|string>(() => hasError.value ? 'error' : props.color);
 
-function onBlur (event: InputEvent) {
-    const inputField = event.currentTarget as HTMLInputElement;
-    fieldError.value = '';
-    if ((props.required as boolean) && (inputField.value === '')) {
-        fieldError.value = 'This field is required';
-    } else if (inputField.value !== '') {
-        let newValue: string | null = inputField.value.trim();
+function onBlur () {
+    internalError.value = '';
+    if (props.required && value.value?.length === 0) {
+        internalError.value = 'This field is required';
+    } else if (value.value?.length) {
+        let newValue: string | null = value.value.trim();
         switch (props.type) {
             case 'email':
-                newValue = validateEmail(inputField.value);
+                newValue = validateEmail(value.value);
                 if (!newValue) {
-                    fieldError.value = 'Invalid email';
+                    internalError.value = 'Invalid email format';
                 }
                 break;
         }
-        if (newValue !== null && newValue !== inputField.value) {
-            inputField.value = newValue;
-            emit('update:modelValue', newValue);
-            emit('change', newValue);
+        if (newValue !== null && newValue !== value.value) {
+            value.value = newValue;
         }
     }
-}
 
-function onInput (event: InputEvent) {
-    emit('update:modelValue', (event.currentTarget as HTMLInputElement).value);
+    emit('change', value.value);
 }
-
-function onChange (event: InputEvent) {
-    emit('change', (event.currentTarget as HTMLInputElement).value);
-}
-
-onDeactivated(() => {
-    fieldError.value = '';
-});
 </script>

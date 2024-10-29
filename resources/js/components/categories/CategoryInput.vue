@@ -1,34 +1,35 @@
 <template>
     <div>
         <dropdown-input
-            ref="input"
-            :name="name"
             v-model="category"
-            :placeholder="placeholder"
+            ref="input"
+            :id="id"
+            :name="name"
             :label="label"
-            :error="error"
+            :placeholder="placeholder ?? 'Select a category...'"
             :disabled="disabled"
             :required="required"
+            :readonly="readonly"
+            :help-text="helpText"
+            :color="color"
+            :error="error"
             :options="options"
             @search="onSearch"
-            :help-text="helpText"
-            :readonly="readonly"
             :loading="isLoading"
             :debounce="500"
-            with-highlight
-            :cursor-offset="cursorOffset ?? (withCreateButton ? '3em' : '1em')"
-            @change="onChange"
-            :notice="notice"
+            :no-clear="noClear"
         >
+            <template #left>
+                <slot name="left"></slot>
+            </template>
             <template #item="{value}">
                 <category-label :category="value" />
             </template>
-            <template v-if="withCreateButton || $slots.addon" #addon>
-                <div class="input-group-addon btn btn-primary" @click="onCreate" title="New category"><i class="fa-solid fa-circle-plus"/></div>
-                <slot name="addon"/>
-            </template>
-            <template v-if="$slots.notice" #notice>
-                <slot name="notice"></slot>
+            <template #right>
+                <div v-if="withCreateButton" class="cursor-pointer" @click="onCreate" title="New category">
+                    <i class="fa-solid fa-circle-plus"/>
+                </div>
+                <slot name="left"></slot>
             </template>
         </dropdown-input>
         <modal
@@ -49,7 +50,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { Category, Option } from '@interfaces';
+import { BaseFormInput, Category, Option } from '@interfaces';
 import Modal from '@tools/Modal.vue';
 import DropdownInput from '@tools/forms/DropdownInput.vue';
 import { useAsyncState } from '@composables/useAsyncState';
@@ -57,27 +58,20 @@ import CategoryForm from './CategoryForm.vue';
 import { listCategories } from '@requests/categories';
 import CategoryLabel from './CategoryLabel.vue';
 
-interface Props {
-    name: string,
-    modelValue: Category|null,
-    placeholder?: string,
-    label?: string,
-    helpText?: string,
-    error?: string,
-    disabled?: boolean,
-    required?: boolean,
-    readonly?: boolean,
+interface Props extends BaseFormInput {
     withCreateButton?: boolean,
-    notice?: string,
-    cursorOffset?: string
+    noClear?: boolean
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits(['update:modelValue', 'change']);
+
+const emit = defineEmits(['change']);
 
 const search = ref<string>('');
 
-const { state: options, isReady, isLoading, updateState: updateOptions } = useAsyncState<Option[]>(loadOptions, [], props.modelValue?.id === undefined);
+const categoryModel = defineModel<Category|null>();
+
+const { state: options, isReady, isLoading, updateState: updateOptions } = useAsyncState<Option<Category>[]>(loadOptions, [], categoryModel.value?.id === undefined);
 const disabled = computed<boolean>(() => props.disabled || !isReady.value);
 const input = ref<InstanceType<typeof DropdownInput>|null>(null);
 
@@ -85,23 +79,30 @@ const createModal = ref<InstanceType<typeof Modal> | null>(null);
 
 const createForm = ref<InstanceType<typeof CategoryForm>|null>(null);
 
-function categoryToOption (category: Category): Option {
-    return { key: category.id, label: category.name, value: category } as Option;
+function categoryToOption (category: Category): Option<Category> {
+    return { key: category.id.toString(), label: category.name, value: category };
 }
 
-const category = computed<Option|null>({
-    get (): Option | null {
-        return props.modelValue == null ? null : categoryToOption(props.modelValue);
+const category = computed<Option<Category>|null>({
+    get (): Option<Category> | null {
+        return categoryModel.value ? categoryToOption(categoryModel.value) : null;
     },
-    set (selected: Option|null) {
-        emit('update:modelValue', selected?.value);
+    set (selected: Option<Category>|null) {
+        categoryModel.value = (selected?.value as Category|undefined) ?? null;
+        emit('change', categoryModel.value);
     }
 });
 
-async function loadOptions (): Promise<Option[]> {
+function sortCategories (data: Category[]) {
+    return data
+        .sort((a, b) => b.order - a.order)
+        .reverse();
+}
+
+async function loadOptions (): Promise<Option<Category>[]> {
     return await listCategories()
         .then(data => {
-            return data
+            return sortCategories(data)
                 .filter(category => search.value.length === 0 || category.name.includes(search.value))
                 .map(categoryToOption);
         });
@@ -110,10 +111,6 @@ async function loadOptions (): Promise<Option[]> {
 async function onSearch (value = '') {
     search.value = value;
     await updateOptions();
-}
-
-function onChange (value: Option | null) {
-    emit('change', value?.value);
 }
 
 function onCreate () {
@@ -130,7 +127,8 @@ function createModalSubmit () {
             createModal.value?.close();
             createForm.value?.reset();
             await updateOptions();
-            emit('update:modelValue', category);
+            categoryModel.value = category;
+            emit('change', categoryModel.value);
         })
         .catch(() => {
             // ignore

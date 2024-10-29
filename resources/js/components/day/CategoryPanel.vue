@@ -1,14 +1,13 @@
 <template>
-    <div v-if="trackers.length" class="px-1 px-sm-2 p py-3 p-md-4">
-        <h3 class="w-100 text-center">
+    <div v-if="trackers.length" class="px-1 sm:px-2 py-3 md:p-4">
+        <h3 class="w-100 text-center text-2xl font-bold mb-2">
             <category-label :category="category"/>
             <score-badge :title="`average: ${category.statistics.average.toFixed(1)}`" :value="score" :reference="category.statistics.average" />
         </h3>
-        <div class="d-flex flex-row flex-wrap justify-content-center">
+        <div class="flex flex-row flex-wrap justify-center gap-1 lg:gap-2">
             <data-point-input
                 v-for="(tracker,i) in trackers"
                 v-bind:key="tracker.id"
-                class="me-1 me-lg-2 mb-1 mb-lg-2"
                 v-model="trackers[i]"
                 v-model:loading="loading"
             />

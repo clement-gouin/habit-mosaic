@@ -1,12 +1,12 @@
 <template>
-    <div class="p-1 py-2 p-sm-2 p-md-4 user-select-none">
-        <h1 class="border-bottom border-1 pb-2">
+    <div class="p-2 sm:p-2 md:p-4 select-none">
+        <h1 class="border-b pb-2 mb-4 text-3xl font-bold">
             <i class="fa-solid fa-chart-column" />&nbsp;Graphics
         </h1>
-        <chart type="bar" :data="graphData" />
-        <div class="w-100 pt-4 row align-items-center">
+        <div class="w-100 row align-items-center">
             <tracker-input class="col-4 offset-4" name="tracker" label="" input-wrapper-col-size="12" v-model="selectedTracker"/>
         </div>
+        <chart class="h-fit" type="bar" :data="graphData" />
     </div>
 </template>
 
