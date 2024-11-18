@@ -1,26 +1,26 @@
 <template>
     <div
         :style="{color: textColor(baseColor)}"
-        class="p-0 text-nowrap shadow rounded-full h-fit text-center relative select-none lh-base"
+        class="p-0 text-nowrap rounded-full h-fit text-center relative select-none lh-base"
         :title="title"
     >
         <template v-if="tracker.single && (!tracker.overflow || rawValue < tracker.target_value)">
             <span class="" v-if="rawValue" @click="remove" role="button">
-                <span :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor)}" class="inline-block shadow-sm align-bottom border-2 px-3 py-2 lh-base rounded-l-full">&nbsp;</span>
+                <span :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor)}" class="inline-block shadow border-2 px-3 py-2 lh-base rounded-l-full">&nbsp;</span>
                 <i class="inline-block border-r rounded-r-full border-t border-b border-2 px-2 py-2 lh-base" :style="{backgroundColor: backgroundColor(baseColorDark), borderColor: borderColor(baseColor)}" :class="mapToClassName(tracker.icon)"></i>
             </span>
             <span v-else @click="add" role="button">
                 <i class="inline-block border-l rounded-l-full border-t border-b border-2 px-2 py-2 lh-base" :style="{backgroundColor: backgroundColor(baseColorDark), borderColor: borderColor(baseColor)}" :class="mapToClassName(tracker.icon)"></i>
-                <span :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor)}" class="inline-block shadow-sm align-bottom h-100 border-2 px-3 py-2 lh-base rounded-r-full">&nbsp;</span>
+                <span :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor)}" class="inline-block shadow h-100 border-2 px-3 py-2 lh-base rounded-r-full">&nbsp;</span>
             </span>
         </template>
         <template v-else>
-            <i :style="{backgroundColor: backgroundColor(baseColorDark), borderColor: borderColor(baseColor)}" class="fa-solid fa-minus shadow-sm border-2 px-2 py-2 rounded-l-full lh-base" role="button" @click="remove"></i>
+            <i :style="{backgroundColor: backgroundColor(baseColorDark), borderColor: borderColor(baseColor)}" class="fa-solid fa-minus shadow border-2 px-2 py-2 rounded-l-full lh-base" role="button" @click="remove"></i>
             <span :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor)}" class="inline-block border-t border-b border-2 px-2 py-2 lh-base">
                 <i class="inline-block" :class="mapToClassName(tracker.icon)"></i>
                 <span class="inline-block ps-2">{{ rawValue.toFixed(precision(tracker.value_step)) }}</span>
             </span>
-            <i :style="{backgroundColor: backgroundColor(baseColorDark), borderColor: borderColor(baseColor)}" class="fa-solid fa-plus shadow-sm border-2 px-2 py-2 rounded-r-full lh-base" role="button" @click="add"></i>
+            <i :style="{backgroundColor: backgroundColor(baseColorDark), borderColor: borderColor(baseColor)}" class="fa-solid fa-plus shadow border-2 px-2 py-2 rounded-r-full lh-base" role="button" @click="add"></i>
         </template>
     </div>
 </template>
@@ -101,6 +101,6 @@ watch(() => props.modelValue, () => {
 
 <style scoped>
 .lh-base {
-    line-height: 1rem;
+    line-height: 1.1rem;
 }
 </style>

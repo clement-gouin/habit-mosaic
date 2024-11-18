@@ -23,11 +23,11 @@ export function referenceColor (value: number, reference: number, root = '#f8f9f
 }
 
 export function backgroundColor (value: string): string {
-    return lighter(0.9, value);
+    return lighter(0.75, value);
 }
 
 export function borderColor (value: string): string {
-    return lighter(0.75, darker(0.25, value));
+    return lighter(0.6, darker(0.25, value));
 }
 
 export function textColor (value: string): string {
