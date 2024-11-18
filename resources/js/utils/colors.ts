@@ -23,7 +23,7 @@ export function referenceColor (value: number, reference: number, root = '#f8f9f
 }
 
 export function backgroundColor (value: string): string {
-    return lighter(0.75, value);
+    return lighter(0.8, value);
 }
 
 export function borderColor (value: string): string {
