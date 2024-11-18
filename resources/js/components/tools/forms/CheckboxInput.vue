@@ -1,65 +1,54 @@
 <template>
-    <div class="form-group" :class="{'row': isHorizontal && !isFloating}">
-        <label v-if="!isFloating" :class="labelClass" :for="name">
-            <template v-if="helpText">
-                <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;<span
-                    class="badge">?</span></Tooltip>
-            </template>
-            <template v-else>
-                {{ label }}<span v-if="required" class="text-danger">*</span>
-            </template>
-        </label>
-        <div class="form-check form-switch" :class="inputWrapperClass">
+    <div class="form-control my-2">
+        <label :for="id" class="label cursor-pointer py-0">
+      <span v-if="label" class="label-text" :class="{'text-error': hasError}">
+        {{ label }}
+        <span v-if="required" class="text-error">*</span>
+      </span>
             <input
-                ref="input"
-                :name="name"
                 type="checkbox"
-                id="checkbox"
-                class="form-check-input align-text-bottom fs-4"
-                style="margin-left: -1.5rem"
-                v-model="checked"
+                v-model="value"
+                :id="id"
+                :name="name ?? id"
                 :disabled="disabled"
                 :required="required"
-                @change="onChange"
-                @click.stop
-            >
+                :readonly="readonly"
+                :class="`${displayType} ${displayType}-${displayColor} ` + (hasError ? 'input-error' : '')"
+            />
+        </label>
+        <div v-if="helpText ?? (typeof displayError === 'string' && displayError.length)" class="label -mt-1 pb-0">
+            <span class="label-text-alt" :class="hasError ? 'font-bold text-error' : 'italic'">{{
+              (typeof displayError === 'string' && displayError.length) ? displayError : helpText
+            }}</span>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import Tooltip from '@tools/Tooltip.vue';
-import { useBsForm } from '@composables/useBsForm';
+import { computed, ref, watch } from 'vue';
+import { BaseFormInput } from '@interfaces';
 
-interface Props {
-    name: string,
-    checked?: boolean,
-    placeholder?: string,
-    label?: string,
-    disabled?: boolean,
-    required?: boolean,
-    helpText?: string,
-
-    labelColSize?: number,
-    inputWrapperColSize?: number,
+interface Props extends BaseFormInput {
+    toggle?: boolean
 }
 
 const props = defineProps<Props>();
-const checked = ref<boolean>(props.checked);
 
-const emit = defineEmits(['change', 'update:checked']);
+const emit = defineEmits(['change']);
 
-const { labelClass, inputWrapperClass, isHorizontal, isFloating } = useBsForm(props);
+const value = defineModel<boolean>();
+const internalError = ref<string>();
 
-const input = ref<HTMLInputElement|null>(null);
+const hasError = computed<boolean>(() => !!props.error || !!internalError.value || false);
+const displayType = computed<string>(() => props.toggle ? 'toggle' : 'checkbox');
+const displayError = computed<undefined|string|boolean>(() => (typeof props.error === 'string' && props.error.length) ? props.error : internalError.value);
+const displayColor = computed<undefined|string>(() => hasError.value ? 'error' : props.color);
 
-function onChange (event: InputEvent) {
-    const inputField = event.currentTarget as HTMLInputElement;
-    emit('change', inputField.checked);
-}
-
-watch(() => props.checked, () => {
-    checked.value = props.checked;
+watch(value, () => {
+    emit('change', value.value);
+    internalError.value = '';
+    if (props.required && !value.value) {
+        internalError.value = 'This field is required';
+    }
 });
 </script>

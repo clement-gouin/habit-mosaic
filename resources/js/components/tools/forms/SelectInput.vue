@@ -1,117 +1,65 @@
 <template>
-    <div class="form-group" :class="{'has-error': (error || emptyError), 'row': isHorizontal}">
-        <label :class="labelClass" :for="name" v-if="label">
-            <template v-if="helpText">
-                <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;
-                    <span class="badge">?</span></Tooltip>
-            </template>
-            <template v-else>
-                {{ label }}<span v-if="required" class="text-danger">*</span>
-            </template>
+    <div class="form-control my-2">
+        <label :for="id" v-if="label" class="label pt-0">
+            <span class="label-text" :class="hasError ? 'text-error' : ''">{{ label }}<span v-if="required" class="text-error">*</span></span>
         </label>
-        <div :class="inputWrapperClass">
-            <select
-                ref="input"
-                :name="name"
-                class="form-control"
-                :value="findOption(modelValue)?.key"
-                :disabled="disabled"
-                :aria-describedby="'help-' + name"
-                :required="required"
-                @blur="onBlur"
-                @focus="onFocus"
-                @change="onChange"
-            >
-                <option v-for="option in options" :value="option.key" :key="option.key" :disabled="option.disabled">
-                    {{ option.label }}
-                </option>
-            </select>
-            <span v-if="error" :id="'help-' + name" class="form-text">{{ error }}</span>
-            <span v-else-if="emptyError" :id="'help-' + name" class="form-text">This field is required</span>
+        <select
+            v-model="internalValue"
+            :id="id"
+            :name="name ?? id"
+            :disabled="disabled"
+            :required="required"
+            class="select select-bordered"
+            :class="`select-${displayColor} ` + (hasError ? 'input-error text-error' : '')"
+            @blur="onBlur"
+        >
+            <option v-if="placeholder" disabled value="">{{ placeholder }}</option>
+            <option v-if="!required" value="">{{ emptyText }}</option>
+            <option v-for="option in options" v-bind:key="option.key" :value="option.key">
+                <slot :option="option">{{ option.label ?? option.value }}</slot>
+            </option>
+        </select>
+        <div v-if="helpText ?? (typeof displayError === 'string' && displayError.length)" class="label pb-0">
+            <span class="label-text-alt" :class="hasError ? 'font-bold text-error' : 'italic'">{{
+              (typeof displayError === 'string' && displayError.length) ? displayError : helpText
+            }}</span>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { onDeactivated, ref } from 'vue';
-import Tooltip from '@tools/Tooltip.vue';
-import { Option } from '@interfaces';
-import { useBsForm } from '@composables/useBsForm';
+import { computed, ref, watch } from 'vue';
+import { BaseFormInput, Option } from '@interfaces';
 
-interface Props {
-    /** name of field in form */
-    name: string,
-    /** initial value */
-    modelValue?: string | number | Option,
-    /** label associated with field */
-    label?: string,
-    /** tooltip on label hover */
-    helpText?: string,
-    /** current error of field */
-    error?: string,
-    /** field is disabled */
-    disabled?: boolean,
-    /** field is required */
-    required?: boolean,
-    readonly?: boolean,
-    /** values available in field */
-    options: Option[],
-    labelColSize?: number,
-    inputWrapperColSize?: number,
-    emitOption?: boolean,
-    emitValue?: boolean,
+interface Props extends BaseFormInput {
+    options: Option<unknown>[]
+    emptyText?: string
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), { emptyText: '(none)' });
 
-const input = ref<HTMLInputElement | null>(null);
-const emptyError = ref(false);
+const emit = defineEmits(['change']);
 
-const emit = defineEmits(['update:modelValue', 'lazyLoad']);
+const value = defineModel<Option<unknown>|null>();
+const internalError = ref<string>();
+const internalValue = ref<string|null>(value.value?.key ?? '');
 
-const { labelClass, inputWrapperClass, isHorizontal } = useBsForm(props);
+const hasError = computed<boolean>(() => !!props.error || !!internalError.value || false);
+const displayError = computed<undefined|string|boolean>(() => (typeof props.error === 'string' && props.error.length) ? props.error : internalError.value);
+const displayColor = computed<undefined|string>(() => hasError.value ? 'error' : props.color);
 
-function findOption (value: string | number | Option | undefined): Option | undefined {
-    if (!value) {
-        return undefined;
-    }
-
-    if (props.emitOption) {
-        return value as Option;
-    }
-
-    if (props.emitValue) {
-        return props.options.find((option: Option) => '' + option.value === '' + value);
-    }
-
-    return props.options.find((option: Option) => '' + option.key === '' + value);
+function updateInternal () {
+    value.value = props.options.find((option: Option<unknown>) => option.key === internalValue.value);
+    emit('change', value.value);
 }
+
+watch(internalValue, updateInternal);
 
 function onBlur () {
-    emptyError.value = (props.required as boolean) && (input.value?.value === '');
-}
-
-function onFocus () {
-    emit('lazyLoad');
-}
-
-function onChange () {
-    const selected = props.options.find((option: Option) => '' + option.key === input.value?.value);
-
-    if (props.emitOption) {
-        emit('update:modelValue', selected);
-        return;
+    updateInternal();
+    internalError.value = '';
+    if (props.required && value.value?.length === 0) {
+        internalError.value = 'This field is required';
     }
-
-    if (props.emitValue) {
-        emit('update:modelValue', selected?.value);
-        return;
-    }
-
-    emit('update:modelValue', selected?.key);
 }
-
-onDeactivated(() => {
-    emptyError.value = false;
-});
 </script>

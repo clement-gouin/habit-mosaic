@@ -3,8 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChartData, ChartItem, ChartOptions } from 'chart.js/dist/types';
-import Chart from 'chart.js/auto';
+import Chart, { ChartItem, ChartOptions, ChartData, ChartConfiguration } from 'chart.js/auto';
 import { onMounted, ref, watch } from 'vue';
 
 interface Props {
@@ -34,7 +33,7 @@ function makeChart () {
             {
                 data: props.data,
                 options: props.options ?? {}
-            }
+            } as ChartConfiguration
         );
     }
 }

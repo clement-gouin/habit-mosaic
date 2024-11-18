@@ -1,17 +1,40 @@
 <template>
-    <div
-        :class="`alert-${alert.type} ${alert.show ? 'show' : ''}`"
-        class="alert alert-dismissible fade"
-        role="alert"
-    >
-        <h4 v-if="alert.title" class="alert-heading">{{ alert.title }}</h4>
-        <div>{{ alert.text }}</div>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <div role="alert" class="alert shadow transition-opacity ease-in-out mb-4 w-fit ml-auto" :class="`alert-${alert.type} ` + (alert.fade ? 'opacity-0 duration-700' : 'opacity-100 duration-200')">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 shrink-0 stroke-current"
+            fill="none"
+            viewBox="0 0 24 24">
+            <path v-if="alert.type === AlertType.Info"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path v-if="alert.type === AlertType.Success"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <path v-if="alert.type === AlertType.Warning"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            <path v-if="alert.type === AlertType.Error"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>
+            <span v-if="alert.title" class="font-bold inline-block mr-2" v-html="alert.title + ':'"></span>
+            <span v-html="alert.text" />
+        </span>
     </div>
 </template>
 
 <script setup lang="ts">
-import { Alert } from '@interfaces';
+import { Alert, AlertType } from '@interfaces';
 
 interface Props {
     alert: Alert
@@ -19,10 +42,3 @@ interface Props {
 
 defineProps<Props>();
 </script>
-
-<style scoped>
-.alert {
-    margin-bottom: 0;
-    margin-top: 18px;
-}
-</style>

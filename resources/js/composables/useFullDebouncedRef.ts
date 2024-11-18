@@ -10,7 +10,7 @@ export interface ClonedDebouncedRef<T> extends Base {
 export function useFullDebouncedRef<T> (value: T, delay: number | boolean | undefined = 200): ClonedDebouncedRef<T> {
     let timeout: number;
 
-    const rawValue = ref<T>(value);
+    const rawValue = ref<T>(value) as Ref<T>;
     const isLoading = ref<boolean>(false);
 
     const debouncedValue = customRef<T>((track, trigger) => {

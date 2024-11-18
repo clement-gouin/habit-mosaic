@@ -1,49 +1,38 @@
 <template>
-    <div :id="`dropdown-input-${name}`" class="form-group" :class="{ 'has-error': error || internalError, 'has-feedback': true, 'row': isHorizontal }">
-        <slot name="label">
-            <label v-if="label" :class="labelClass" :for="name">
-                <template v-if="helpText">
-                    <Tooltip :text="helpText">{{ label }}<span v-if="required" class="text-danger">*</span>&nbsp;<span class="badge">?</span></Tooltip>
-                </template>
-                <template v-else>
-                    {{ label }}<span v-if="required" class="text-danger">*</span>
-                </template>
-            </label>
-        </slot>
-        <div :class="inputWrapperClass">
-            <div :class="$slots.addon ? 'input-group' : ''">
-                <div v-if="!showInput" class="form-control" @click="onClick" :class="{disabled}">
-                    <div v-if="selected?.key"><slot name="item" v-bind="selected">{{ selected?.label }}</slot></div>
-                    <div v-else class="placeholder-text">{{ placeholder ?? 'Search...' }}</div>
-                </div>
+    <div class="form-control text-base my-2">
+        <label :for="id" v-if="label" class="label pt-0">
+            <span class="label-text" :class="hasError ? 'text-error' : ''">{{ label }}<span v-if="required" class="text-error">*</span></span>
+        </label>
+        <div class="dropdown relative">
+            <div
+                class="input input-bordered flex items-center gap-4 w-full"
+                :class="`input-${displayColor} ` + (hasError ? 'text-error ' : ' ') + (showInput ? 'rounded-b-none' : '')"
+            >
+                <slot name="left"></slot>
                 <input
-                    v-else
+                    :style="{display: showInput ? 'inline-block': 'none'}"
                     ref="input"
-                    :name="name + '_label'"
-                    type="text"
-                    class="form-control"
                     v-model="searchText"
-                    :disabled="disabled"
-                    :aria-describedby="'help-' + name"
+                    :id="id"
+                    :name="name ?? id"
                     :required="required"
+                    :disabled="disabled"
                     :readonly="readonly"
+                    class="grow"
                     :placeholder="placeholder ?? 'Search...'"
                     @focus="onFocus"
                     @blur="onBlur"
                 />
-                <slot name="addon"></slot>
-                <span
-                    :style="{right: cursorOffset}"
-                    v-if="selected?.key && !readonly && !disabled"
-                    @click="clearSelection"
-                    class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true">
-                </span>
-                <span v-else-if="!readonly && !disabled" :style="{right: cursorOffset}" class="glyphicon glyphicon-chevron-down form-control-feedback" aria-hidden="true" @click="onFocus"></span>
+                <div v-if="!showInput" @click="onClick" class="w-full flex" :class="{disabled}">
+                    <div v-if="selected?.key" class="grow"><slot name="item" v-bind="selected">{{ selected?.label }}</slot></div>
+                    <div v-else class="placeholder-text">{{ placeholder ?? 'Search...' }}</div>
+                </div>
+                <div v-if="selected?.key && !noClear" @click="clearSelection" title="Clear selection" class="text-lg flex cursor-pointer"><i class="my-auto inline-block fas fa-times"/></div>
+                <slot name="right"></slot>
             </div>
-
-            <ul ref="menu" class="dropdown-menu" :style="{ display: showList ? 'block' : 'none', ...floatingStyles}">
+            <ul v-if="showList" class="w-full menu p-2 shadow bg-base-100 rounded-box dropdown-content z-[1] top-12 rounded-t-none max-h-80 flex-nowrap overflow-auto">
                 <template v-if="options.length === 0">
-                    <li class="dropdown-item disabled">
+                    <li>
                         <a><slot :search-text="searchText" name="empty-result">{{ searchText ? 'No results' : 'Please refine your search' }}</slot></a>
                     </li>
                 </template>
@@ -52,79 +41,48 @@
                         <a><slot name="item" v-bind="option"><span v-html="withHighlight ? highlight(String(option.label)) : option.label"></span></slot></a>
                     </li>
                 </template>
-                <div class="loading" v-if="loading" >
-                    <div class="spinner-border" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
+                <loading-mask  v-if="loading" />
             </ul>
-            <span v-if="error" :id="`help-${name}`" class="form-text">{{ error }}</span>
-            <span v-else-if="internalError" :id="`help-${name}`" class="form-text">{{ internalError }}</span>
-            <span v-else-if="notice || $slots.notice" :id="`help-${name}`" class="form-text"><slot name="notice">{{ notice }}</slot></span>
+        </div>
+        <div v-if="helpText ?? (typeof displayError === 'string' && displayError.length)" class="label pb-0">
+        <span class="label-text-alt" :class="hasError ? 'font-bold text-error' : 'italic'">{{
+                (typeof displayError === 'string' && displayError.length) ? displayError : helpText
+            }}</span>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue';
-import Tooltip from '@tools/Tooltip.vue';
-import { Option } from '@interfaces';
-import { useBsForm } from '@composables/useBsForm';
+import { nextTick, ref, watch, useTemplateRef, computed } from 'vue';
+import { BaseFormInput, Option } from '@interfaces';
 import { useDebouncedRef } from '@composables/useDebouncedRef';
-import { autoUpdate, flip, shift, size, useFloating } from '@floating-ui/vue';
+import LoadingMask from '@tools/LoadingMask.vue';
 
-interface Props {
-    name: string,
-    modelValue: Option|null
-    placeholder?: string,
-    label?: string,
-    helpText?: string,
-    error?: string,
-    disabled?: boolean,
-    required?: boolean,
-    readonly?: boolean,
-    notice?: string,
-    cursorOffset?: string,
-
-    options: Option[],
+interface Props extends BaseFormInput {
+    options: Option<unknown>[],
     loading?: boolean,
     withHighlight?: boolean,
     debounce?: number | boolean,
-    labelColSize?: number,
-    inputWrapperColSize?: number,
-
+    noClear?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), { cursorOffset: '1em' });
+const props = defineProps<Props>();
+
+const selected = defineModel<Option<unknown>|null>();
+
+const internalError = ref<string>();
+
+const hasError = computed<boolean>(() => !!props.error || !!internalError.value);
+const displayError = computed<undefined|string|boolean>(() => (typeof props.error === 'string' && props.error.length) ? props.error : internalError.value);
+const displayColor = computed<undefined|string>(() => hasError.value ? 'error' : props.color);
 
 const searchText = useDebouncedRef('', props.debounce);
-const input = ref<HTMLInputElement|null>(null);
-const internalError = ref<string|null>(null);
-
-const menu = ref(null);
-const { floatingStyles } = useFloating(input, menu, {
-    placement: 'bottom-start',
-    middleware: [
-        flip(), shift(), size({
-            apply ({ rects, elements }) {
-                Object.assign(elements.floating.style, { width: `${rects.reference.width}px` });
-            }
-        })
-    ],
-    whileElementsMounted: autoUpdate
-});
+const inputElement = useTemplateRef<HTMLInputElement>('input');
 
 const showList = ref(false);
 const showInput = ref(false);
 
-const emit = defineEmits(['update:modelValue', 'change', 'search']);
-
-const { labelClass, inputWrapperClass, isHorizontal } = useBsForm(props);
-
-const selected = computed<Option|null>({
-    get (): Option|null { return props.modelValue; },
-    set (value: Option|null) { emit('update:modelValue', value); }
-});
+const emit = defineEmits(['change', 'search']);
 
 function onClick () {
     if (props.readonly || props.disabled) {
@@ -137,7 +95,7 @@ function onClick () {
     }
 
     nextTick(() => {
-        input.value?.focus();
+        inputElement.value?.focus();
     });
 }
 
@@ -156,9 +114,9 @@ function onBlur () {
     showList.value = false;
     showInput.value = false;
 
-    if (selected.value === null || selected.value?.key === undefined) {
+    if (selected.value === null || selected.value === undefined || selected.value?.key === undefined) {
         searchText.value = '';
-        internalError.value = props.required ? 'This field is required' : null;
+        internalError.value = props.required ? 'This field is required' : '';
     }
 }
 
@@ -178,8 +136,8 @@ function highlight (value: string) {
     return value;
 }
 
-function select (selectedOption: Option) {
-    cleanErrors();
+function select (selectedOption: Option<unknown>) {
+    internalError.value = '';
     const changed = selected.value?.key !== selectedOption.key;
     selected.value = props.options.find(option => option.key === selectedOption.key) ?? null;
     nextTick(() => {
@@ -196,7 +154,7 @@ function clearSelection (): void {
         return;
     }
 
-    cleanErrors();
+    internalError.value = '';
     selected.value = null;
     if (!props.required) {
         emit('change', selected);
@@ -206,65 +164,12 @@ function clearSelection (): void {
     });
 }
 
-function cleanErrors () {
-    internalError.value = null;
-}
-
 watch(searchText, search);
 
 defineExpose({ select, highlight });
 </script>
 
-<style scoped lang="scss">
-ul.dropdown-menu {
-    max-height: 20em;
-    overflow: scroll;
-}
-
-.dropdown-item {
-    cursor: pointer;
-    &.disabled {
-        cursor: none;
-        font-style: italic;
-
-    }
-}
-
-.has-feedback .form-control-feedback {
-    user-select: none;
-    pointer-events: all;
-    cursor: pointer;
-    right: 0;
-    z-index: 1000;
-    &.glyphicon-remove {
-        color: initial;
-    }
-}
-
-.form-control .placeholder-text {
-    color: #999;
-}
-
-.form-control.disabled {
-    opacity: 0.3;
-}
-
-.loading {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: white;
-    opacity: 0.8;
-
-    .spinner-border {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin: -1rem 0 0 -1rem;
-    }
-}
+<style scoped>
 
 </style>
 

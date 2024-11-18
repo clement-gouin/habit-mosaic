@@ -1,5 +1,5 @@
 <template>
-    <datatable :total="trackers.length" :data="trackers" :columns="columns" :with-pagination="false" :loading="loading" stripped>
+    <datatable :total="trackers.length" :data="trackers" :columns="columns" no-pagination :loading="loading" stripped hover>
         <template #col-name="{row}">
             <tracker-label :tracker="row" />
         </template>
@@ -26,8 +26,8 @@
             />
         </template>
     </datatable>
-    <div class="d-grid">
-        <button type="button" class="btn btn-primary" @click="createModal.open()"><i class="fa-solid fa-circle-plus" /> New tracker</button>
+    <div class="grid mt-2">
+        <button type="button" class="btn btn-primary text-white" @click="createModal.open()"><i class="fa-solid fa-circle-plus" /> New tracker</button>
     </div>
     <modal
         ref="createModal"
@@ -67,40 +67,54 @@ const createModal = ref<InstanceType<typeof Modal> | null>(null);
 const createForm = ref<InstanceType<typeof TrackerForm>|null>(null);
 const loading = ref<boolean>(false);
 
+const border = (tracker, index) => (index !== null && (index < trackers.value.length - 1 && trackers.value[index + 1].category.id !== trackers.value[index].category.id)) ? 'border-b border-gray-300' : '';
+
 const columns: TableColumn[] = [
     {
         id: 'name',
-        label: 'Name'
+        label: 'Name',
+        cssClass: border
     },
     {
         id: 'category',
-        label: 'Category'
+        label: 'Category',
+        cssClass: border
     },
     {
         id: 'target_score',
         label: 'Target score',
-        cssClass: 'd-none d-xl-table-cell'
+        cssClass: (tracker, index) => {
+            return `hidden xl:table-cell ${border(tracker, index)}`;
+        }
     },
     {
         id: 'value_step',
         label: 'Value step',
-        cssClass: 'd-none d-xl-table-cell'
+        cssClass: (tracker, index) => {
+            return `hidden xl:table-cell ${border(tracker, index)}`;
+        }
     },
     {
         id: 'target_value',
         label: 'Target value',
-        cssClass: 'd-none d-xl-table-cell'
+        cssClass: (tracker, index) => {
+            return `hidden xl:table-cell ${border(tracker, index)}`;
+        }
     },
     {
         id: 'unit',
         label: 'Unit',
-        cssClass: 'd-none d-md-table-cell'
+        cssClass: (tracker, index) => {
+            return `hidden xl:table-cell ${border(tracker, index)}`;
+        }
     },
     {
         id: 'actions',
         label: '',
-        cssClass: 'text-left',
-        cssStyle: 'width: 11em; vertical-align: middle'
+        cssClass: (tracker, index) => {
+            return `text-left ${border(tracker, index)}`;
+        },
+        cssStyle: 'width: 14em; vertical-align: middle'
     }
 ];
 

@@ -1,104 +1,87 @@
 <template>
-  <div v-if="enabled" role="dialog">
-    <div class="fade modal-backdrop" :class="visible ? 'show' : ''"></div>
-    <div class="fade modal" role="dialog" tabindex="-1" :class="visible ? 'show' : ''" style="display:block">
-      <div class="modal-dialog">
-        <div class="modal-content" role="document">
-          <div class="modal-header">
+    <dialog ref="dialog" class="modal" @close="onClose">
+        <div class="modal-box">
             <slot name="modal-header">
-                <h4 class="modal-title">{{ title }}</h4>
-              <button v-if="canClose" class="btn-close" type="button" @click.prevent="closeButton" />
+                <h3 v-if="title" class="text-lg font-bold pb-3">{{ title }}</h3>
             </slot>
-          </div>
-          <div class="modal-body" v-if="!noBody">
             <slot></slot>
-          </div>
-          <div class="modal-footer">
-            <slot name="modal-footer">
-              <button v-if="canClose" type="button" class="btn btn-default" @click.prevent="closeButton"><span>{{ closeText ?? 'Close' }}</span></button>
-              <button type="button" class="btn action-submit" :class="'btn-' + actionColor" @click.prevent="action"><span>{{ actionText ?? 'Confirm' }}</span></button>
-            </slot>
-          </div>
+            <div class="modal-action">
+                <slot name="modal-footer">
+                    <button v-if="canClose"  @click="onClose" class="btn ml-4">{{closeText}}</button>
+                    <button v-if="canSubmit"  @click="onSubmit" class="btn ml-4" :class="`btn-${actionColor}`">{{actionText}}</button>
+                </slot>
+            </div>
         </div>
-      </div>
-    </div>
-  </div>
+        <form v-if="autoClose && canClose" method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 
 interface Props {
-    title: string,
-    canClose?: boolean,
-    closeText?: string,
-    actionText?: string,
-    actionColor?: string,
-    autoClose?: boolean,
+    title?: string
+    canClose?: boolean
+    closeText?: string
+    actionText?: string
+    actionColor?: string
+    autoClose?: boolean
+    canSubmit?: boolean
     noBody?: boolean
 }
+
+const props = withDefaults(defineProps<Props>(), {
+    closeText: 'Cancel',
+    actionText: 'OK',
+    canClose: true,
+    canSubmit: true,
+    actionColor: 'primary',
+    autoClose: true
+});
 
 interface Emits {
     (e: 'submit'): void
     (e: 'close'): void
 }
 
-const props = withDefaults(defineProps<Props>(), {
-    canClose: true,
-    actionColor: 'primary',
-    autoClose: true
-});
-
-const visible = ref(false);
-const enabled = ref(false);
-
 const emit = defineEmits<Emits>();
 
+const dialog = ref<HTMLDialogElement | null>(null);
+const displayed = ref<boolean>(false);
+
+function onClose (): void {
+    if (displayed.value) {
+        if (!props.canClose) {
+            open();
+        } else {
+            displayed.value = false;
+            close();
+            emit('close');
+        }
+    }
+}
+
+function onSubmit (): void {
+    if (displayed.value) {
+        if (props.autoClose) {
+            displayed.value = false;
+            close();
+        }
+        emit('submit');
+    }
+}
+
 function open (): void {
-    enabled.value = true;
-    setTimeout(() => {
-        visible.value = true;
-        document.body.classList.add('modal-open');
-        document.addEventListener('keyup', keyUpEvent);
-    });
+    displayed.value = true;
+    dialog.value?.showModal();
 }
 
 function close (): void {
-    visible.value = false;
-    document.body.classList.remove('modal-open');
-    setTimeout(() => {
-        enabled.value = false;
-        document.removeEventListener('keyup', keyUpEvent);
-    });
+    displayed.value = false;
+    dialog.value?.close();
 }
 
-function closeButton (): void {
-    emit('close');
-    close();
-}
-
-function action (): void {
-    emit('submit');
-    if (props.autoClose) {
-        close();
-    }
-}
-
-function keyUpEvent (event: KeyboardEvent) {
-    if (event.key === 'Escape') {
-        closeButton();
-    }
-}
-
-defineExpose({ open, close });
+defineExpose({ open, close, submit: onSubmit });
 </script>
-
-<style scoped>
-.modal, .modal-backdrop {
-  z-index: -1050;
-}
-
-.modal.show, .modal-backdrop.show {
-  z-index: 1050;
-}
-</style>

@@ -4,7 +4,7 @@ import { useAlertsStore } from '@stores/alerts';
 
 export const ENDPOINT = '/api/categories';
 
-const { alertAxiosError, alertSuccess } = useAlertsStore();
+const { alertSuccess } = useAlertsStore();
 
 let controller: AbortController;
 
@@ -31,8 +31,7 @@ export async function createCategory (category: CategoryData): Promise<Category>
         .then(resp => {
             alertSuccess('Category created');
             return resp.data.data;
-        })
-        .catch(alertAxiosError);
+        });
 }
 
 export async function updateCategory (category: CategoryData): Promise<Category> {
@@ -40,14 +39,12 @@ export async function updateCategory (category: CategoryData): Promise<Category>
         .then(resp => {
             alertSuccess('Category updated');
             return resp.data.data;
-        })
-        .catch(alertAxiosError);
+        });
 }
 
 export async function deleteCategory (category: CategoryData): Promise<void> {
     await axios.delete(`${ENDPOINT}/${category.id as number}`)
         .then(() => {
             alertSuccess('Category deleted');
-        })
-        .catch(alertAxiosError);
+        });
 }

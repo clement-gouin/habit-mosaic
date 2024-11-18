@@ -1,6 +1,6 @@
 <template>
-  <div class="loading">
-    <div class="spinner-border" role="status"></div>
+  <div class="loading-container">
+    <span class="loading loading-spinner" role="status"></span>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 </script>
 
 <style scoped lang="scss">
-.loading {
+.loading-container {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -19,7 +19,7 @@
   opacity: 0.8;
   z-index: 1001;
 
-  .spinner-border {
+  .loading-spinner {
     position: absolute;
     top: 50%;
     left: 50%;

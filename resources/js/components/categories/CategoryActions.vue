@@ -1,9 +1,9 @@
 <template>
-    <div class="btn-toolbar d-flex justify-content-end gap-2" role="toolbar">
-        <button type="button" class="btn btn-sm btn-outline-primary" :disabled="first" @click="$emit('moveUp')"><i class="fa-solid fa-arrow-up" /></button>
-        <button type="button" class="btn btn-sm btn-outline-primary" :disabled="last" @click="$emit('moveDown')"><i class="fa-solid fa-arrow-down" /></button>
-        <button type="button" class="btn btn-sm btn-outline-primary" @click="updateModal.open()"><i class="fa-solid fa-pen" /></button>
-        <button type="button" class="btn btn-sm btn-outline-danger" @click="onDeleteClick"><i class="fa-solid fa-trash" /></button>
+    <div class="join" role="toolbar">
+        <button type="button" class="join-item btn btn-sm" :disabled="first" @click="$emit('moveUp')"><i class="fa-solid fa-arrow-up" /></button>
+        <button type="button" class="join-item btn btn-sm" :disabled="last" @click="$emit('moveDown')"><i class="fa-solid fa-arrow-down" /></button>
+        <button type="button" class="join-item btn btn-sm" @click="updateModal.open()"><i class="fa-solid fa-pen" /></button>
+        <button type="button" class="join-item btn btn-sm" @click="onDeleteClick"><i class="fa-solid fa-trash" /></button>
     </div>
     <modal
         ref="updateModal"
@@ -55,7 +55,7 @@ const confirmDeleteDialog = ref<InstanceType<typeof ConfirmDialog>|null>(null);
 
 function updateModalSubmit () {
     updateForm.value?.submit()
-        .then(category => {
+        .then((category: Category) => {
             updateModal.value?.close();
             updateForm.value?.reset();
             emit('update:modelValue', category);

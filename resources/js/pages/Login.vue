@@ -1,56 +1,35 @@
 <template>
-    <div class="card">
-        <div class="card-body">
-                <bs-form horizontal floating>
-                    <text-input
-                        required
-                        type="text"
-                        id="email"
-                        name="email"
-                        label="Email"
-                        v-model="formData.email"
-                        :disabled="loading"
-                        :placeholder="placeholder"
-                        hide-help
-                    />
-                    <text-input
-                        required
-                        v-if="formData.new"
-                        type="text"
-                        id="name"
-                        name="name"
-                        label="Name"
-                        v-model="formData.name"
-                        :disabled="loading"
-                        placeholder="Name"
-                        hide-help
-                    />
-                </bs-form>
-            <div v-if="errorMessage" class="invalid-feedback mb-1 d-block">
-                {{ errorMessage }}
-            </div>
-            <div v-if="outputMessage" class="valid-feedback mb-1 d-block">
-                {{ outputMessage }}
-            </div>
-            <div class="checkbox mb-3">
-                <label>
-                    <input
-                        type="checkbox"
-                        id="remember_me"
-                        name="remember_me"
-                        v-model="formData.new"
-                        :disabled="loading"
-                    >
-                    I'm new
-                </label>
-            </div>
-            <button
-                type="submit"
-                @click="onSubmit"
-                class="w-100 btn btn-lg btn-primary"
-                :class="{disabled: !canSubmit}">
-                {{ formData.new ? 'Register' : 'Sign in' }}
-            </button>
+    <div class="card-body">
+        <text-input
+            required
+            icon="envelope"
+            placeholder="Email"
+            :disabled="loading"
+            v-model="formData.email"
+            :error="errorMessage"
+            type="email"
+        />
+        <text-input
+            v-if="formData.new"
+            type="name"
+            required
+            icon="user"
+            placeholder="Name"
+            :disabled="loading"
+            v-model="formData.name"
+            :error="!!errorMessage"
+        />
+        <checkbox-input
+            label="I'm new"
+            :error="!!errorMessage"
+            :disabled="loading"
+            v-model="formData.new"
+        />
+        <div class="form-control mt-6">
+            <button class="btn btn-primary" @click="onSubmit" :class="{disabled: !canSubmit}">Entrer <span v-if="loading" class="loading loading-spinner loading-xs"></span></button>
+        </div>
+        <div v-if="outputMessage" class="text-success w-full text-center">
+            {{ outputMessage }}
         </div>
     </div>
 </template>
@@ -59,7 +38,7 @@
 import { computed, ref } from 'vue';
 import axios from 'axios';
 import TextInput from '@tools/forms/TextInput.vue';
-import BsForm from '@tools/forms/BsForm.vue';
+import CheckboxInput from '@tools/forms/CheckboxInput.vue';
 
 const formData = ref({
     email: '',
@@ -67,8 +46,6 @@ const formData = ref({
     new: false
 });
 
-const PLACEHOLDERS = ['to.stark', 'th.odinson', 'br.banner', 'st.rogers', 'cl.barton', 'na.romanoff'];
-const placeholder = computed(() => PLACEHOLDERS[Math.floor(Math.random() * PLACEHOLDERS.length)] + '@avengers.com');
 const errorMessage = ref('');
 const outputMessage = ref('');
 const loading = ref(false);
@@ -91,9 +68,3 @@ function onSubmit () {
         });
 }
 </script>
-
-<style scoped>
-  .card {
-    background-color: #f5f5f5 !important;
-  }
-</style>

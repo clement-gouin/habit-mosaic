@@ -1,5 +1,5 @@
 <template>
-    <datatable :total="categories.length" :data="categories" :columns="columns" :with-pagination="false" :loading="loading" stripped>
+    <datatable :total="categories.length" :data="categories" :columns="columns" no-pagination :loading="loading" stripped hover>
         <template #col-name="{row}">
             <category-label :category="row" />
         </template>
@@ -14,8 +14,8 @@
             />
         </template>
     </datatable>
-    <div class="d-grid">
-        <button type="button" class="btn btn-primary" @click="createModal.open()"><i class="fa-solid fa-circle-plus" /> New category</button>
+    <div class="grid mt-2">
+        <button type="button" class="btn btn-primary text-white" @click="createModal.open()"><i class="fa-solid fa-circle-plus" /> New category</button>
     </div>
     <modal
         ref="createModal"

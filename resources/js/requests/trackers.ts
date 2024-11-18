@@ -4,7 +4,7 @@ import { useAlertsStore } from '@stores/alerts';
 
 export const ENDPOINT = '/api/trackers';
 
-const { alertAxiosError, alertSuccess } = useAlertsStore();
+const { alertSuccess } = useAlertsStore();
 
 let controller: AbortController;
 
@@ -34,8 +34,7 @@ export async function createTracker (tracker: TrackerData): Promise<Tracker> {
         .then(resp => {
             alertSuccess('Tracker created');
             return resp.data.data;
-        })
-        .catch(alertAxiosError);
+        });
 }
 
 export async function updateTracker (tracker: TrackerData): Promise<Tracker> {
@@ -46,8 +45,7 @@ export async function updateTracker (tracker: TrackerData): Promise<Tracker> {
         .then(resp => {
             alertSuccess('Tracker updated');
             return resp.data.data;
-        })
-        .catch(alertAxiosError);
+        });
 }
 
 export async function deleteTracker (tracker: TrackerData): Promise<void> {
@@ -55,6 +53,5 @@ export async function deleteTracker (tracker: TrackerData): Promise<void> {
         .then(resp => {
             alertSuccess('Tracker deleted');
             return resp.data.data;
-        })
-        .catch(alertAxiosError);
+        });
 }

@@ -20,7 +20,6 @@
 </template>
 
 <script setup lang="ts">
-
 import Modal from '@tools/Modal.vue';
 import { ref } from 'vue';
 
