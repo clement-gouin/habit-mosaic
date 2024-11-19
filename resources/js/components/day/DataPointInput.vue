@@ -11,7 +11,7 @@
             </span>
             <span v-else @click="add" role="button">
                 <i class="inline-block border-l rounded-l-full border-t border-b px-2 py-2 lh-base align-middle" :style="{backgroundColor: backgroundColor(baseColorDark), borderColor: borderColor(baseColor)}" :class="mapToClassName(tracker.icon)"></i>
-                <span :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor)}" class="inline-block h-100 border-2 px-3 py-2 lh-base align-middle rounded-r-full">&nbsp;</span>
+                <span :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor)}" class="inline-block border-2 px-3 py-2 lh-base align-middle rounded-r-full">&nbsp;</span>
             </span>
         </template>
         <template v-else>
