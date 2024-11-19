@@ -13,19 +13,20 @@
 
         @yield('head')
     </head>
-    <body class="antialiased text-gray-800 bg-gray-50 relative" x-data="{open: false}">
-        <x-menu style="z-index: 1002" class="hidden md:flex"/>
-        <main style="background-color: #f5f5f5;min-height: 100vh" class="ml-0 md:ml-20 lg:ml-60 flex-grow" x-on:click="open = false">
+    <body class="antialiased text-gray-800 bg-gray-50 relative drawer md:drawer-open">
+        <input id="menu-drawer" type="checkbox" class="drawer-toggle" />
+        <main class="drawer-content min-h-screen bg-gray-100 z-0">
             @yield('content')
+            <label for="menu-drawer"
+                 class="drawer-button cursor-pointer z-40 block md:hidden fixed start-0 bottom-0 rounded-tr-md p-2 py-1 text-center shadow border border-e-gray-50 border-t-gray-50 bg-white"
+                 style="width: 4em;"
+            >
+                <i class="fa-solid fa-bars"></i>
+            </label>
         </main>
-        <div class="" style="z-index: 1002" x-show="open">
-            <x-menu class="" style=""/>
-        </div>
-        <div x-on:click="open = true" x-show="!open" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMenu" aria-expanded="false" aria-controls="collapseMenu"
-             class="cursor-pointer block md:hidden fixed start-0 bottom-0 rounded-tr-md p-2 py-1 text-center shadow border border-e-gray-50 border-t-gray-50 bg-white"
-             style="width: 4em; z-index: 1002;"
-        >
-            <i class="fa-solid fa-bars"></i>
+        <div class="drawer-side">
+            <label for="menu-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+            <x-menu />
         </div>
         <footer class="fixed bottom-0 end-1 ps-2 w-fit select-none" style="color: #AAA">{{ config('app.version') }}</footer>
     </body>

@@ -7,10 +7,6 @@ import { createPinia } from 'pinia';
 import AlertsContainer from './components/alerts/AlertsContainer.vue';
 import axios from 'axios';
 import { Service } from 'axios-middleware';
-import Alpine from 'alpinejs';
-
-window.Alpine = Alpine;
-Alpine.start();
 
 const element = document.getElementById('app');
 
