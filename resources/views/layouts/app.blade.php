@@ -15,7 +15,7 @@
     </head>
     <body class="antialiased text-gray-800 min-h-screen drawer md:drawer-open">
         <input id="menu-drawer" type="checkbox" class="drawer-toggle" />
-        <main class="drawer-content h-full bg-gray-100 z-0">
+        <main class="drawer-content h-full bg-gray-50 z-0">
             @yield('content')
             <label for="menu-drawer"
                  class="drawer-button cursor-pointer z-40 block md:hidden fixed start-0 bottom-0 rounded-tr-md p-2 py-1 text-center shadow border border-e-gray-50 border-t-gray-50 bg-white"

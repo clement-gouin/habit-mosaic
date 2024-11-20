@@ -7,14 +7,14 @@ export function darker (ratio: number, value: string): string {
 }
 
 export function lighter (ratio: number, value: string): string {
-    return colorMix(ratio, value.replace('!important', ''), '#f8f9fa');
+    return colorMix(ratio, value.replace('!important', ''), '#fff');
 }
 
-export function ratioColor (ratio: number, positive: boolean, root = '#f8f9fa'): string {
+export function ratioColor (ratio: number, positive: boolean, root = '#fff'): string {
     return colorMix(ratio, root, positive ? 'oklch(var(--su))' : 'oklch(var(--er))');
 }
 
-export function referenceColor (value: number, reference: number, root = '#f8f9fa'): string {
+export function referenceColor (value: number, reference: number, root = '#fff'): string {
     if (reference === 0) {
         reference = 1;
     }
