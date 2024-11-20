@@ -7,7 +7,7 @@
     </div>
     <hr class="my-6 hidden lg:block">
     <div class="flex-grow text-gray-700">
-        <ul class="menu bg-base-0 menu-lg rounded-lg w-full p-0">
+        <ul class="menu bg-base-0 menu-lg rounded-lg w-full p-0 gap-1">
             <x-menu.item route="dashboard" pattern="dashboard" icon="fa-solid fa-grip">
                 Mosaic
             </x-menu.item>
