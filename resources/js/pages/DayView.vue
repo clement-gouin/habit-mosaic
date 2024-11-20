@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full sticky top-0 z-50 select-none">
+    <div class="w-full sticky top-0 z-30 select-none">
         <h2 class="w-full h-14 text-3xl font-bold border-b border-1 m-0 flex justify-between md:justify-center gap-14" :style="{backgroundColor: backgroundColor(baseColor), borderColor: borderColor(baseColor), color: textColor(baseColor)}">
             <i class="fa-solid w-8 fa-caret-left text-end my-auto" role="button" @click="previous"></i>
             <span class="text-center inline-block my-auto">

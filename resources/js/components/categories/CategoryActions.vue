@@ -31,11 +31,11 @@
 <script setup lang="ts">
 
 import CategoryForm from './CategoryForm.vue';
-import Modal from '@tools/Modal.vue';
+import Modal from '@tools/modals/Modal.vue';
 import { Category } from '@interfaces';
 import { watch, ref } from 'vue';
 import { deleteCategory } from '@requests/categories';
-import ConfirmDialog from '@tools/dialogs/ConfirmDialog.vue';
+import ConfirmDialog from '@tools/modals/ConfirmDialog.vue';
 
 interface Props {
     modelValue: Category

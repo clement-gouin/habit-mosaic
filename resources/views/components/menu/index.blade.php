@@ -1,4 +1,4 @@
-<nav class="bg-white border-r-2 border-gray-200 w-22 lg:w-60 md:w-auto px-2 py-2 pb-4 lg:pt-8 flex flex-col min-h-screen z-50">
+<nav class="bg-white border-r-2 border-gray-200 w-22 lg:w-60 md:w-auto px-2 py-2 pb-4 lg:pt-8 flex flex-col min-h-screen z-40">
     <div class="text-center hidden lg:block text-3xl">
         <x-full-logo />
     </div>

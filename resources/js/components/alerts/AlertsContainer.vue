@@ -1,5 +1,5 @@
 <template>
-    <div class="fixed bottom-0 right-0 gap-2 mr-4 z-50" style="z-index: 1003;">
+    <div class="fixed bottom-0 right-0 gap-2 mr-4 z-50">
         <template v-for="alert in alerts" v-bind:key="alert.id">
             <Alert :alert="alert" />
         </template>

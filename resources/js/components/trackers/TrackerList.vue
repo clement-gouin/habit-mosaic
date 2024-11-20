@@ -49,7 +49,7 @@ import Datatable from '@tools/tables/Datatable.vue';
 import { TableColumn, Tracker } from '@interfaces';
 import { ref } from 'vue';
 import { listTrackers, updateTracker } from '@requests/trackers';
-import Modal from '@tools/Modal.vue';
+import Modal from '@tools/modals/Modal.vue';
 import TrackerForm from './TrackerForm.vue';
 import TrackerActions from './TrackerActions.vue';
 import CategoryLabel from '@components/categories/CategoryLabel.vue';

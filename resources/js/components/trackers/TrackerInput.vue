@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { Tracker, Option, BaseFormInput } from '@interfaces';
-import Modal from '@tools/Modal.vue';
+import Modal from '@tools/modals/Modal.vue';
 import DropdownInput from '@tools/forms/DropdownInput.vue';
 import { useAsyncState } from '@composables/useAsyncState';
 import TrackerLabel from './TrackerLabel.vue';

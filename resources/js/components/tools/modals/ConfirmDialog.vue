@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import Modal from '@tools/Modal.vue';
+import Modal from '@tools/modals/Modal.vue';
 import { ref } from 'vue';
 
 interface Props {

@@ -30,10 +30,10 @@
 
 <script setup lang="ts">
 
-import Modal from '@tools/Modal.vue';
+import Modal from '@tools/modals/Modal.vue';
 import { Tracker } from '@interfaces';
 import { watch, ref } from 'vue';
-import ConfirmDialog from '@tools/dialogs/ConfirmDialog.vue';
+import ConfirmDialog from '@tools/modals/ConfirmDialog.vue';
 import TrackerForm from './TrackerForm.vue';
 import { deleteTracker } from '@requests/trackers';
 

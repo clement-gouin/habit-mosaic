@@ -36,7 +36,7 @@
 import Datatable from '@tools/tables/Datatable.vue';
 import { Category, TableColumn } from '@interfaces';
 import { ref } from 'vue';
-import Modal from '@tools/Modal.vue';
+import Modal from '@tools/modals/Modal.vue';
 import CategoryForm from './CategoryForm.vue';
 import { listCategories, updateCategory } from '@requests/categories';
 import CategoryActions from './CategoryActions.vue';
