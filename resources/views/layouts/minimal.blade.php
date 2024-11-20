@@ -7,7 +7,7 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="minimal-body antialiased text-gray-800 bg-gray-50 relative" style="background-color: #f5f5f5;min-height: 100vh">
+<body class="antialiased text-gray-800 bg-gray-100 min-h-screen">
 @yield('content')
 @stack('scripts')
 </body>
