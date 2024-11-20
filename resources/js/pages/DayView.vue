@@ -26,7 +26,7 @@
 import { CategoryFull, Statistics, Tracker, TrackerFull } from '@interfaces';
 import { computed, ref, watch } from 'vue';
 import { getDayData } from '@requests/day';
-import { backgroundColor, borderColor, referenceColor, textColor } from '@utils/colors';
+import { backgroundColor, borderColor, darker, referenceColor, textColor } from '@utils/colors';
 import CategoryPanel from '@components/day/CategoryPanel.vue';
 import LoadingMask from '@tools/LoadingMask.vue';
 import { useFullDebouncedRef } from '@composables/useFullDebouncedRef';
@@ -53,7 +53,7 @@ const score = computed<number>(() => trackers.value.map(tracker => tracker.data_
 const averageScore = computed<number>(() => Math.max(0, trackers.value.map(tracker => tracker.statistics.average).reduce((a, b) => a + b, 0)));
 const isToday = computed<boolean>(() => (new Date(rawDate.value)).setHours(0, 0, 0, 0) === (new Date()).setHours(0, 0, 0, 0));
 
-const baseColor = computed(() => referenceColor(score.value, averageScore.value));
+const baseColor = computed(() => darker(0.1, referenceColor(score.value, averageScore.value)));
 
 const { loading: loadingInternal, forceFetch } = useBackgroundFetch(async () => getDayData(new Date(date.value)), ([newDate, newStatistics, newCategories, newTrackers]) => {
     date.value = Date.parse(newDate);
