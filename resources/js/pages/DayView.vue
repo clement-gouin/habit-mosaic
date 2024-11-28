@@ -9,7 +9,7 @@
             <i class="fa-solid w-8 fa-caret-right text-start my-auto" :class="isToday ? 'opacity-0 pointer-events-none' : ''" role="button" @click="next"></i>
         </h2>
     </div>
-    <div class="position-relative select-none">
+    <div class="relative select-none">
         <motivation-banner :loading="loading" :is-today="isToday" :score="score" :statistics="statistics" />
         <category-panel
             v-for="(category,i) in categories"
@@ -18,8 +18,8 @@
             :trackers="trackers.filter((tracker: Tracker) => tracker.category.id === category.id)"
             v-model:loading="loadingInternal"
         />
-        <LoadingMask v-if="loading" />
     </div>
+    <LoadingMask v-if="loading" />
 </template>
 
 <script setup lang="ts">
