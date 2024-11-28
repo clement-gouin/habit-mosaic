@@ -18,8 +18,8 @@
             :trackers="trackers.filter((tracker: Tracker) => tracker.category.id === category.id)"
             v-model:loading="loadingInternal"
         />
+        <LoadingMask v-if="loading" />
     </div>
-    <LoadingMask v-if="loading" />
 </template>
 
 <script setup lang="ts">
