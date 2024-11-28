@@ -99,7 +99,3 @@ watch(selectedTracker, fetchData);
 <script lang="ts">
 export default { inheritAttrs: false };
 </script>
-
-<style scoped>
-
-</style>

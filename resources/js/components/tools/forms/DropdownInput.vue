@@ -169,10 +169,6 @@ watch(searchText, search);
 defineExpose({ select, highlight });
 </script>
 
-<style scoped>
-
-</style>
-
 <style>
 .form-control mark {
     background: inherit;
