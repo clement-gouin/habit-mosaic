@@ -71,7 +71,17 @@ const DAYS_OPTIONS_ALL: Option<number>[] = [
     }
 ];
 
-const daysOptions = computed<Option<number>[]>(() => DAYS_OPTIONS_ALL.filter((v, i) => i === 0 || v.value <= props.max_days));
+const daysOptions = computed<Option<number>[]>(() => {
+    const options = DAYS_OPTIONS_ALL.filter((v, i) => i === 0 || v.value <= props.max_days);
+
+    options.push({
+        key: 'all',
+        label: `All (${Math.round(props.max_days / 7).toFixed(0)} weeks)`,
+        value: props.max_days
+    });
+
+    return options;
+});
 
 const SHOW_OPTIONS: Option<boolean>[] = [
     {
@@ -222,10 +232,6 @@ watch(selectedShow, makeGraphData);
 watch(selectedReduce, makeGraphData);
 
 onBeforeMount(fetchData);
-
-onBeforeMount(() => {
-    screen.orientation.lock('landscape');
-});
 </script>
 
 <script lang="ts">
