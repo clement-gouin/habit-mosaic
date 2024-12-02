@@ -40,7 +40,7 @@ const props = defineProps<Props>();
 
 const date = ref<number>(Date.parse(props.date));
 const rawData = ref<(number|null)[]>([]);
-const startingAverage = ref<number>(0);
+const rawStartingAverage = ref<number>(0);
 const loading = ref<boolean>(true);
 
 const graphData = ref<ChartData>();
@@ -124,9 +124,9 @@ function reduceChunks (data: (number|null)[], chunkSize: number): number[] {
     return output;
 }
 
-function computeAverage (data: number[]): number[] {
-    const output = [startingAverage.value];
-    let lastValue = startingAverage.value;
+function computeAverage (data: number[], startingAverage: number): number[] {
+    const output = [startingAverage];
+    let lastValue = startingAverage;
     data.forEach((value: number, index: number) => {
         lastValue = (lastValue * (index + 1) + value) / (index + 2);
         output.push(lastValue);
@@ -144,14 +144,14 @@ function fetchData (): void {
         getDayGraphData(selectedDays.value.value)
             .then(([newData, newStartingAverage]) => {
                 rawData.value = newData;
-                startingAverage.value = newStartingAverage;
+                rawStartingAverage.value = newStartingAverage;
                 loading.value = false;
             });
     } else {
         getTrackerGraphData(selectedTracker.value, selectedDays.value.value)
             .then(([newData, newStartingAverage]) => {
                 rawData.value = newData;
-                startingAverage.value = newStartingAverage;
+                rawStartingAverage.value = newStartingAverage;
                 loading.value = false;
             });
     }
@@ -159,15 +159,17 @@ function fetchData (): void {
 
 function makeGraphData (): void {
     let data = rawData.value.reverse();
+    let startingAverage = rawStartingAverage.value;
 
     if (selectedTracker.value !== null && selectedShow.value.value) {
         data = data.map(v => v !== null ? (v * selectedTracker.value.target_value / selectedTracker.value.target_score) : v);
+        startingAverage *= selectedTracker.value.target_value / selectedTracker.value.target_score;
     }
 
     const chunkSize = selectedReduce.value.value ? 31 : 7;
 
     const reducedData = reduceChunks(data, chunkSize);
-    const average = computeAverage(reducedData);
+    const average = computeAverage(reducedData, startingAverage);
     const globalAverage = selectedTracker.value?.statistics?.average ?? props.statistics.average;
 
     graphOptions.value = {
