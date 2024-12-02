@@ -6,6 +6,7 @@ use App\Events\TrackerDeleted;
 use App\Models\Category;
 use App\Models\Tracker;
 use App\Models\User;
+use App\Services\Mosaic\TrackerMosaicService;
 use App\Services\TrackerService;
 use Database\Factories\TrackerFactory;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -21,6 +22,8 @@ class TrackerControllerTest extends TestCase
     {
         $tracker = Tracker::factory()->create();
 
+        $this->mockMosaicServiceStatistics(TrackerMosaicService::class, $tracker);
+
         $this->actingAs($tracker->user)
             ->getJson(route('trackers.list'))
             ->assertSuccessful()
@@ -33,6 +36,8 @@ class TrackerControllerTest extends TestCase
         $category = Category::factory()->create();
 
         $targetData = $this->getTargetData($category);
+
+        $this->mockMosaicServiceStatistics(TrackerMosaicService::class);
 
         $this->actingAs($category->user)
             ->postJson(route('trackers.store'), $targetData)
@@ -82,6 +87,8 @@ class TrackerControllerTest extends TestCase
         $tracker = Tracker::factory()->create();
 
         $targetData = $this->getTargetData($tracker->category);
+
+        $this->mockMosaicServiceStatistics(TrackerMosaicService::class, $tracker);
 
         $this->getMock(TrackerService::class)
             ->expects('update')
