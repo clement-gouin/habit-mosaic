@@ -6,6 +6,7 @@
         <div class="w-100 flex space-x-2">
             <tracker-input class="flex-1" name="tracker" label="Tracker" v-model="selectedTracker"/>
             <select-input class="flex-1" name="days" label="Time span" :options="daysOptions" required v-model="selectedDays"/>
+            <select-input class="flex-1" name="show" label="Values shown" :options="SHOW_OPTIONS" :disabled="selectedTracker === null" required v-model="selectedShow"/>
         </div>
         <chart class="h-fit" type="bar" :data="graphData" :options="graphOptions" />
     </div>
@@ -24,6 +25,7 @@ import LoadingMask from '@tools/LoadingMask.vue';
 import SelectInput from '@tools/forms/SelectInput.vue';
 import { referenceColor } from '@utils/colorsRaw';
 import { ChartOptions } from 'chart.js/auto';
+import { precision } from '@utils/numbers';
 
 interface Props {
     date: string,
@@ -34,8 +36,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const date = ref<number>(Date.parse(props.date));
-const data = ref<(number|null)[]>([]);
-const average = ref<(number)[]>([]);
+const rawData = ref<(number|null)[]>([]);
+const rawAverage = ref<(number)[]>([]);
 const loading = ref<boolean>(true);
 
 const graphData = ref<ChartData>();
@@ -66,14 +68,26 @@ const DAYS_OPTIONS_ALL: Option<number>[] = [
     }
 ];
 
-const daysOptions: Option<number>[] = computed<Option<number>[]>(() => DAYS_OPTIONS_ALL.filter((v, i) => i === 0 || v.value <= props.max_days));
+const daysOptions = computed<Option<number>[]>(() => DAYS_OPTIONS_ALL.filter((v, i) => i === 0 || v.value <= props.max_days));
+
+const SHOW_OPTIONS: Option<boolean>[] = [
+    {
+        key: '0',
+        label: 'Show score',
+        value: false
+    },
+    {
+        key: '1',
+        label: 'Show tracker value',
+        value: true
+    }
+];
 
 const selectedDays = ref<Option<number>>(daysOptions.value[0]);
+const selectedShow = ref<Option<boolean>>(SHOW_OPTIONS[0]);
 
 function reduceChunks (data: (number|null)[], chunkSize: number): number[] {
     const output = [];
-
-    data = data.slice().reverse();
 
     for (let i = 0; i < data.length; i += chunkSize) {
         const slice = data.slice(i, i + chunkSize).filter(i => i !== null) as number[];
@@ -92,22 +106,30 @@ function fetchData (): void {
     if (selectedTracker.value === null) {
         getDayGraphData(selectedDays.value.value)
             .then(([newData, newAverage]) => {
-                data.value = newData;
-                average.value = newAverage;
+                rawData.value = newData;
+                rawAverage.value = newAverage;
                 loading.value = false;
             });
     } else {
         getTrackerGraphData(selectedTracker.value, selectedDays.value.value)
             .then(([newData, newAverage]) => {
-                data.value = newData;
-                average.value = newAverage;
+                rawData.value = newData;
+                rawAverage.value = newAverage;
                 loading.value = false;
             });
     }
 }
 
 function makeGraphData (): void {
-    const reducedData = reduceChunks(data.value, 7);
+    let data = rawData.value.slice(1).reverse();
+    let average = rawAverage.value.slice(1).reverse();
+
+    if (selectedTracker.value !== null && selectedShow.value.value) {
+        data = data.map(v => v !== null ? (v * selectedTracker.value.target_value / selectedTracker.value.target_score) : v);
+        average = average.map(v => v * selectedTracker.value.target_value / selectedTracker.value.target_score);
+    }
+
+    const reducedData = reduceChunks(data, 7);
     const globalAverage = selectedTracker.value?.statistics?.average ?? props.statistics.average;
 
     graphOptions.value = {
@@ -115,19 +137,41 @@ function makeGraphData (): void {
         scales: {
             y: {
                 type: 'linear',
-                min: Math.min(...average.value, ...reducedData) * 1.1,
-                max: Math.max(...average.value, ...reducedData) * 1.1
+                min: Math.min(...average, ...reducedData) * 1.1,
+                max: Math.max(...average, ...reducedData) * 1.1
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function (context) {
+                        let label = context.dataset.label || '';
+
+                        if (label) {
+                            label += ': ';
+                        }
+                        if (context.parsed.y !== null) {
+                            if (selectedTracker.value !== null && selectedShow.value.value) {
+                                label += context.parsed.y.toFixed(precision(selectedTracker.value.value_step)) + ' ' + (selectedTracker.value.unit ?? ' ');
+                            } else {
+                                label += context.parsed.y.toFixed(2);
+                            }
+                        }
+
+                        return label;
+                    }
+                }
             }
         }
     };
 
     graphData.value = {
-        labels: average.value.map((v, i) => formatDate(addDays(date.value, -7 * (average.value.length - i + 1)))),
+        labels: average.map((v, i) => formatDate(addDays(date.value, -7 * (average.length - i + 1)))),
         datasets: [
             {
                 type: 'line',
                 label: 'Global average',
-                data: average.value.slice().reverse(),
+                data: average.slice().reverse(),
                 borderColor: '#212529aa',
                 backgroundColor: '#212529'
             },
@@ -141,10 +185,11 @@ function makeGraphData (): void {
     };
 }
 
-watch(data, makeGraphData);
-watch(average, makeGraphData);
+watch(rawData, makeGraphData);
+watch(rawAverage, makeGraphData);
 watch(selectedTracker, fetchData);
 watch(selectedDays, fetchData);
+watch(selectedShow, makeGraphData);
 
 onBeforeMount(fetchData);
 </script>
