@@ -32,7 +32,7 @@ class TrackerMosaicService extends MosaicService
     }
 
     /** @param Tracker $value */
-    protected function getMaxDate($value): ?CarbonInterface
+    public function getMaxDate($value): ?CarbonInterface
     {
         return new Carbon(strval($value->dataPoints()->min('date')));
     }

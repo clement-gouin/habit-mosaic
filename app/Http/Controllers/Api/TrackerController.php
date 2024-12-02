@@ -6,7 +6,7 @@ use App\Events\TrackerDeleted;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTrackerRequest;
 use App\Http\Requests\UpdateTrackerRequest;
-use App\Http\Resources\TrackerResource;
+use App\Http\Resources\TrackerFullResource;
 use App\Models\Tracker;
 use App\Models\User;
 use App\Services\TrackerService;
@@ -28,7 +28,7 @@ class TrackerController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        return TrackerResource::collection($user->trackers);
+        return TrackerFullResource::collection($user->trackers);
     }
 
     /**
@@ -48,7 +48,7 @@ class TrackerController extends Controller
 
         $tracker->save();
 
-        return TrackerResource::make($tracker->refresh())
+        return TrackerFullResource::make($tracker->refresh())
             ->toResponse($request)
             ->setStatusCode(201);
     }
@@ -60,7 +60,7 @@ class TrackerController extends Controller
     {
         $this->trackerService->update($tracker, $request->validated());
 
-        return TrackerResource::make($tracker->refresh());
+        return TrackerFullResource::make($tracker->refresh());
     }
 
     /**

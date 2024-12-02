@@ -200,7 +200,7 @@ abstract class MosaicService extends Service
     abstract protected static function getRootCacheKey($value): string;
 
     /** @param T $value */
-    abstract protected function getMaxDate($value): ?CarbonInterface;
+    abstract public function getMaxDate($value): ?CarbonInterface;
 
     /**
      * @param  T  $value

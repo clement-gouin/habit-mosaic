@@ -122,3 +122,9 @@ export interface DataPoint extends Base {
     tracker?: Tracker
     tableElement?: HTMLDivElement
 }
+
+export interface Color {
+    r: number
+    g: number
+    b: number
+}

@@ -26,7 +26,7 @@ class CategoryMosaicService extends MosaicService
     }
 
     /** @param Category $value */
-    protected function getMaxDate($value): ?CarbonInterface
+    public function getMaxDate($value): ?CarbonInterface
     {
         return new Carbon(strval($value->dataPoints()->min('date')));
     }
