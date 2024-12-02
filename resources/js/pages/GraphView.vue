@@ -1,14 +1,16 @@
 <template>
-    <div class="p-2 sm:p-2 md:p-4 select-none">
-        <h1 class="border-b pb-2 mb-4 text-3xl font-bold">
+    <div class="p-2 sm:p-2 md:p-4 select-none flex flex-col h-screen">
+        <h1 class="border-b pb-2 mb-4 text-3xl font-bold flex-none">
             <i class="fa-solid fa-chart-column" />&nbsp;Graphics
         </h1>
-        <div class="w-100 flex space-x-2">
+        <div class="w-100 flex space-x-2 flex-none">
             <tracker-input class="flex-1" name="tracker" label="Tracker" v-model="selectedTracker"/>
             <select-input class="flex-1" name="days" label="Time span" :options="daysOptions" required v-model="selectedDays"/>
             <select-input class="flex-1" name="show" label="Values shown" :options="SHOW_OPTIONS" :disabled="selectedTracker === null" required v-model="selectedShow"/>
         </div>
-        <chart class="h-fit" type="bar" :data="graphData" :options="graphOptions" />
+        <div class="grow w-100">
+            <chart type="bar" :data="graphData" :options="graphOptions" />
+        </div>
     </div>
     <LoadingMask v-if="loading" />
 </template>
@@ -134,11 +136,13 @@ function makeGraphData (): void {
 
     graphOptions.value = {
         interaction: { mode: 'index' },
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
             y: {
                 type: 'linear',
-                min: Math.min(...average, ...reducedData) * 1.1,
-                max: Math.max(...average, ...reducedData) * 1.1
+                min: Math.floor(Math.min(...average, ...reducedData) * 1.1),
+                max: Math.ceil(Math.max(...average, ...reducedData) * 1.1)
             }
         },
         plugins: {
@@ -171,7 +175,7 @@ function makeGraphData (): void {
             {
                 type: 'line',
                 label: 'Global average',
-                data: average.slice().reverse(),
+                data: average,
                 borderColor: '#212529aa',
                 backgroundColor: '#212529'
             },
