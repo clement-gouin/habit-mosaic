@@ -209,7 +209,7 @@ function makeGraphData (): void {
                 type: 'bar',
                 label: selectedTracker.value ? `Week "${selectedTracker.value.name}" average` : 'Week average',
                 data: reducedData,
-                backgroundColor: reducedData.map(v => ratioColor(Math.abs(v / (globalAverage ?? 1)), v >= 0 && (selectedTracker.value ? selectedTracker.value.target_score >= 0 : true)))
+                backgroundColor: reducedData.map((v, i) => ratioColor(Math.abs(v / (average[i] ?? 1)), v >= 0 && (selectedTracker.value ? selectedTracker.value.target_score >= 0 : true)))
             }
         ]
     };
