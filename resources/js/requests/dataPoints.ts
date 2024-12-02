@@ -1,6 +1,5 @@
 import { DataPoint } from '@interfaces';
 import axios from 'axios';
-import { useAlertsStore } from '@stores/alerts';
 
 export const ENDPOINT = '/api/data_points';
 
