@@ -26,9 +26,11 @@ class GraphDataController extends Controller
         /** @var User $user */
         $user = $request->user();
 
+        $average = $this->dayMosaicService->getAverageData($user, $request->integer('days', 70));
+
         return response()->json([
             'data' => $this->dayMosaicService->getMosaicData($user, $request->integer('days', 70)),
-            'average' => $this->dayMosaicService->getAverageData($user, $request->integer('days', 70)),
+            'starting_average' => $average[0] ?? 0,
         ]);
     }
 
@@ -39,9 +41,11 @@ class GraphDataController extends Controller
     {
         $this->authorize('view', $category);
 
+        $average = $this->catMosaicService->getAverageData($category, $request->integer('days', 70));
+
         return response()->json([
             'data' => $this->catMosaicService->getMosaicData($category, $request->integer('days', 70)),
-            'average' => $this->catMosaicService->getAverageData($category, $request->integer('days', 70)),
+            'starting_average' => $average[0] ?? 0,
         ]);
     }
 
@@ -52,9 +56,11 @@ class GraphDataController extends Controller
     {
         $this->authorize('view', $tracker);
 
+        $average = $this->trackerMosaicService->getAverageData($tracker, $request->integer('days', 70));
+
         return response()->json([
             'data' => $this->trackerMosaicService->getMosaicData($tracker, $request->integer('days', 70)),
-            'average' => $this->trackerMosaicService->getAverageData($tracker, $request->integer('days', 70)),
+            'starting_average' => $average[0] ?? 0,
         ]);
     }
 }

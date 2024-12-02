@@ -5,8 +5,9 @@
         </h1>
         <div class="w-100 flex space-x-2 flex-none">
             <tracker-input class="flex-1" name="tracker" label="Tracker" v-model="selectedTracker"/>
-            <select-input class="flex-1" name="days" label="Time span" :options="daysOptions" required v-model="selectedDays"/>
             <select-input class="flex-1" name="show" label="Values shown" :options="SHOW_OPTIONS" :disabled="selectedTracker === null" required v-model="selectedShow"/>
+            <select-input class="flex-1" name="days" label="Time span" :options="daysOptions" required v-model="selectedDays"/>
+            <select-input class="flex-1" name="reduce" label="X axis" :options="REDUCE_OPTIONS"  required v-model="selectedReduce"/>
         </div>
         <div class="grow w-100">
             <chart type="bar" :data="graphData" :options="graphOptions" />
@@ -25,7 +26,7 @@ import { getDayGraphData, getTrackerGraphData } from '@requests/graph';
 import { ChartData } from 'chart.js';
 import LoadingMask from '@tools/LoadingMask.vue';
 import SelectInput from '@tools/forms/SelectInput.vue';
-import { referenceColor } from '@utils/colorsRaw';
+import { ratioColor } from '@utils/colorsRaw';
 import { ChartOptions } from 'chart.js/auto';
 import { precision } from '@utils/numbers';
 
@@ -39,7 +40,7 @@ const props = defineProps<Props>();
 
 const date = ref<number>(Date.parse(props.date));
 const rawData = ref<(number|null)[]>([]);
-const rawAverage = ref<(number)[]>([]);
+const startingAverage = ref<number>(0);
 const loading = ref<boolean>(true);
 
 const graphData = ref<ChartData>();
@@ -85,53 +86,78 @@ const SHOW_OPTIONS: Option<boolean>[] = [
     }
 ];
 
+const REDUCE_OPTIONS: Option<boolean>[] = [
+    {
+        key: '0',
+        label: 'Week averages',
+        value: false
+    },
+    {
+        key: '1',
+        label: 'Month averages',
+        value: true
+    }
+];
+
 const selectedDays = ref<Option<number>>(daysOptions.value[0]);
 const selectedShow = ref<Option<boolean>>(SHOW_OPTIONS[0]);
+const selectedReduce = ref<Option<boolean>>(REDUCE_OPTIONS[0]);
 
 function reduceChunks (data: (number|null)[], chunkSize: number): number[] {
     const output = [];
 
     for (let i = 0; i < data.length; i += chunkSize) {
-        const slice = data.slice(i, i + chunkSize).filter(i => i !== null) as number[];
+        const slice = data.slice(i, Math.min(i + chunkSize, data.length)).filter(i => i !== null) as number[];
         output.push(slice.reduce((a, b) => a + b) / (slice.length ?? 1));
     }
 
     return output;
 }
 
-function formatDate (date: Date): string {
-    return date.toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined }) + ' - ' + addDays(date, 6).toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined });
+function computeAverage (data: number[]): number[] {
+    const output = [startingAverage.value];
+    let lastValue = startingAverage.value;
+    data.forEach((value: number, index: number) => {
+        lastValue = (lastValue * (index + 1) + value) / (index + 2);
+        output.push(lastValue);
+    });
+    return output.slice(1);
+}
+
+function formatDate (date: Date, chunkSize: number): string {
+    return date.toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined }) + ' - ' + addDays(date, chunkSize - 1).toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined });
 }
 
 function fetchData (): void {
     loading.value = true;
     if (selectedTracker.value === null) {
         getDayGraphData(selectedDays.value.value)
-            .then(([newData, newAverage]) => {
+            .then(([newData, newStartingAverage]) => {
                 rawData.value = newData;
-                rawAverage.value = newAverage;
+                startingAverage.value = newStartingAverage;
                 loading.value = false;
             });
     } else {
         getTrackerGraphData(selectedTracker.value, selectedDays.value.value)
-            .then(([newData, newAverage]) => {
+            .then(([newData, newStartingAverage]) => {
                 rawData.value = newData;
-                rawAverage.value = newAverage;
+                startingAverage.value = newStartingAverage;
                 loading.value = false;
             });
     }
 }
 
 function makeGraphData (): void {
-    let data = rawData.value.slice(1).reverse();
-    let average = rawAverage.value.slice(1).reverse();
+    let data = rawData.value.reverse();
 
     if (selectedTracker.value !== null && selectedShow.value.value) {
         data = data.map(v => v !== null ? (v * selectedTracker.value.target_value / selectedTracker.value.target_score) : v);
-        average = average.map(v => v * selectedTracker.value.target_value / selectedTracker.value.target_score);
     }
 
-    const reducedData = reduceChunks(data, 7);
+    const chunkSize = selectedReduce.value.value ? 31 : 7;
+
+    const reducedData = reduceChunks(data, chunkSize);
+    const average = computeAverage(reducedData);
     const globalAverage = selectedTracker.value?.statistics?.average ?? props.statistics.average;
 
     graphOptions.value = {
@@ -141,8 +167,8 @@ function makeGraphData (): void {
         scales: {
             y: {
                 type: 'linear',
-                min: Math.floor(Math.min(...average, ...reducedData) * 1.1),
-                max: Math.ceil(Math.max(...average, ...reducedData) * 1.1)
+                min: Math.floor(Math.min(0, ...average, ...reducedData) * 1.1),
+                max: Math.ceil(Math.max(0, ...average, ...reducedData) * 1.1)
             }
         },
         plugins: {
@@ -170,7 +196,7 @@ function makeGraphData (): void {
     };
 
     graphData.value = {
-        labels: average.map((v, i) => formatDate(addDays(date.value, -7 * (average.length - i + 1)))),
+        labels: average.map((v, i) => formatDate(addDays(date.value, -chunkSize * (average.length - i - 1)), chunkSize)),
         datasets: [
             {
                 type: 'line',
@@ -183,19 +209,23 @@ function makeGraphData (): void {
                 type: 'bar',
                 label: selectedTracker.value ? `Week "${selectedTracker.value.name}" average` : 'Week average',
                 data: reducedData,
-                backgroundColor: reducedData.map(v => referenceColor(v, globalAverage))
+                backgroundColor: reducedData.map(v => ratioColor(Math.abs(v / (globalAverage ?? 1)), v >= 0 && (selectedTracker.value ? selectedTracker.value.target_score >= 0 : true)))
             }
         ]
     };
 }
 
 watch(rawData, makeGraphData);
-watch(rawAverage, makeGraphData);
 watch(selectedTracker, fetchData);
 watch(selectedDays, fetchData);
 watch(selectedShow, makeGraphData);
+watch(selectedReduce, makeGraphData);
 
 onBeforeMount(fetchData);
+
+onBeforeMount(() => {
+    screen.orientation.lock('landscape');
+});
 </script>
 
 <script lang="ts">

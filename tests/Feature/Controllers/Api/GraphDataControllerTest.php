@@ -35,7 +35,7 @@ class GraphDataControllerTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'data' => [null, null, null, null, null, 1.0, 0.0],
-                'average' => [0.5],
+                'starting_average' => 0.5,
             ]);
     }
 
@@ -59,7 +59,7 @@ class GraphDataControllerTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'data' => [null, null, null, null, null, 1.0, 0.0],
-                'average' => [0.5],
+                'starting_average' => 0.5,
             ]);
     }
 
@@ -83,7 +83,7 @@ class GraphDataControllerTest extends TestCase
             ->assertSuccessful()
             ->assertJson([
                 'data' => [null, null, null, null, null, 1.0, 0.0],
-                'average' => [0.5],
+                'starting_average' => 0.5,
             ]);
     }
 }
