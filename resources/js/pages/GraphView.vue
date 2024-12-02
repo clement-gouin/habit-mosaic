@@ -174,14 +174,14 @@ function makeGraphData (): void {
         datasets: [
             {
                 type: 'line',
-                label: 'Global average',
+                label: selectedTracker.value ? `Global "${selectedTracker.value.name}" average` : 'Global day average',
                 data: average,
                 borderColor: '#212529aa',
                 backgroundColor: '#212529'
             },
             {
                 type: 'bar',
-                label: 'Week average',
+                label: selectedTracker.value ? `Week "${selectedTracker.value.name}" average` : 'Week average',
                 data: reducedData,
                 backgroundColor: reducedData.map(v => referenceColor(v, globalAverage))
             }
