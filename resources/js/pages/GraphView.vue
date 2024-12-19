@@ -115,17 +115,11 @@ const selectedShow = ref<Option<boolean>>(SHOW_OPTIONS[0]);
 const selectedReduce = ref<Option<boolean>>(REDUCE_OPTIONS[0]);
 
 function reduceChunks (data: (number|null)[], chunks: number[]): number[] {
-    const output = [];
-
-    let j = 0;
-
-    chunks.forEach(chunkSize => {
-        const slice = data.slice(j, Math.min(j + chunkSize, data.length)).filter(i => i !== null) as number[];
-        output.push(slice.reduce((a, b) => a + b) / (slice.length ?? 1));
-        j += chunkSize;
+    data = data.slice();
+    return chunks.map(chunkSize => {
+        const slice = data.splice(0, chunkSize).filter(i => i !== null) as number[];
+        return slice.reduce((a, b) => a + b) / (slice.length ?? 1);
     });
-
-    return output;
 }
 
 function computeAverage (data: number[], startingAverage: number): number[] {
