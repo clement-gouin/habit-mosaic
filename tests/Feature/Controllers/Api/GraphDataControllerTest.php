@@ -25,17 +25,11 @@ class GraphDataControllerTest extends TestCase
             ->with(self::modelArg($tracker), 7)
             ->andReturn([null, null, null, null, null, 1.0, 0.0]);
 
-        $this->getMock(TrackerMosaicService::class)
-            ->expects('getAverageData')
-            ->with(self::modelArg($tracker), 7)
-            ->andReturn([0.5]);
-
         $this->actingAs($tracker->user)
             ->getJson(route('graph.tracker', [$tracker->id, 'days' => 7]))
             ->assertSuccessful()
             ->assertJson([
                 'data' => [null, null, null, null, null, 1.0, 0.0],
-                'starting_average' => 0.5,
                 'months' => [],
             ]);
     }
@@ -50,17 +44,11 @@ class GraphDataControllerTest extends TestCase
             ->with(self::modelArg($category), 7)
             ->andReturn([null, null, null, null, null, 1.0, 0.0]);
 
-        $this->getMock(CategoryMosaicService::class)
-            ->expects('getAverageData')
-            ->with(self::modelArg($category), 7)
-            ->andReturn([0.5]);
-
         $this->actingAs($category->user)
             ->getJson(route('graph.category', [$category->id, 'days' => 7]))
             ->assertSuccessful()
             ->assertJson([
                 'data' => [null, null, null, null, null, 1.0, 0.0],
-                'starting_average' => 0.5,
                 'months' => [],
             ]);
     }
@@ -75,17 +63,11 @@ class GraphDataControllerTest extends TestCase
             ->with(self::modelArg($user), 7)
             ->andReturn([null, null, null, null, null, 1.0, 0.0]);
 
-        $this->getMock(DayMosaicService::class)
-            ->expects('getAverageData')
-            ->with(self::modelArg($user), 7)
-            ->andReturn([0.5]);
-
         $this->actingAs($user)
             ->getJson(route('graph.day', ['days' => 7]))
             ->assertSuccessful()
             ->assertJson([
                 'data' => [null, null, null, null, null, 1.0, 0.0],
-                'starting_average' => 0.5,
                 'months' => [],
             ]);
     }

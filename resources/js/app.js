@@ -7,6 +7,8 @@ import { createPinia } from 'pinia';
 import AlertsContainer from './components/alerts/AlertsContainer.vue';
 import axios from 'axios';
 import { Service } from 'axios-middleware';
+import annotationPlugin from 'chartjs-plugin-annotation';
+import { Chart } from 'chart.js/auto';
 
 const element = document.getElementById('app');
 
@@ -37,6 +39,8 @@ if (element) {
 
     window.axios = axios;
     window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+    Chart.register(annotationPlugin);
 
     app.use(createPinia());
     app.use(VueCookies, { expires: '365d' });

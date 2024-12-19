@@ -29,11 +29,8 @@ class GraphDataController extends Controller
 
         $days = $this->getDays($request);
 
-        $average = $this->dayMosaicService->getAverageData($user, $days);
-
         return response()->json([
             'data' => $this->dayMosaicService->getMosaicData($user, $days),
-            'starting_average' => $average[0] ?? 0,
             'months' => $this->getMonthFragments($days),
         ]);
     }
@@ -47,11 +44,8 @@ class GraphDataController extends Controller
 
         $days = $this->getDays($request);
 
-        $average = $this->catMosaicService->getAverageData($category, $days);
-
         return response()->json([
             'data' => $this->catMosaicService->getMosaicData($category, $days),
-            'starting_average' => $average[0] ?? 0,
             'months' => $this->getMonthFragments($days),
         ]);
     }
@@ -65,11 +59,8 @@ class GraphDataController extends Controller
 
         $days = $this->getDays($request);
 
-        $average = $this->trackerMosaicService->getAverageData($tracker, $days);
-
         return response()->json([
             'data' => $this->trackerMosaicService->getMosaicData($tracker, $days),
-            'starting_average' => $average[0] ?? 0,
             'months' => $this->getMonthFragments($days),
         ]);
     }

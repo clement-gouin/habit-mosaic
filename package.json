@@ -35,6 +35,7 @@
         "axios": "1.1.*",
         "axios-middleware": "^0.4.0",
         "chart.js": "^4.4.5",
+        "chartjs-plugin-annotation": "^3.1.0",
         "daisyui": "^4.12.13",
         "js-levenshtein": "^1.1.6",
         "pinia": "^2.1.7",
