@@ -73,7 +73,7 @@ const DAYS_OPTIONS_ALL: Option<number>[] = [
 ];
 
 const daysOptions = computed<Option<number>[]>(() => {
-    const options = DAYS_OPTIONS_ALL.filter((v, i) => i === 0 || (v.value < 0 ? v.value * 30.5 >= props.max_days : v.value <= props.max_days));
+    const options = DAYS_OPTIONS_ALL.filter((v, i) => i === 0 || (v.value < 0 ? -v.value * 30 <= props.max_days : v.value <= props.max_days));
 
     options.push({
         key: 'all',
@@ -118,11 +118,12 @@ function reduceChunks (data: (number|null)[], chunks: number[]): number[] {
     const output = [];
 
     let j = 0;
-    for (let i = 0; i < chunks.length; i += 1) {
-        const slice = data.slice(j, Math.min(j + chunks[i], data.length)).filter(i => i !== null) as number[];
+
+    chunks.forEach(chunkSize => {
+        const slice = data.slice(j, Math.min(j + chunkSize, data.length)).filter(i => i !== null) as number[];
         output.push(slice.reduce((a, b) => a + b) / (slice.length ?? 1));
-        j += chunks[i];
-    }
+        j += chunkSize;
+    });
 
     return output;
 }
