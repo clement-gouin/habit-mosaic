@@ -41,6 +41,7 @@ const props = defineProps<Props>();
 const date = ref<number>(Date.parse(props.date));
 const rawData = ref<(number|null)[]>([]);
 const rawStartingAverage = ref<number>(0);
+const monthChunks = ref<number[]>([]);
 const loading = ref<boolean>(true);
 
 const graphData = ref<ChartData>();
@@ -52,27 +53,27 @@ const DAYS_OPTIONS_ALL: Option<number>[] = [
     {
         key: '2m',
         label: '2 months',
-        value: 63
+        value: -2
     },
     {
         key: '6m',
         label: '6 months',
-        value: 189
+        value: -6
     },
     {
         key: '1y',
         label: '1 year',
-        value: 364
+        value: -12
     },
     {
         key: '2y',
         label: '2 years',
-        value: 728
+        value: -24
     }
 ];
 
 const daysOptions = computed<Option<number>[]>(() => {
-    const options = DAYS_OPTIONS_ALL.filter((v, i) => i === 0 || v.value <= props.max_days);
+    const options = DAYS_OPTIONS_ALL.filter((v, i) => i === 0 || (v.value < 0 ? v.value * 30.5 >= props.max_days : v.value <= props.max_days));
 
     options.push({
         key: 'all',
@@ -113,12 +114,14 @@ const selectedDays = ref<Option<number>>(daysOptions.value[0]);
 const selectedShow = ref<Option<boolean>>(SHOW_OPTIONS[0]);
 const selectedReduce = ref<Option<boolean>>(REDUCE_OPTIONS[0]);
 
-function reduceChunks (data: (number|null)[], chunkSize: number): number[] {
+function reduceChunks (data: (number|null)[], chunks: number[]): number[] {
     const output = [];
 
-    for (let i = 0; i < data.length; i += chunkSize) {
-        const slice = data.slice(i, Math.min(i + chunkSize, data.length)).filter(i => i !== null) as number[];
+    let j = 0;
+    for (let i = 0; i < chunks.length; i += 1) {
+        const slice = data.slice(j, Math.min(j + chunks[i], data.length)).filter(i => i !== null) as number[];
         output.push(slice.reduce((a, b) => a + b) / (slice.length ?? 1));
+        j += chunks[i];
     }
 
     return output;
@@ -134,24 +137,30 @@ function computeAverage (data: number[], startingAverage: number): number[] {
     return output.slice(1);
 }
 
-function formatDate (date: Date, chunkSize: number): string {
-    return date.toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined }) + ' - ' + addDays(date, chunkSize - 1).toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined });
+function formatDate (date: Date, week: boolean): string {
+    if (week) {
+        return date.toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined }) + ' - ' + addDays(date, 6).toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined });
+    }
+    return date.toLocaleDateString('en', { weekday: undefined, day: undefined, month: 'short', year: '2-digit' });
 }
 
 function fetchData (): void {
     loading.value = true;
+    const count = selectedDays.value.value;
     if (selectedTracker.value === null) {
-        getDayGraphData(selectedDays.value.value)
-            .then(([newData, newStartingAverage]) => {
+        getDayGraphData(count < 0 ? undefined : count, count < 0 ? -count : undefined)
+            .then(([newData, newStartingAverage, newMonthChunks]) => {
                 rawData.value = newData;
                 rawStartingAverage.value = newStartingAverage;
+                monthChunks.value = newMonthChunks;
                 loading.value = false;
             });
     } else {
-        getTrackerGraphData(selectedTracker.value, selectedDays.value.value)
-            .then(([newData, newStartingAverage]) => {
+        getTrackerGraphData(selectedTracker.value, count < 0 ? undefined : count, count < 0 ? -count : undefined)
+            .then(([newData, newStartingAverage, newMonthChunks]) => {
                 rawData.value = newData;
                 rawStartingAverage.value = newStartingAverage;
+                monthChunks.value = newMonthChunks;
                 loading.value = false;
             });
     }
@@ -166,11 +175,10 @@ function makeGraphData (): void {
         startingAverage *= selectedTracker.value.target_value / selectedTracker.value.target_score;
     }
 
-    const chunkSize = selectedReduce.value.value ? 31 : 7;
+    const chunks = selectedReduce.value.value ? monthChunks.value : Array(Math.floor(data.length / 7)).fill(7);
 
-    const reducedData = reduceChunks(data, chunkSize);
+    const reducedData = reduceChunks(data, chunks);
     const average = computeAverage(reducedData, startingAverage);
-    const globalAverage = selectedTracker.value?.statistics?.average ?? props.statistics.average;
 
     graphOptions.value = {
         interaction: { mode: 'index' },
@@ -208,7 +216,9 @@ function makeGraphData (): void {
     };
 
     graphData.value = {
-        labels: average.map((v, i) => formatDate(addDays(date.value, -chunkSize * (average.length - i - 1)), chunkSize)),
+        labels: chunks
+            .map((chunkSize, i) => (i < chunks.length - 1) ? chunks.slice(i + 1).reduce((a, b) => a + b) : 0)
+            .map(v => formatDate(addDays(date.value, -v), !selectedReduce.value.value)),
         datasets: [
             {
                 type: 'line',

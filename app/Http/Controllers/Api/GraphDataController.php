@@ -12,6 +12,7 @@ use App\Services\Mosaic\TrackerMosaicService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class GraphDataController extends Controller
 {
@@ -26,11 +27,14 @@ class GraphDataController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $average = $this->dayMosaicService->getAverageData($user, $request->integer('days', 70));
+        $days = $this->getDays($request);
+
+        $average = $this->dayMosaicService->getAverageData($user, $days);
 
         return response()->json([
-            'data' => $this->dayMosaicService->getMosaicData($user, $request->integer('days', 70)),
+            'data' => $this->dayMosaicService->getMosaicData($user, $days),
             'starting_average' => $average[0] ?? 0,
+            'months' => $this->getMonthFragments($days),
         ]);
     }
 
@@ -41,11 +45,14 @@ class GraphDataController extends Controller
     {
         $this->authorize('view', $category);
 
-        $average = $this->catMosaicService->getAverageData($category, $request->integer('days', 70));
+        $days = $this->getDays($request);
+
+        $average = $this->catMosaicService->getAverageData($category, $days);
 
         return response()->json([
-            'data' => $this->catMosaicService->getMosaicData($category, $request->integer('days', 70)),
+            'data' => $this->catMosaicService->getMosaicData($category, $days),
             'starting_average' => $average[0] ?? 0,
+            'months' => $this->getMonthFragments($days),
         ]);
     }
 
@@ -56,11 +63,49 @@ class GraphDataController extends Controller
     {
         $this->authorize('view', $tracker);
 
-        $average = $this->trackerMosaicService->getAverageData($tracker, $request->integer('days', 70));
+        $days = $this->getDays($request);
+
+        $average = $this->trackerMosaicService->getAverageData($tracker, $days);
 
         return response()->json([
-            'data' => $this->trackerMosaicService->getMosaicData($tracker, $request->integer('days', 70)),
+            'data' => $this->trackerMosaicService->getMosaicData($tracker, $days),
             'starting_average' => $average[0] ?? 0,
+            'months' => $this->getMonthFragments($days),
         ]);
+    }
+
+    protected function getDays(Request $request): int
+    {
+        if ($request->has('days')) {
+            return $request->integer('days');
+        }
+
+        $months = $request->integer('months', 1);
+
+        $endDate = Carbon::today()->endOfWeek()->startOfDay();
+        $startDate = $endDate->clone();
+
+        while ($months--) {
+            $startDate->subDay()->startOfMonth();
+        }
+
+        return intval(round($endDate->diffInDays($startDate, absolute: true)));
+    }
+
+    protected function getMonthFragments(int $days): array
+    {
+        $fragments = collect();
+
+        $date = Carbon::today()->endOfWeek()->startOfDay();
+
+        while ($days > 0) {
+            $newDate = $date->clone()->startOfMonth();
+            $count = min($days, $date->diffInDays($newDate, absolute: true)) + 1;
+            $fragments->prepend($count);
+            $date = $newDate->subDay();
+            $days -= $count;
+        }
+
+        return $fragments->toArray();
     }
 }
