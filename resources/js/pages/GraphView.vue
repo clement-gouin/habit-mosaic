@@ -149,7 +149,7 @@ function fetchData (): void {
 }
 
 function makeGraphData (): void {
-    let data = rawData.value.reverse();
+    let data = rawData.value.slice().reverse();
     let globalAverage = selectedTracker.value?.statistics?.average ?? props.statistics.average;
 
     if (selectedTracker.value !== null && selectedShow.value.value) {
