@@ -147,6 +147,10 @@ function makeGraphData (): void {
         statisticsKey.forEach(key => {
             statistics[key] *= selectedTracker.value.target_value / selectedTracker.value.target_score;
         });
+
+        if (selectedTracker.value.target_score < 0) {
+            [statistics.lower_quartile, statistics.upper_quartile] = [statistics.upper_quartile, statistics.lower_quartile];
+        }
     }
 
     if (reduceSum.value) {
@@ -200,7 +204,12 @@ function makeGraphData (): void {
                     }
                 }
             },
-            annotation: {}
+            annotation: {},
+            background: {
+                color: 'rgb(249, 250, 251)',
+                icon: selectedTracker.value?.icon,
+                text: selectedTracker.value?.name
+            }
         }
     };
 
