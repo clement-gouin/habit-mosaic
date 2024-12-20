@@ -249,7 +249,7 @@ function makeGraphData (): void {
                         borderWidth: 3,
                         label: {
                             display: true,
-                            content: `Average${reduceSums ? ' total' : ''}: ${showValue(globalAverage)}`,
+                            content: `Average ${reduceSums ? (reduceMonths ? 'month' : 'week') : 'day'}: ${showValue(globalAverage)}`,
                             position: 'start'
                         },
                         scaleID: 'y',
