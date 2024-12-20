@@ -1,7 +1,7 @@
 <template>
     <div class="form-control my-2">
         <label :for="id" class="label cursor-pointer py-0">
-            <span v-if="label" class="label-text mr-1 flex-grow" :class="{'text-error': hasError, 'text-right': labelAfter}">
+            <span v-if="label" class="label-text mr-1 flex-grow" :class="{'text-error': hasError, 'text-right': labelAfter, 'basis-1/3': labelAfter}">
               {{ label }}
               <span v-if="required" class="text-error">*</span>
             </span>
@@ -15,7 +15,7 @@
                 :readonly="readonly"
                 :class="`${displayType} ${displayType}-${displayColor} ` + (hasError ? 'input-error' : '')"
             />
-            <span v-if="labelAfter" class="label-text ml-1 flex-grow" :class="{'text-error': hasError}">
+            <span v-if="labelAfter" class="label-text ml-1 flex-grow" :class="{'text-error': hasError, 'basis-1/3': label}">
               {{ labelAfter }}
             </span>
         </label>

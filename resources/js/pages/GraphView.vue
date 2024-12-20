@@ -9,12 +9,11 @@
             <div class="basis-1/2 flex space-x-2 my-auto">
                 <div class="flex-1 flex flex-col-reverse">
                     <checkbox-input :disabled="selectedTracker === null" name="value" label="Score" label-after="Tracker value" toggle v-model="showTrackerValue" />
+                    <checkbox-input name="quartiles" label="Average" label-after="Quartiles" toggle v-model="showQuartiles" />
                 </div>
                 <div class="flex-1 flex flex-col-reverse">
+                    <checkbox-input name="sum" label="Day average" label-after="Total" toggle invert v-model="reduceSum" />
                     <checkbox-input name="month" label="Weeks" label-after="Months" toggle invert v-model="reduceMonth" />
-                </div>
-                <div class="flex-1 flex flex-col-reverse">
-                    <checkbox-input name="sum" label="Average" label-after="Total" toggle invert v-model="reduceSum" />
                 </div>
             </div>
         </div>
@@ -54,6 +53,7 @@ const monthChunks = ref<number[]>([]);
 const loading = ref<boolean>(true);
 
 const showTrackerValue = ref<boolean>(false);
+const showQuartiles = ref<boolean>(false);
 const reduceSum = ref<boolean>(false);
 const reduceMonth = ref<boolean>(false);
 
@@ -138,15 +138,21 @@ function fetchData (): Promise<void> {
 
 function makeGraphData (): void {
     let data = rawData.value.slice().reverse();
-    let globalAverage = selectedTracker.value?.statistics?.average ?? props.statistics.average;
+    const statistics: Statistics = { ...(selectedTracker.value?.statistics ?? props.statistics) };
+
+    const statisticsKey = ['min', 'average', 'lower_quartile', 'median', 'upper_quartile', 'max'];
 
     if (selectedTracker.value !== null && showTrackerValue.value) {
         data = data.map(v => v !== null ? (v * selectedTracker.value.target_value / selectedTracker.value.target_score) : v);
-        globalAverage *= selectedTracker.value.target_value / selectedTracker.value.target_score;
+        statisticsKey.forEach(key => {
+            statistics[key] *= selectedTracker.value.target_value / selectedTracker.value.target_score;
+        });
     }
 
     if (reduceSum.value) {
-        globalAverage *= reduceMonth.value ? MONTH_LENGTH : 7;
+        statisticsKey.forEach(key => {
+            statistics[key] *= reduceMonth.value ? MONTH_LENGTH : 7;
+        });
     }
 
     const chunks = reduceMonth.value ? monthChunks.value : Array(Math.floor(data.length / 7)).fill(7);
@@ -172,8 +178,8 @@ function makeGraphData (): void {
         scales: {
             y: {
                 type: 'linear',
-                min: Math.floor(Math.min(0, globalAverage, ...reducedData)),
-                max: Math.ceil(Math.max(0, globalAverage, ...reducedData))
+                min: Math.floor(1.05 * Math.min(0, statistics.average, ...reducedData)),
+                max: Math.ceil(1.05 * Math.max(0, statistics.average, ...reducedData))
             }
         },
         plugins: {
@@ -194,27 +200,77 @@ function makeGraphData (): void {
                     }
                 }
             },
-            annotation: {
-                annotations: {
-                    average: {
-                        type: 'line',
-                        borderColor: '#212529aa',
-                        backgroundColor: '#212529aa',
-                        borderDash: [6, 6],
-                        borderDashOffset: 0,
-                        borderWidth: 3,
-                        label: {
-                            display: true,
-                            content: `Average ${reduceSum.value ? (reduceMonth.value ? 'month' : 'week') : 'day'}: ${showValue(globalAverage)}`,
-                            position: 'start'
-                        },
-                        scaleID: 'y',
-                        value: globalAverage
-                    }
-                }
-            }
+            annotation: {}
         }
     };
+
+    if (showQuartiles.value) {
+        graphOptions.value.plugins.annotation.annotations = {
+            lower: {
+                type: 'line',
+                borderColor: '#212529aa',
+                backgroundColor: '#212529aa',
+                borderDash: [6, 6],
+                borderDashOffset: 0,
+                borderWidth: 3,
+                label: {
+                    display: true,
+                    content: `75% ≥ ${showValue(statistics.lower_quartile)}`,
+                    position: 'start'
+                },
+                scaleID: 'y',
+                value: statistics.lower_quartile
+            },
+            median: {
+                type: 'line',
+                borderColor: '#212529aa',
+                backgroundColor: '#212529aa',
+                borderDash: [6, 6],
+                borderDashOffset: 0,
+                borderWidth: 3,
+                label: {
+                    display: true,
+                    content: `50% ≥ ${showValue(statistics.median)}`,
+                    position: 'start'
+                },
+                scaleID: 'y',
+                value: statistics.median
+            },
+            upper: {
+                type: 'line',
+                borderColor: '#212529aa',
+                backgroundColor: '#212529aa',
+                borderDash: [6, 6],
+                borderDashOffset: 0,
+                borderWidth: 3,
+                label: {
+                    display: true,
+                    content: `25% ≥ ${showValue(statistics.upper_quartile)}`,
+                    position: 'start'
+                },
+                scaleID: 'y',
+                value: statistics.upper_quartile
+            }
+        };
+    } else {
+        graphOptions.value.plugins.annotation.annotations = {
+            average: {
+                type: 'line',
+                borderColor: '#212529aa',
+                backgroundColor: '#212529aa',
+                borderDash: [6, 6],
+                borderDashOffset: 0,
+                borderWidth: 3,
+                label: {
+                    display: true,
+                    content: `Average ${reduceSum.value ? (reduceMonth.value ? 'month' : 'week') : 'day'}: ${showValue(statistics.average)}`,
+                    position: 'start'
+                },
+                scaleID: 'y',
+                value: statistics.average
+            }
+        };
+    }
 
     graphData.value = {
         labels: chunks
@@ -225,7 +281,7 @@ function makeGraphData (): void {
                 type: 'bar',
                 label: (reduceMonth.value ? 'Month ' : 'Week ') + (selectedTracker.value ? `"${selectedTracker.value.name}" ` : '') + (reduceSum.value ? 'total' : 'average'),
                 data: reducedData,
-                backgroundColor: reducedData.map(v => ratioColor(Math.abs(v / (globalAverage ?? 1)), v >= 0 && (selectedTracker.value ? selectedTracker.value.target_score >= 0 : true)))
+                backgroundColor: reducedData.map(v => ratioColor(Math.abs(v / (statistics.average ?? 1)), v >= 0 && (selectedTracker.value ? selectedTracker.value.target_score >= 0 : true)))
             }
         ]
     };
@@ -245,6 +301,7 @@ watch(selectedTracker, (newValue, oldValue) => {
 });
 watch(selectedDays, fetchData);
 watch(showTrackerValue, makeGraphData);
+watch(showQuartiles, makeGraphData);
 watch(reduceMonth, makeGraphData);
 watch(reduceSum, makeGraphData);
 
