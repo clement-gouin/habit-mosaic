@@ -54,6 +54,9 @@ function updateInternal () {
 }
 
 watch(internalValue, updateInternal);
+watch(value, () => {
+    internalValue.value = value.value?.key ?? '';
+});
 
 function onBlur () {
     updateInternal();

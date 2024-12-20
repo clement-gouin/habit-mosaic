@@ -157,18 +157,18 @@ function formatDate (date: Date, week: boolean): string {
     return date.toLocaleDateString('en', { weekday: undefined, day: undefined, month: 'short', year: '2-digit' });
 }
 
-function fetchData (): void {
+function fetchData (): Promise<void> {
     loading.value = true;
     const count = selectedDays.value.value;
     if (selectedTracker.value === null) {
-        getDayGraphData(count < 0 ? undefined : count, count < 0 ? -count : undefined)
+        return getDayGraphData(count < 0 ? undefined : count, count < 0 ? -count : undefined)
             .then(([newData, newMonthChunks]) => {
                 rawData.value = newData;
                 monthChunks.value = newMonthChunks;
                 loading.value = false;
             });
     } else {
-        getTrackerGraphData(selectedTracker.value, count < 0 ? undefined : count, count < 0 ? -count : undefined)
+        return getTrackerGraphData(selectedTracker.value, count < 0 ? undefined : count, count < 0 ? -count : undefined)
             .then(([newData, newMonthChunks]) => {
                 rawData.value = newData;
                 monthChunks.value = newMonthChunks;
@@ -197,6 +197,14 @@ function makeGraphData (): void {
 
     const reducedData = reduceChunks(data, chunks, reduceSums);
 
+    function showValue (v: number) {
+        if (selectedTracker.value !== null && selectedShow.value.value) {
+            return v.toFixed(reduceSums ? precision(selectedTracker.value.value_step) : 2) + ' ' + (selectedTracker.value.unit ?? '');
+        } else {
+            return v.toFixed(2);
+        }
+    }
+
     graphOptions.value = {
         interaction: {
             mode: 'nearest',
@@ -208,8 +216,8 @@ function makeGraphData (): void {
         scales: {
             y: {
                 type: 'linear',
-                min: Math.floor(Math.min(0, globalAverage, ...reducedData) * 1.1),
-                max: Math.ceil(Math.max(0, globalAverage, ...reducedData) * 1.1)
+                min: Math.floor(Math.min(0, globalAverage, ...reducedData)),
+                max: Math.ceil(Math.max(0, globalAverage, ...reducedData))
             }
         },
         plugins: {
@@ -223,11 +231,7 @@ function makeGraphData (): void {
                             label += ': ';
                         }
                         if (context.parsed.y !== null) {
-                            if (selectedTracker.value !== null && selectedShow.value.value) {
-                                label += context.parsed.y.toFixed(precision(selectedTracker.value.value_step)) + ' ' + (selectedTracker.value.unit ?? ' ');
-                            } else {
-                                label += context.parsed.y.toFixed(2);
-                            }
+                            label += showValue(context.parsed.y);
                         }
 
                         return label;
@@ -239,12 +243,13 @@ function makeGraphData (): void {
                     average: {
                         type: 'line',
                         borderColor: '#212529aa',
+                        backgroundColor: '#212529aa',
                         borderDash: [6, 6],
                         borderDashOffset: 0,
                         borderWidth: 3,
                         label: {
                             display: true,
-                            content: 'Average' + (reduceSums ? ' total: ' : ': ') + globalAverage.toFixed(2) + (selectedTracker.value !== null && selectedShow.value.value ? selectedTracker.value.unit ?? '' : ''),
+                            content: `Average${reduceSums ? ' total' : ''}: ${showValue(globalAverage)}`,
                             position: 'start'
                         },
                         scaleID: 'y',
@@ -271,7 +276,17 @@ function makeGraphData (): void {
 }
 
 watch(rawData, makeGraphData);
-watch(selectedTracker, fetchData);
+watch(selectedTracker, (newValue, oldValue) => {
+    fetchData()
+        .then(() => {
+            if (newValue !== null && newValue !== oldValue) {
+                selectedShow.value = SHOW_OPTIONS[1];
+            }
+            if (newValue === null && newValue !== oldValue) {
+                selectedShow.value = SHOW_OPTIONS[0];
+            }
+        });
+});
 watch(selectedDays, fetchData);
 watch(selectedShow, makeGraphData);
 watch(selectedReduce, makeGraphData);
