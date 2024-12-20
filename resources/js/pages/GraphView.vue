@@ -4,10 +4,19 @@
             <i class="fa-solid fa-chart-column" />&nbsp;Graphics
         </h1>
         <div class="w-100 flex space-x-2 flex-none">
-            <tracker-input class="flex-1" name="tracker" label="Tracker" v-model="selectedTracker"/>
-            <select-input class="flex-1" name="show" label="Values shown" :options="SHOW_OPTIONS" :disabled="selectedTracker === null" required v-model="selectedShow"/>
-            <select-input class="flex-1" name="days" label="Time span" :options="daysOptions" required v-model="selectedDays"/>
-            <select-input class="flex-1" name="reduce" label="X axis" :options="REDUCE_OPTIONS"  required v-model="selectedReduce"/>
+            <tracker-input class="basis-1/4" name="tracker" label="Tracker" v-model="selectedTracker"/>
+            <select-input class="basis-1/4" name="days" label="Time span" :options="daysOptions" required v-model="selectedDays"/>
+            <div class="basis-1/2 flex space-x-2 my-auto">
+                <div class="flex-1 flex flex-col-reverse">
+                    <checkbox-input :disabled="selectedTracker === null" name="value" label="Score" label-after="Tracker value" toggle v-model="showTrackerValue" />
+                </div>
+                <div class="flex-1 flex flex-col-reverse">
+                    <checkbox-input name="month" label="Weeks" label-after="Months" toggle invert v-model="reduceMonth" />
+                </div>
+                <div class="flex-1 flex flex-col-reverse">
+                    <checkbox-input name="sum" label="Average" label-after="Total" toggle invert v-model="reduceSum" />
+                </div>
+            </div>
         </div>
         <div class="grow w-100">
             <chart type="bar" :data="graphData" :options="graphOptions" />
@@ -29,6 +38,7 @@ import SelectInput from '@tools/forms/SelectInput.vue';
 import { ratioColor } from '@utils/colorsRaw';
 import { ChartOptions } from 'chart.js/auto';
 import { precision } from '@utils/numbers';
+import CheckboxInput from '@tools/forms/CheckboxInput.vue';
 
 interface Props {
     date: string,
@@ -42,6 +52,10 @@ const date = ref<number>(Date.parse(props.date));
 const rawData = ref<(number|null)[]>([]);
 const monthChunks = ref<number[]>([]);
 const loading = ref<boolean>(true);
+
+const showTrackerValue = ref<boolean>(false);
+const reduceSum = ref<boolean>(false);
+const reduceMonth = ref<boolean>(false);
 
 const graphData = ref<ChartData>();
 const graphOptions = ref<ChartOptions>();
@@ -85,73 +99,18 @@ const daysOptions = computed<Option<number>[]>(() => {
     return options;
 });
 
-const SHOW_OPTIONS: Option<boolean>[] = [
-    {
-        key: '0',
-        label: 'Show score',
-        value: false
-    },
-    {
-        key: '1',
-        label: 'Show tracker value',
-        value: true
-    }
-];
-
-interface Reduce {
-    month: boolean
-    sum: boolean
-}
-
-const REDUCE_OPTIONS: Option<Reduce>[] = [
-    {
-        key: '0',
-        label: 'Week averages',
-        value: {
-            month: false,
-            sum: false
-        }
-    },
-    {
-        key: '1',
-        label: 'Week total',
-        value: {
-            month: false,
-            sum: true
-        }
-    },
-    {
-        key: '2',
-        label: 'Month averages',
-        value: {
-            month: true,
-            sum: false
-        }
-    },
-    {
-        key: '3',
-        label: 'Month total',
-        value: {
-            month: true,
-            sum: true
-        }
-    }
-];
-
 const selectedDays = ref<Option<number>>(daysOptions.value.slice(-1)[0]);
-const selectedShow = ref<Option<boolean>>(SHOW_OPTIONS[0]);
-const selectedReduce = ref<Option<Reduce>>(REDUCE_OPTIONS[0]);
 
-function reduceChunks (data: (number|null)[], chunks: number[], sum: boolean): number[] {
+function reduceChunks (data: (number|null)[], chunks: number[]): number[] {
     data = data.slice(-chunks.reduce((a, b) => a + b));
     return chunks.map(chunkSize => {
         const slice = data.splice(0, chunkSize).filter(i => i !== null) as number[];
-        return slice.reduce((a, b) => a + b) / (sum ? 1 : (slice.length ?? 1));
+        return slice.reduce((a, b) => a + b) / (reduceSum.value ? 1 : (slice.length ?? 1));
     });
 }
 
-function formatDate (date: Date, week: boolean): string {
-    if (week) {
+function formatDate (date: Date): string {
+    if (!reduceMonth.value) {
         return date.toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined }) + ' - ' + addDays(date, 6).toLocaleDateString('en', { weekday: undefined, day: 'numeric', month: 'short', year: undefined });
     }
     return date.toLocaleDateString('en', { weekday: undefined, day: undefined, month: 'short', year: '2-digit' });
@@ -181,25 +140,22 @@ function makeGraphData (): void {
     let data = rawData.value.slice().reverse();
     let globalAverage = selectedTracker.value?.statistics?.average ?? props.statistics.average;
 
-    if (selectedTracker.value !== null && selectedShow.value.value) {
+    if (selectedTracker.value !== null && showTrackerValue.value) {
         data = data.map(v => v !== null ? (v * selectedTracker.value.target_value / selectedTracker.value.target_score) : v);
         globalAverage *= selectedTracker.value.target_value / selectedTracker.value.target_score;
     }
 
-    const reduceMonths = selectedReduce.value.value.month ?? false;
-    const reduceSums = selectedReduce.value.value.sum ?? false;
-
-    if (reduceSums) {
-        globalAverage *= reduceMonths ? MONTH_LENGTH : 7;
+    if (reduceSum.value) {
+        globalAverage *= reduceMonth.value ? MONTH_LENGTH : 7;
     }
 
-    const chunks = reduceMonths ? monthChunks.value : Array(Math.floor(data.length / 7)).fill(7);
+    const chunks = reduceMonth.value ? monthChunks.value : Array(Math.floor(data.length / 7)).fill(7);
 
-    const reducedData = reduceChunks(data, chunks, reduceSums);
+    const reducedData = reduceChunks(data, chunks);
 
     function showValue (v: number) {
-        if (selectedTracker.value !== null && selectedShow.value.value) {
-            return v.toFixed(reduceSums ? precision(selectedTracker.value.value_step) : 2) + ' ' + (selectedTracker.value.unit ?? '');
+        if (selectedTracker.value !== null && showTrackerValue.value) {
+            return v.toFixed(reduceSum.value ? precision(selectedTracker.value.value_step) : 2) + ' ' + (selectedTracker.value.unit ?? '');
         } else {
             return v.toFixed(2);
         }
@@ -249,7 +205,7 @@ function makeGraphData (): void {
                         borderWidth: 3,
                         label: {
                             display: true,
-                            content: `Average ${reduceSums ? (reduceMonths ? 'month' : 'week') : 'day'}: ${showValue(globalAverage)}`,
+                            content: `Average ${reduceSum.value ? (reduceMonth.value ? 'month' : 'week') : 'day'}: ${showValue(globalAverage)}`,
                             position: 'start'
                         },
                         scaleID: 'y',
@@ -263,11 +219,11 @@ function makeGraphData (): void {
     graphData.value = {
         labels: chunks
             .map((chunkSize, i) => (i < chunks.length - 1) ? chunks.slice(i + 1).reduce((a, b) => a + b) : 0)
-            .map(v => formatDate(addDays(date.value, -v), !reduceMonths)),
+            .map(v => formatDate(addDays(date.value, -v))),
         datasets: [
             {
                 type: 'bar',
-                label: (reduceMonths ? 'Month ' : 'Week ') + (selectedTracker.value ? `"${selectedTracker.value.name}" ` : '') + (reduceSums ? 'total' : 'average'),
+                label: (reduceMonth.value ? 'Month ' : 'Week ') + (selectedTracker.value ? `"${selectedTracker.value.name}" ` : '') + (reduceSum.value ? 'total' : 'average'),
                 data: reducedData,
                 backgroundColor: reducedData.map(v => ratioColor(Math.abs(v / (globalAverage ?? 1)), v >= 0 && (selectedTracker.value ? selectedTracker.value.target_score >= 0 : true)))
             }
@@ -280,16 +236,17 @@ watch(selectedTracker, (newValue, oldValue) => {
     fetchData()
         .then(() => {
             if (newValue !== null && newValue !== oldValue) {
-                selectedShow.value = SHOW_OPTIONS[1];
+                showTrackerValue.value = true;
             }
             if (newValue === null && newValue !== oldValue) {
-                selectedShow.value = SHOW_OPTIONS[0];
+                showTrackerValue.value = false;
             }
         });
 });
 watch(selectedDays, fetchData);
-watch(selectedShow, makeGraphData);
-watch(selectedReduce, makeGraphData);
+watch(showTrackerValue, makeGraphData);
+watch(reduceMonth, makeGraphData);
+watch(reduceSum, makeGraphData);
 
 onBeforeMount(fetchData);
 </script>
