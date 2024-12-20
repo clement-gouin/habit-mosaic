@@ -4,9 +4,9 @@
             <i class="fa-solid fa-chart-column" />&nbsp;Graphics
         </h1>
         <div class="w-100 flex space-x-2 flex-none">
-            <tracker-input class="basis-1/4" name="tracker" label="Tracker" v-model="selectedTracker"/>
-            <select-input class="basis-1/4" name="days" label="Time span" :options="daysOptions" required v-model="selectedDays"/>
-            <div class="basis-1/2 flex space-x-2 my-auto">
+            <tracker-input class="md:basis-1/2 lg:basis-1/4" name="tracker" label="Tracker" v-model="selectedTracker"/>
+            <select-input class="md:basis-1/2 lg:basis-1/4" name="days" label="Time span" :options="daysOptions" required v-model="selectedDays"/>
+            <div class="lg:flex md:hidden basis-1/2 space-x-2 my-auto">
                 <div class="flex-1 flex flex-col-reverse">
                     <checkbox-input :disabled="selectedTracker === null" name="value" label="Score" label-after="Tracker value" toggle v-model="showTrackerValue" />
                     <checkbox-input name="quartiles" label="Average" label-after="Quartiles" toggle v-model="showQuartiles" />

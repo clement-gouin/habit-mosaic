@@ -18,7 +18,7 @@
         <main class="drawer-content h-full bg-gray-50 z-0">
             @yield('content')
             <label for="menu-drawer"
-                 class="drawer-button cursor-pointer z-40 block md:hidden fixed start-0 bottom-0 rounded-tr-md p-2 py-1 text-center shadow border border-e-gray-50 border-t-gray-50 bg-white"
+                 class="drawer-button cursor-pointer z-50 block md:hidden fixed start-0 bottom-0 rounded-tr-md p-2 py-1 text-center shadow border border-e-gray-50 border-t-gray-50 bg-white"
                  style="width: 4em;"
             >
                 <i class="fa-solid fa-bars"></i>
