@@ -182,8 +182,8 @@ function makeGraphData (): void {
         scales: {
             y: {
                 type: 'linear',
-                min: Math.floor(1.05 * Math.min(0, statistics.average, ...reducedData)),
-                max: Math.ceil(1.05 * Math.max(0, statistics.average, ...reducedData))
+                min: 1.1 * Math.min(0, statistics.average, ...reducedData),
+                max: 1.1 * Math.max(0, statistics.average, ...reducedData)
             }
         },
         plugins: {
