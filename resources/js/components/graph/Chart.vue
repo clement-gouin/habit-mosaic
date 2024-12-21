@@ -57,8 +57,25 @@ function makeChart () {
                             let iconWidth = 0;
 
                             if (options.icon) {
-                                iconText = window.getComputedStyle(document.querySelector(`.fa-${options.icon}`), ':before').getPropertyValue('content')
+                                let iconElement = document.querySelector(`.fa-${options.icon}`);
+                                let created = false;
+
+                                if (iconElement === null) {
+                                    iconElement = document.createElement('i');
+                                    iconElement.setAttribute('class', `fa-regular fa-${options.icon}`);
+
+                                    document.body.parentNode?.appendChild(iconElement);
+
+                                    created = true;
+                                }
+
+                                iconText = window.getComputedStyle(iconElement, ':before')
+                                    .getPropertyValue('content')
                                     .replace(/"/g, '');
+
+                                if (created) {
+                                    iconElement.parentNode?.removeChild(iconElement);
+                                }
 
                                 ctx.font = `${textHeight}px FontAwesome`;
                                 iconWidth = ctx.measureText(iconText).width;
